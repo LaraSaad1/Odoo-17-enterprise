@@ -1,0 +1,131 @@
+2026-07-20 17:59:35,262 8248 INFO ? odoo.service.server: Initiating shutdown 
+2026-07-20 17:59:35,262 8248 INFO ? odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-07-20 17:59:35,480 8248 INFO ? odoo.sql_db: ConnectionPool(used=0/count=0/max=64): Closed 5 connections  
+2026-07-20 17:59:44,572 13328 INFO ? odoo: Odoo version 17.0+e-20241103 
+2026-07-20 17:59:44,572 13328 INFO ? odoo: Using configuration file at C:\Workspace\Odoo 17 enterprise\server\odoo.conf 
+2026-07-20 17:59:44,574 13328 INFO ? odoo: addons paths: ['C:\\Workspace\\Odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\sessions\\addons\\17.0', 'c:\\workspace\\odoo 17 enterprise\\server\\odoo\\addons'] 
+2026-07-20 17:59:44,574 13328 INFO ? odoo: database: odoo@localhost:8017 
+2026-07-20 17:59:45,194 13328 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at C:\Workspace\Odoo 17 enterprise\thirdparty\wkhtmltopdf.exe 
+2026-07-20 17:59:46,016 13328 INFO ? odoo.service.server: HTTP service (werkzeug) running on Lara-Saad:8069 
+2026-07-20 17:59:46,477 13328 INFO odoo17 odoo.modules.loading: loading 1 modules... 
+2026-07-20 17:59:46,485 13328 INFO odoo17 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-07-20 17:59:46,645 13328 INFO odoo17 odoo.modules.loading: loading 88 modules... 
+2026-07-20 17:59:46,661 13328 WARNING odoo17 odoo.addons.attachment_indexation.models.ir_attachment: Attachment indexation of PDF documents is unavailable because the 'pdfminer' Python library cannot be found on the system. You may install it from https://pypi.org/project/pdfminer.six/ (e.g. `pip3 install pdfminer.six`) 
+2026-07-20 17:59:48,452 13328 INFO odoo17 odoo.modules.loading: 88 modules loaded in 1.81s, 0 queries (+0 extra) 
+2026-07-20 17:59:48,770 13328 INFO odoo17 odoo.modules.loading: Modules loaded. 
+2026-07-20 17:59:48,786 13328 INFO odoo17 odoo.modules.registry: Registry loaded in 2.416s 
+2026-07-20 17:59:48,789 13328 INFO odoo17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-07-20 17:59:48,867 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 17:59:48] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 22 0.061 2.438
+2026-07-20 17:59:49,233 13328 INFO ? odoo.addons.bus.models.bus: Bus.loop listen imbus on db postgres 
+2026-07-20 18:00:25,934 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:25] "POST /web/action/load HTTP/1.1" 200 - 14 0.017 2.284
+2026-07-20 18:00:25,972 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:25] "POST /web/action/run HTTP/1.1" 200 - 19 0.016 0.007
+2026-07-20 18:00:26,388 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:26] "POST /web/dataset/call_kw/knowledge.article/get_views HTTP/1.1" 200 - 33 0.024 0.058
+2026-07-20 18:00:26,609 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:26] "POST /web/dataset/call_kw/knowledge.article/web_read HTTP/1.1" 200 - 19 0.018 0.029
+2026-07-20 18:00:26,734 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:26] "POST /web/dataset/call_kw/knowledge.article/get_sidebar_articles HTTP/1.1" 200 - 12 0.002 0.018
+2026-07-20 18:00:26,965 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:26] "POST /web/dataset/call_kw/knowledge.article.thread/search_read HTTP/1.1" 200 - 9 0.010 0.014
+2026-07-20 18:00:26,965 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:26] "POST /web/dataset/call_kw/res.users/has_group HTTP/1.1" 200 - 1 0.000 0.000
+2026-07-20 18:00:27,213 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:27] "GET /web/bundle/web_editor.backend_assets_wysiwyg?lang=en_US HTTP/1.1" 200 - 9 0.001 0.247
+2026-07-20 18:00:28,854 13328 INFO odoo17 odoo.addons.base.models.assetsbundle: Generating a new asset bundle attachment /web/assets/bea449a/web_editor.backend_assets_wysiwyg.min.css (id:672) 
+2026-07-20 18:00:28,885 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:28] "GET /web/assets/bea449a/web_editor.backend_assets_wysiwyg.min.css HTTP/1.1" 200 - 11 0.007 1.657
+2026-07-20 18:00:32,776 13328 INFO odoo17 odoo.addons.base.models.assetsbundle: Generating a new asset bundle attachment /web/assets/8590c07/web_editor.backend_assets_wysiwyg.min.js (id:673) 
+2026-07-20 18:00:32,876 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:32] "GET /web/assets/8590c07/web_editor.backend_assets_wysiwyg.min.js HTTP/1.1" 200 - 8 0.007 4.099
+2026-07-20 18:00:33,261 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:33] "GET /web/bundle/knowledge.assets_wysiwyg?lang=en_US HTTP/1.1" 200 - 2 0.000 0.005
+2026-07-20 18:00:33,660 13328 INFO odoo17 odoo.addons.base.models.assetsbundle: Generating a new asset bundle attachment /web/assets/fdaf87d/knowledge.assets_wysiwyg.min.js (id:674) 
+2026-07-20 18:00:33,707 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:33] "GET /web/assets/fdaf87d/knowledge.assets_wysiwyg.min.js HTTP/1.1" 200 - 8 0.000 0.192
+2026-07-20 18:00:33,754 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:00:33] "POST /web/dataset/call_kw/ir.ui.view/render_public_asset HTTP/1.1" 200 - 8 0.001 0.016
+2026-07-20 18:02:48,281 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:48] "POST /web_editor/get_ice_servers HTTP/1.1" 200 - 3 0.017 0.000
+2026-07-20 18:02:48,304 13328 INFO ? werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:48] "GET /web/static/img/mimetypes/pdf.svg HTTP/1.1" 200 - 0 0.000 0.040
+2026-07-20 18:02:48,433 13328 INFO ? werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:48] "GET /knowledge/static/src/img/form_status_indicator_saved.svg HTTP/1.1" 200 - 0 0.000 0.048
+2026-07-20 18:02:48,464 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:48] "POST /web_editor/bus_broadcast HTTP/1.1" 200 - 5 0.000 0.083
+2026-07-20 18:02:48,552 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:48] "GET /web/image?model=res.users&field=avatar_128&id=1 HTTP/1.1" 200 - 9 0.000 0.032
+2026-07-20 18:02:53,244 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:53] "POST /web/dataset/call_kw/knowledge.article/web_save HTTP/1.1" 200 - 16 0.020 0.089
+2026-07-20 18:02:53,451 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:53] "GET / HTTP/1.1" 303 - 2 0.000 0.008
+2026-07-20 18:02:54,834 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:54] "GET /web HTTP/1.1" 200 - 83 0.068 0.993
+2026-07-20 18:02:54,944 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:54] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 9 0.000 0.048
+2026-07-20 18:02:55,794 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:55] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 26 0.078 0.157
+2026-07-20 18:02:55,794 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:55] "POST /mail/init_messaging HTTP/1.1" 200 - 56 0.078 0.176
+2026-07-20 18:02:55,832 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:55] "GET /bus/websocket_worker_bundle?v=17.0-1 HTTP/1.1" 304 - 4 0.014 0.214
+2026-07-20 18:02:55,840 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:55] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.027 0.225
+2026-07-20 18:02:55,874 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:55] "POST /mail/load_message_failures HTTP/1.1" 200 - 10 0.037 0.026
+2026-07-20 18:02:56,170 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:56] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.000 0.010
+2026-07-20 18:02:57,723 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:02:57] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.010
+2026-07-20 18:03:55,544 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:03:55] "GET /web/database/manager HTTP/1.1" 200 - 4 0.007 0.147
+2026-07-20 18:03:57,894 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:03:57] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.007
+2026-07-20 18:03:59,131 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:03:59] "GET /web?db=odoo17 HTTP/1.1" 200 - 13 0.015 0.014
+2026-07-20 18:03:59,565 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:03:59] "POST /mail/init_messaging HTTP/1.1" 200 - 34 0.019 0.070
+2026-07-20 18:03:59,724 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:03:59] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 10 0.037 0.017
+2026-07-20 18:03:59,724 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:03:59] "POST /mail/load_message_failures HTTP/1.1" 200 - 9 0.025 0.013
+2026-07-20 18:03:59,750 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:03:59] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.014 0.012
+2026-07-20 18:03:59,764 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:03:59] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.004 0.036
+2026-07-20 18:04:01,360 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:04:01] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.010
+2026-07-20 18:04:55,629 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:04:55] "POST /web/action/load HTTP/1.1" 200 - 9 0.003 0.017
+2026-07-20 18:04:55,950 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:04:55] "POST /web/dataset/call_kw/ir.module.module/get_views HTTP/1.1" 200 - 41 0.017 0.068
+2026-07-20 18:04:55,966 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:04:55] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 1 0.000 0.005
+2026-07-20 18:04:56,329 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:04:56] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 43 0.025 0.022
+2026-07-20 18:04:56,437 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:04:56] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.013 0.138
+2026-07-20 18:04:59,412 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:04:59] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 40 0.026 0.031
+2026-07-20 18:04:59,477 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:04:59] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.000 0.118
+2026-07-20 18:05:01,940 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:01] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 40 0.035 0.018
+2026-07-20 18:05:02,289 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:02] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 3 0.000 0.024
+2026-07-20 18:05:02,529 13328 INFO ? werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:02] "GET /base/static/description/icon.png HTTP/1.1" 200 - 0 0.000 0.000
+2026-07-20 18:05:07,553 13328 INFO odoo17 odoo.addons.base.models.ir_module: ALLOW access to module.button_immediate_install on ['Quality'] to user admin #2 via 127.0.0.1 
+2026-07-20 18:05:07,553 13328 INFO odoo17 odoo.addons.base.models.ir_module: User #2 triggered module installation 
+2026-07-20 18:05:07,553 13328 INFO odoo17 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on ['Quality'] to user admin #2 via 127.0.0.1 
+2026-07-20 18:05:07,680 13328 INFO odoo17 odoo.modules.loading: loading 1 modules... 
+2026-07-20 18:05:07,696 13328 INFO odoo17 odoo.modules.loading: 1 modules loaded in 0.02s, 0 queries (+0 extra) 
+2026-07-20 18:05:07,748 13328 INFO odoo17 odoo.modules.loading: updating modules list 
+2026-07-20 18:05:07,748 13328 INFO odoo17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via 127.0.0.1 
+2026-07-20 18:05:09,088 13328 INFO odoo17 odoo.modules.loading: loading 88 modules... 
+2026-07-20 18:05:09,146 13328 INFO odoo17 odoo.modules.loading: 88 modules loaded in 0.06s, 0 queries (+0 extra) 
+2026-07-20 18:05:09,149 13328 INFO odoo17 odoo.modules.loading: loading 90 modules... 
+2026-07-20 18:05:09,149 13328 INFO odoo17 odoo.modules.loading: Loading module quality (84/90) 
+2026-07-20 18:05:09,566 13328 INFO odoo17 odoo.modules.registry: module quality: creating or updating database tables 
+2026-07-20 18:05:10,183 13328 INFO odoo17 odoo.modules.loading: loading quality/security/quality.xml 
+2026-07-20 18:05:10,365 13328 INFO odoo17 odoo.modules.loading: loading quality/security/ir.model.access.csv 
+2026-07-20 18:05:10,401 13328 INFO odoo17 odoo.modules.loading: loading quality/data/mail_alias_data.xml 
+2026-07-20 18:05:10,417 13328 INFO odoo17 odoo.modules.loading: loading quality/data/quality_data.xml 
+2026-07-20 18:05:10,478 13328 INFO odoo17 odoo.modules.loading: loading quality/views/quality_views.xml 
+2026-07-20 18:05:10,548 13328 INFO odoo17 odoo.modules.loading: Module quality loaded in 1.40s, 586 queries (+586 other) 
+2026-07-20 18:05:10,548 13328 INFO odoo17 odoo.modules.loading: Loading module quality_control (89/90) 
+2026-07-20 18:05:11,116 13328 INFO odoo17 odoo.modules.registry: module quality_control: creating or updating database tables 
+2026-07-20 18:05:11,467 13328 INFO odoo17 odoo.modules.loading: loading quality_control/data/quality_control_data.xml 
+2026-07-20 18:05:11,499 13328 INFO odoo17 odoo.modules.loading: loading quality_control/report/worksheet_custom_reports.xml 
+2026-07-20 18:05:11,514 13328 INFO odoo17 odoo.modules.loading: loading quality_control/report/worksheet_custom_report_templates.xml 
+2026-07-20 18:05:11,533 13328 INFO odoo17 odoo.modules.loading: loading quality_control/views/quality_views.xml 
+2026-07-20 18:05:11,816 13328 INFO odoo17 odoo.modules.loading: loading quality_control/views/product_views.xml 
+2026-07-20 18:05:11,856 13328 INFO odoo17 odoo.modules.loading: loading quality_control/views/stock_move_views.xml 
+2026-07-20 18:05:11,879 13328 INFO odoo17 odoo.modules.loading: loading quality_control/views/stock_picking_views.xml 
+2026-07-20 18:05:11,911 13328 INFO odoo17 odoo.modules.loading: loading quality_control/views/stock_lot_views.xml 
+2026-07-20 18:05:11,940 13328 INFO odoo17 odoo.modules.loading: loading quality_control/wizard/quality_check_wizard_views.xml 
+2026-07-20 18:05:11,958 13328 INFO odoo17 odoo.modules.loading: loading quality_control/security/ir.model.access.csv 
+2026-07-20 18:05:11,973 13328 INFO odoo17 odoo.modules.loading: Module quality_control: loading demo 
+2026-07-20 18:05:11,973 13328 INFO odoo17 odoo.modules.loading: loading quality_control/data/quality_control_demo.xml 
+2026-07-20 18:05:12,053 13328 INFO odoo17 odoo.modules.loading: Module quality_control loaded in 1.51s, 771 queries (+771 other) 
+2026-07-20 18:05:12,053 13328 INFO odoo17 odoo.modules.loading: 90 modules loaded in 2.90s, 1357 queries (+1357 extra) 
+2026-07-20 18:05:13,521 13328 INFO odoo17 odoo.modules.loading: Modules loaded. 
+2026-07-20 18:05:13,525 13328 INFO odoo17 odoo.modules.registry: Registry loaded in 5.861s 
+2026-07-20 18:05:13,525 13328 INFO odoo17 odoo.addons.base.models.ir_module: getting next ir.actions.todo() 
+2026-07-20 18:05:13,543 13328 INFO odoo17 odoo.modules.registry: Registry changed, signaling through the database 
+2026-07-20 18:05:13,543 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:13] "POST /web/dataset/call_button HTTP/1.1" 200 - 5289 2.649 3.358
+2026-07-20 18:05:13,880 13328 INFO odoo17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-07-20 18:05:14,919 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:14] "GET /web HTTP/1.1" 200 - 92 0.064 0.981
+2026-07-20 18:05:31,711 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:31] "GET /web/webclient/load_menus/49d313b56118c799adf967b0685f829f49487fbf63423a2f49e9d6188d87114a HTTP/1.1" 200 - 2 0.012 0.219
+2026-07-20 18:05:31,724 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:31] "GET /web/webclient/translations/3df65bf58c13a43580292bcc845a2ba0a4d574b1?lang=en_US HTTP/1.1" 200 - 3 0.037 0.166
+2026-07-20 18:05:31,750 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:31] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 9 0.048 0.174
+2026-07-20 18:05:31,765 13328 INFO odoo17 odoo.addons.base.models.assetsbundle: Generating a new asset bundle attachment /web/assets/f4cd6fc/web.assets_web.min.css (id:676) 
+2026-07-20 18:05:31,768 13328 INFO odoo17 odoo.addons.base.models.assetsbundle: Deleting attachments [670] (matching /web/assets/_______/web.assets_web.min.css) because it was replaced with /web/assets/f4cd6fc/web.assets_web.min.css 
+2026-07-20 18:05:31,886 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:31] "GET /web/assets/f4cd6fc/web.assets_web.min.css HTTP/1.1" 200 - 17 0.093 16.838
+2026-07-20 18:05:39,411 13328 INFO odoo17 odoo.addons.base.models.assetsbundle: Generating a new asset bundle attachment /web/assets/ca1ad1e/web.assets_web.min.js (id:677) 
+2026-07-20 18:05:39,415 13328 INFO odoo17 odoo.addons.base.models.assetsbundle: Deleting attachments [671] (matching /web/assets/_______/web.assets_web.min.js) because it was replaced with /web/assets/ca1ad1e/web.assets_web.min.js 
+2026-07-20 18:05:40,062 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:40] "GET /web/assets/ca1ad1e/web.assets_web.min.js HTTP/1.1" 200 - 13 0.087 8.530
+2026-07-20 18:05:40,776 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:40] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 26 0.030 0.014
+2026-07-20 18:05:40,776 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:40] "POST /mail/init_messaging HTTP/1.1" 200 - 55 0.053 0.025
+2026-07-20 18:05:40,833 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:40] "POST /mail/load_message_failures HTTP/1.1" 200 - 10 0.000 0.016
+2026-07-20 18:05:40,960 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:40] "GET /bus/websocket_worker_bundle?v=17.0-1 HTTP/1.1" 304 - 4 0.000 0.007
+2026-07-20 18:05:41,286 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:41] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.000 0.006
+2026-07-20 18:05:42,268 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:42] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.004
+2026-07-20 18:05:46,786 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:05:46] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.006 0.016
+2026-07-20 18:06:33,160 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:06:33] "POST /web/action/load HTTP/1.1" 200 - 9 0.003 0.014
+2026-07-20 18:06:33,567 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:06:33] "POST /web/dataset/call_kw/quality.alert.team/get_views HTTP/1.1" 200 - 27 0.014 0.060
+2026-07-20 18:06:33,775 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:06:33] "POST /web/dataset/call_kw/quality.alert.team/web_search_read HTTP/1.1" 200 - 17 0.010 0.034
+2026-07-20 18:17:10,317 13328 INFO odoo17 werkzeug: 127.0.0.1 - - [20/Jul/2026 18:17:10] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.002 0.057
