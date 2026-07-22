@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_quality_inspection_template_user,quality.inspection.template.user,model_quality_inspection_template,quality.group_quality_user,1,0,0,0
+access_quality_inspection_template_manager,quality.inspection.template.manager,model_quality_inspection_template,quality.group_quality_manager,1,1,1,1
+access_quality_point_inspection_field_user,quality.point.inspection.field.user,model_quality_point_inspection_field,quality.group_quality_user,1,0,0,0
+access_quality_point_inspection_field_manager,quality.point.inspection.field.manager,model_quality_point_inspection_field,quality.group_quality_manager,1,1,1,1
+access_custom_quality_inspection,custom.quality.inspection,model_custom_quality_inspection,,1,1,1,1
+access_custom_quality_inspection_line,custom.quality.inspection.line,model_custom_quality_inspection_line,,1,1,1,1

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================ -->
+    <!-- Inspection Template Views                      -->
+    <!-- ============================================ -->
+
+    <record id="view_quality_inspection_template_tree" model="ir.ui.view">
+        <field name="name">quality.inspection.template.tree</field>
+        <field name="model">quality.inspection.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="product_category_id"/>
+                <field name="required"/>
+               
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_quality_inspection_template_form" model="ir.ui.view">
+        <field name="name">quality.inspection.template.form</field>
+        <field name="model">quality.inspection.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="product_category_id"/>
+                            <field name="required"/>
+                        </group>
+
+                    </group>
+                    <field name="help_text" placeholder="Help text..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_quality_inspection_template_search" model="ir.ui.view">
+        <field name="name">quality.inspection.template.search</field>
+        <field name="model">quality.inspection.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_category_id"/>
+                <filter string="Finished Product" name="finished" domain="[('product_category_id.name', '=', 'منتج تام')]"/>
+                <filter string="Raw Materials" name="raw" domain="[('product_category_id.name', '=', 'خامات')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product Category" name="group_category" context="{'group_by': 'product_category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_quality_inspection_template" model="ir.actions.act_window">
+        <field name="name">Inspection Templates</field>
+        <field name="res_model">quality.inspection.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_group_category': 1}</field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Menu - Under Quality/Configuration             -->
+    <!-- ============================================ -->
+    
+    <menuitem id="menu_quality_inspection_template"
+              name="Inspection Templates"
+              parent="quality_control.menu_quality_root"
+              action="action_quality_inspection_template"
+              sequence="100"/>
+
+
+    <!-- ============================================ -->
+    <!-- Quality Point Form - Add Multi-Field Section   -->
+    <!-- ============================================ -->
+
+    <record id="view_quality_point_form_inherit" model="ir.ui.view">
+        <field name="name">quality.point.form.inherit</field>
+        <field name="model">quality.point</field>
+        <field name="inherit_id" ref="quality.quality_point_view_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add check_count as invisible field so we can use it in modifiers -->
+            <xpath expr="//sheet" position="inside">
+                <field name="check_count" invisible="1"/>
+            </xpath>
+
+            <!-- Add multi-field flag after product_category_ids -->
+            <xpath expr="//field[@name='product_category_ids']" position="after">
+                <field name="is_multi_field"/>
+            </xpath>
+
+            <!-- Add inspection fields section -->
+            <xpath expr="//notebook" position="before">
+                <div invisible="not is_multi_field">
+                    <separator string="Inspection Form Fields"/>
+                    
+                    <!-- Button always visible when is_multi_field is checked -->
+                    <button name="action_load_inspection_fields" 
+                            string="Load Fields from Selected Categories" 
+                            type="object" 
+                            class="oe_highlight"
+                            icon="fa-refresh"/>
+                    
+                    <field name="inspection_field_ids" 
+                           readonly="check_count > 0">
+                        <tree editable="bottom">
+                           
+                            <field name="name"/>
+                            <field name="product_category_id" readonly="1"/>
+                    
+                            <field name="required"/>
+                            <field name="min_value"/>
+                            <field name="max_value"/>
+                            <field name="uom_id"/>
+                        </tree>
+                    </field>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

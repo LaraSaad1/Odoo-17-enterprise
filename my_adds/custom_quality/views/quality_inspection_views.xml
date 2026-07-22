@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="view_custom_quality_inspection_form" model="ir.ui.view">
+        <field name="name">custom.quality.inspection.form</field>
+        <field name="model">custom.quality.inspection</field>
+        <field name="arch" type="xml">
+
+            <form string="Quality Inspection">
+
+                <header>
+
+                    <button
+                        name="action_pass"
+                        string="Pass"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'draft'"
+                    />
+
+                    <button
+                        name="action_fail"
+                        string="Fail"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="state != 'draft'"
+                    />
+
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,pass,fail"
+                    />
+
+                </header>
+
+                <sheet>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+
+                        <group>
+                            <field name="quality_check_id"/>
+                            <field name="quality_point_id"/>
+                        </group>
+
+                        <group>
+                            <field name="product_id"/>
+                        </group>
+
+                    </group>
+
+                    <separator string="Inspection Results"/>
+
+                    <field
+                        name="inspection_line_ids"
+                        nolabel="1"
+                    >
+
+                        <tree editable="bottom">
+
+                            <field name="name"/>
+                           
+                            <field name="required"/>
+                            <field name="min_value"/>
+                            <field name="max_value"/>
+                            <field name="uom_id"/>
+
+                            <field name="value_char"/>
+                            <field name="value_float"/>
+                   
+                            <field name="value_boolean"/>
+                          
+
+                        </tree>
+
+                    </field>
+
+                </sheet>
+
+            </form>
+
+        </field>
+    </record>
+
+</odoo>
