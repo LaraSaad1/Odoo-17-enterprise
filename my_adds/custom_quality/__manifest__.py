@@ -13,6 +13,8 @@
         'data/quality_inspection_templates.xml',
         'views/quality_point_views.xml',
         'views/quality_inspection_views.xml',
+        'views/quality_check.xml',
+      
     ],
     'installable': True,
     'license': 'LGPL-3',

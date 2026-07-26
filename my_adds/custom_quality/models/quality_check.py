@@ -5,6 +5,14 @@ class QualityCheck(models.Model):
     _inherit = 'quality.check'
 
     def action_open_quality_check_wizard(self, current_check_id=None):
+        """
+        This is the existing Odoo Quality Check button.
+
+        We only change its behavior when the Quality Check
+        has a Control Point configured for Multi-Field Inspection.
+
+        Otherwise, standard Odoo behavior is preserved.
+        """
 
         check_ids = sorted(self.ids)
 
@@ -13,22 +21,32 @@ class QualityCheck(models.Model):
         )
 
         # -----------------------------------------
-        # YOUR CUSTOM MULTI-FIELD INSPECTION
+        # CUSTOM MULTI-FIELD FLOW
         # -----------------------------------------
-        if check_id.point_id and check_id.point_id.is_multi_field:
-            return check_id._action_open_multi_field_inspection()
+        if (
+            check_id.point_id
+            and check_id.point_id.is_multi_field
+        ):
+            return check_id.action_open_multi_field_inspection()
 
         # -----------------------------------------
-        # KEEP STANDARD ODOO BEHAVIOR
+        # STANDARD ODOO FLOW
         # -----------------------------------------
         return super().action_open_quality_check_wizard(
             current_check_id
         )
 
-    def _action_open_multi_field_inspection(self):
+    def action_open_multi_field_inspection(self):
+        """
+        Open the Custom Quality Inspection.
+
+        """
+
         self.ensure_one()
 
-        # Find existing custom inspection
+        # -----------------------------------------
+        # FIND EXISTING CUSTOM INSPECTION
+        # -----------------------------------------
         inspection = self.env[
             'custom.quality.inspection'
         ].search(
@@ -38,7 +56,9 @@ class QualityCheck(models.Model):
             limit=1,
         )
 
-        # Create it if it doesn't exist
+        # -----------------------------------------
+        # CREATE CUSTOM INSPECTION IF NOT FOUND
+        # -----------------------------------------
         if not inspection:
             inspection = self.env[
                 'custom.quality.inspection'
@@ -48,6 +68,9 @@ class QualityCheck(models.Model):
                 }
             )
 
+        # -----------------------------------------
+        # OPEN CUSTOM INSPECTION
+        # -----------------------------------------
         return {
             'type': 'ir.actions.act_window',
             'name': 'Quality Inspection',
