@@ -1,44 +1,65 @@
-from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo import models, fields
 
 
 class QualityInspectionTemplate(models.Model):
     _name = 'quality.inspection.template'
-    _description = 'Quality Inspection Template'
-    _order = 'sequence, id'
+    _description = 'Quality Inspection Form'
+    _order = 'id'
 
-    name = fields.Char('Inspection Name', required=True)
-    sequence = fields.Integer('Sequence', default=10)
-    active = fields.Boolean(default=True)
-    
-    # Link to existing product.category
+    name = fields.Char(
+        string='Inspection Form Name',
+        required=True,
+    )
+
     product_category_id = fields.Many2one(
         'product.category',
-        'Product Category',
+        string='Product Category',
         required=True,
-        help="The product category this inspection field belongs to"
+        ondelete='restrict',
     )
-    
-    field_type = fields.Selection([
-        ('char', 'Text'),
-        ('float', 'Number/Measurement'),
-        ('integer', 'Integer'),
-        ('selection', 'Selection'),
-        ('boolean', 'Pass/Fail'),
-        ('text', 'Long Text'),
-        ('date', 'Date'),
-    ], string='Field Type', required=True, default='float')
-    
-    selection_options = fields.Char('Selection Options')
-    min_value = fields.Float('Minimum Value')
-    max_value = fields.Float('Maximum Value')
-    required = fields.Boolean('Required', default=True)
-    uom_id = fields.Many2one('uom.uom', 'Unit of Measure')
-    help_text = fields.Char('Help Text')
 
-    @api.constrains('min_value', 'max_value')
-    def _check_min_max(self):
-        for template in self:
-            if template.min_value and template.max_value:
-                if template.min_value > template.max_value:
-                    raise ValidationError(_("Minimum value cannot be greater than maximum value."))
+    inspection_field_ids = fields.One2many(
+        'quality.inspection.template.field',
+        'template_id',
+        string='Inspection Fields',
+        copy=True,
+    )
+
+
+class QualityInspectionTemplateField(models.Model):
+    _name = 'quality.inspection.template.field'
+    _description = 'Quality Inspection Form Field'
+    _order = 'sequence, id'
+
+    product_category_id = fields.Many2one('product.category', string='Product Category')
+
+    template_id = fields.Many2one(
+        'quality.inspection.template',
+        string='Inspection Form',
+        required=True,
+        ondelete='cascade',
+    )
+
+    name = fields.Char(
+        string='Inspection Name',
+        required=True,
+    )
+
+    test_type_id = fields.Many2one(
+        'quality.point.test_type',
+        string='Test Type',
+    )
+
+    required = fields.Boolean(
+        string='Required',
+        default=True,
+    )
+
+    help_text = fields.Char(
+        string='Help Text',
+    )
+
+    sequence = fields.Integer(
+        string='Sequence',
+        default=10,
+    )

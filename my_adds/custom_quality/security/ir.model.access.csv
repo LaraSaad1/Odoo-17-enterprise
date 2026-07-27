@@ -5,3 +5,4 @@ access_quality_point_inspection_field_user,quality.point.inspection.field.user,m
 access_quality_point_inspection_field_manager,quality.point.inspection.field.manager,model_quality_point_inspection_field,quality.group_quality_manager,1,1,1,1
 access_custom_quality_inspection,custom.quality.inspection,model_custom_quality_inspection,,1,1,1,1
 access_custom_quality_inspection_line,custom.quality.inspection.line,model_custom_quality_inspection_line,,1,1,1,1
+access_quality_inspection_template_field_user,Quality Inspection Template Field User,model_quality_inspection_template_field,base.group_user,1,1,1,1

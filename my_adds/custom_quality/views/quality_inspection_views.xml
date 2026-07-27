@@ -1,10 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <odoo>
 
-    <record id="view_custom_quality_inspection_form" model="ir.ui.view">
+    <record id="view_custom_quality_inspection_form"
+            model="ir.ui.view">
+
         <field name="name">custom.quality.inspection.form</field>
+
         <field name="model">custom.quality.inspection</field>
+
         <field name="arch" type="xml">
 
             <form string="Quality Inspection">
@@ -16,77 +20,102 @@
                         string="Pass"
                         type="object"
                         class="btn-primary"
-                        invisible="state != 'draft'"
-                    />
+                        invisible="state != 'draft'"/>
 
                     <button
                         name="action_fail"
                         string="Fail"
                         type="object"
-                        class="btn-secondary"
-                        invisible="state != 'draft'"
-                    />
+                        class="btn-danger"
+                        invisible="state != 'draft'"/>
 
-                    <field
-                        name="state"
-                        widget="statusbar"
-                        statusbar_visible="draft,pass,fail"
-                    />
+                    <field name="state"
+                           widget="statusbar"/>
 
                 </header>
 
                 <sheet>
 
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name"/>
-                        </h1>
-                    </div>
-
                     <group>
 
                         <group>
-                            <field name="quality_check_id"/>
-                            <field name="quality_point_id"/>
+
+                            <field name="name"/>
+
+                            <field name="product_id"/>
+
                         </group>
 
                         <group>
-                            <field name="product_id"/>
+
+                            <field name="quality_check_id"/>
+
+                            <field name="quality_point_id"/>
+
                         </group>
 
                     </group>
 
-                    <separator string="Inspection Results"/>
 
-                    <field
-                        name="inspection_line_ids"
-                        nolabel="1"
-                    >
+                    <notebook>
 
-                        <tree editable="bottom">
+                        <page string="Inspection Results">
 
-                            <field name="name"/>
-                           
-                            <field name="required"/>
-                            <field name="min_value"/>
-                            <field name="max_value"/>
-                            <field name="uom_id"/>
+                            <field name="inspection_line_ids">
 
-                            <field name="value_char"/>
-                            <field name="value_float"/>
-                   
-                            <field name="value_boolean"/>
-                          
+                                <tree editable="bottom">
 
-                        </tree>
+                                    <field name="sequence"
+                                           column_invisible="True"/>
 
-                    </field>
+                                    <field name="name"/>
+
+                                    <field name="test_type_id" options="{'no_open': True, 'no_create': True}"/>
+
+                                    <field name="value"/>
+
+                                    <field name="required"/>
+
+                                </tree>
+
+                                <form string="Inspection Result">
+
+                                    <sheet>
+
+                                        <group>
+
+                                            <field name="name"
+                                                   readonly="1"/>
+
+                                            <field name="test_type_id"
+                                                   readonly="1"/>
+
+                                            <field name="required"
+                                                   readonly="1"/>
+
+                                            <field name="value"/>
+
+                                            <field name="help_text"
+                                                   readonly="1"/>
+
+                                        </group>
+
+                                    </sheet>
+
+                                </form>
+
+                            </field>
+
+                        </page>
+
+                    </notebook>
 
                 </sheet>
 
             </form>
 
         </field>
+
     </record>
 
 </odoo>

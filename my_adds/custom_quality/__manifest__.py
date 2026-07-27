@@ -14,6 +14,7 @@
         'views/quality_point_views.xml',
         'views/quality_inspection_views.xml',
         'views/quality_check.xml',
+        'views/quality_inspection_template_views.xml',
       
     ],
     'installable': True,
