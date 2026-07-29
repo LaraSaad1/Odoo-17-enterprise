@@ -1,0 +1,45 @@
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_visit_purpose_tree" model="ir.ui.view">
+        <field name="name">visit.purpose.tree</field>
+        <field name="model">visit.purpose</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_visit_purpose_form" model="ir.ui.view">
+        <field name="name">visit.purpose.form</field>
+        <field name="model">visit.purpose</field>
+        <field name="arch" type="xml">
+            <form string="هدف الزيارة">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_visit_purpose" model="ir.actions.act_window">
+        <field name="name">Visit Purposes</field>
+        <field name="res_model">visit.purpose</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu Item (adjust parent as needed) -->
+    <menuitem 
+        id="menu_visit_purpose"
+        name="أهداف الزيارة"
+        parent="menu_salesperson_planner"
+        action="action_visit_purpose"
+        sequence="50"
+    />
+
+</odoo>
