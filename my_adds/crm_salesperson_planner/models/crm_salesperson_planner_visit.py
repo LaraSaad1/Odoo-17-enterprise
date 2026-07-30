@@ -1,3 +1,6 @@
+# Copyright 2021 Sygel - Valentin Vinagre
+# Copyright 2021 Sygel - Manuel Regidor
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
@@ -15,21 +18,24 @@ class CrmSalespersonPlannerVisit(models.Model):
         default="/",
         copy=False,
     )
+
     partner_id = fields.Many2one(
-        comodel_name="res.partner",
-        string="Customer",
-        required=True,
-    )
-    partner_phone = fields.Char(string="Phone", related="partner_id.phone")
-    partner_mobile = fields.Char(string="Mobile", related="partner_id.mobile")
+            comodel_name="res.partner",
+            string="Customer",
+            required=True,
+        )
+
+
     date = fields.Date(
         default=fields.Date.context_today,
         required=True,
     )
     region = fields.Char(string='المنطقة')
     executed_visits_count = fields.Integer(
-        string='عدد الزيارات المنفذة')
-    
+        string='عدد الزيارات المنفذة',
+        compute='_compute_executed_visits_count',
+        store=True,
+    )
     sequence = fields.Integer(
         help="Used to order Visits in the different views",
         default=20,
@@ -46,7 +52,7 @@ class CrmSalespersonPlannerVisit(models.Model):
         tracking=True,
         default=lambda self: self.env.user,
         domain=lambda self: [
-            ("groups_id", "in", self.env.ref("sales_team.group_sale_salesman").id)
+            ("groups_id", "in", [self.env.ref("sales_team.group_sale_salesman").id])
         ],
     )
     sale_order_ids = fields.Many2many(
@@ -54,9 +60,19 @@ class CrmSalespersonPlannerVisit(models.Model):
         relation="crm_salesperson_planner_visit_sale_order_rel",
         string="Sale Orders",
         copy=False,
+
     )
 
-
+    new_customers_count = fields.Integer(string="عدد العملاء الجدد")
+    orders_count = fields.Integer(string="عدد الطلبيات")
+    total_sales = fields.Float(string="إجمالي المبيعات")
+    main_challenges = fields.Text(string="أهم التحديات")
+    
+    customer_line_ids = fields.One2many(
+        comodel_name="crm.salesperson.planner.visit.customer.line",
+        inverse_name="visit_id",
+        string="Customer Visits",
+    )
     description = fields.Html()
     state = fields.Selection(
         string="Status",
@@ -83,40 +99,6 @@ class CrmSalespersonPlannerVisit(models.Model):
     calendar_event_id = fields.Many2one(
         comodel_name="calendar.event", string="Calendar Event"
     )
-    
-    product_ids = fields.Many2many(
-        comodel_name="product.template",
-        relation="crm_salesperson_planner_visit_product_rel",
-        string="Products",
-        copy=True,
-        domain="[('sale_ok', '=', True)]",
-    )
-    cultivated_area = fields.Float(string="المساحة المزروعة (فدان)")
-    crop_type = fields.Char(string="نوع المحصول")
-    growth_stage = fields.Char(string="مرحلة النمو")
-    crop_condition = fields.Char(string="حالة المحصول")
-    product_performance = fields.Char(string="اداء منتجاتنا ورضا العميل")
-    observed_issues = fields.Char(string="المشاكل الظاهرة")
-    technical_recommendations = fields.Char(string="التوصيات الفنية المقدمة")
-    
-    competitor_company = fields.Char(string="اسم الشركة المنافسة")
-    competitor_product = fields.Char(string="المنتج المنافس")
-    competitor_price = fields.Char(string="السعر")
-    strengths_weaknesses = fields.Char(string="نقاط القوة و الضعف")
-    executed_orders = fields.Char(string="الطلبات المنفذة")
-
-
-
-        # خطة المتابعة
-    next_visit_date = fields.Date(string="موعد الزيارة القادمة")
-    company_required_actions = fields.Text(string="إجراءات مطلوبة من الشركة")
-
-    # ملخص اليوم
-    new_customers_count = fields.Integer(string="عدد العملاء الجدد")
-    orders_count = fields.Integer(string="عدد الطلبيات")
-    total_sales = fields.Float(string="إجمالي المبيعات")
-    main_challenges = fields.Text(string="أهم التحديات")
-
     visit_purpose_ids = fields.Many2many(
         'visit.purpose',
         string="هدف الزيارة"
@@ -129,6 +111,11 @@ class CrmSalespersonPlannerVisit(models.Model):
             "The visit number must be unique!",
         ),
     ]
+
+    @api.depends("customer_line_ids")
+    def _compute_executed_visits_count(self):
+        for visit in self:
+            visit.executed_visits_count = len(visit.customer_line_ids)
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -174,34 +161,34 @@ class CrmSalespersonPlannerVisit(models.Model):
             }
         )
 
-    def _prepare_calendar_event_vals(self):
-        return {
-            "name": self.name,
-            "partner_ids": [(6, 0, [self.partner_id.id, self.user_id.partner_id.id])],
-            "user_id": self.user_id.id,
-            "start_date": self.date,
-            "stop_date": self.date,
-            "start": self.date,
-            "stop": self.date,
-            "allday": True,
-            "res_model": self._name,
-            "res_model_id": self.env.ref(
-                "crm_salesperson_planner.model_crm_salesperson_planner_visit"
-            ).id,
-            "res_id": self.id,
-        }
+    # def _prepare_calendar_event_vals(self):
+    #     return {
+    #         "name": self.name,
+    #         "partner_ids": [(6, 0, [self.partner_id.id, self.user_id.partner_id.id])],
+    #         "user_id": self.user_id.id,
+    #         "start_date": self.date,
+    #         "stop_date": self.date,
+    #         "start": self.date,
+    #         "stop": self.date,
+    #         "allday": True,
+    #         "res_model": self._name,
+    #         "res_model_id": self.env.ref(
+    #             "crm_salesperson_planner.model_crm_salesperson_planner_visit"
+    #         ).id,
+    #         "res_id": self.id,
+    #     }
 
-    def create_calendar_event(self):
-        events = self.env["calendar.event"]
-        for item in self:
-            event = self.env["calendar.event"].create(
-                item._prepare_calendar_event_vals()
-            )
-            if event:
-                event.activity_ids.unlink()
-                item.calendar_event_id = event
-            events += event
-        return events
+    # def create_calendar_event(self):
+    #     events = self.env["calendar.event"]
+    #     for item in self:
+    #         event = self.env["calendar.event"].create(
+    #             item._prepare_calendar_event_vals()
+    #         )
+    #         if event:
+    #             event.activity_ids.unlink()
+    #             item.calendar_event_id = event
+    #         events += event
+    #     return events
 
     def action_incident(self, reason_id, image=None, notes=None):
         if self.state not in ["draft", "confirm"]:
@@ -241,3 +228,44 @@ class VisitPurpose(models.Model):
     _description = 'Visit Purpose'
 
     name = fields.Char(string="Visit Purpose", required=True)
+
+
+class CrmSalespersonPlannerVisitCustomerLine(models.Model):
+    _name = "crm.salesperson.planner.visit.customer.line"
+    _description = "Visit Customer Line"
+
+    visit_id = fields.Many2one(
+        comodel_name="crm.salesperson.planner.visit",
+        string="Visit",
+        required=True,
+        ondelete="cascade",
+    )
+    partner_id = fields.Many2one(
+        comodel_name="res.partner",
+        string="Customer",
+        required=True,
+    )
+    partner_phone = fields.Char(string="Phone", related="partner_id.phone")
+    partner_mobile = fields.Char(string="Mobile", related="partner_id.mobile")
+
+    product_ids = fields.Many2many(
+        comodel_name="product.template",
+        relation="crm_salesperson_planner_visit_line_product_rel",
+        string="Products",
+        domain="[('sale_ok', '=', True)]",
+    )
+    product_performance = fields.Char(string="اداء منتجاتنا ورضا العميل")
+    cultivated_area = fields.Float(string="المساحة المزروعة (فدان)")
+    crop_type = fields.Char(string="نوع المحصول")
+    growth_stage = fields.Char(string="مرحلة النمو")
+    crop_condition = fields.Char(string="حالة المحصول")
+    observed_issues = fields.Char(string="المشاكل الظاهرة")
+    technical_recommendations = fields.Char(string="التوصيات الفنية المقدمة")
+    next_visit_date = fields.Date(string="موعد الزيارة القادمة")
+    company_required_actions = fields.Text(string="إجراءات مطلوبة من الشركة")
+    competitor_company = fields.Char(string="اسم الشركة المنافسة")
+    competitor_product = fields.Char(string="المنتج المنافس")
+    competitor_price = fields.Char(string="السعر")
+    strengths_weaknesses = fields.Char(string="نقاط القوة و الضعف")
+    executed_orders = fields.Char(string="الطلبات المنفذة")
+    
