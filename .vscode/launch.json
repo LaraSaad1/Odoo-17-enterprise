@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Odoo 17",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "C:\\Workspace\\Odoo 17 enterprise\\server\\odoo-bin",
+            "args": [
+                "-c",
+                "C:\\Workspace\\Odoo 17 enterprise\\server\\odoo.conf",
+                "-d",
+                "odoo_17",
+                "-u",
+                "custom_quality",
+                "--dev=reload"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        }
+    ]
+}
