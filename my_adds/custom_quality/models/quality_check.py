@@ -1,8 +1,23 @@
 from odoo import models
+from odoo import api, fields
 
 
 class QualityCheck(models.Model):
     _inherit = 'quality.check'
+
+    point_id = fields.Many2one(
+        "quality.point",
+        string="Control Point",
+    )
+
+    @api.onchange("product_id")
+    def _onchange_product_id(self):
+        for check in self:
+            point = self.env["quality.point"].search([
+                ("product_ids", "in", check.product_id.id),
+            ], limit=1)
+
+            check.point_id = point
 
     def action_open_quality_check_wizard(self, current_check_id=None):
         """

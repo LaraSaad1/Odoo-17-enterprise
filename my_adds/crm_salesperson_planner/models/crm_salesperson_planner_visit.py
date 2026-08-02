@@ -22,7 +22,6 @@ class CrmSalespersonPlannerVisit(models.Model):
     partner_id = fields.Many2one(
             comodel_name="res.partner",
             string="Customer",
-            required=True,
         )
 
 
@@ -30,7 +29,12 @@ class CrmSalespersonPlannerVisit(models.Model):
         default=fields.Date.context_today,
         required=True,
     )
-    region = fields.Char(string='المنطقة')
+    region_ids = fields.Many2many(
+    'res.country.state', 
+    string='المنطقة',
+    domain="[('country_id.code', '=', 'EG')]"
+    )
+
     executed_visits_count = fields.Integer(
         string='عدد الزيارات المنفذة',
         compute='_compute_executed_visits_count',
@@ -131,16 +135,16 @@ class CrmSalespersonPlannerVisit(models.Model):
             raise ValidationError(
                 _("The visit must be in cancelled, incident or visited state")
             )
-        if self.calendar_event_id:
-            self.calendar_event_id.with_context(bypass_cancel_visit=True).unlink()
+        # if self.calendar_event_id:
+        #     self.calendar_event_id.with_context(bypass_cancel_visit=True).unlink()
         self.write({"state": "draft"})
 
     def action_confirm(self):
         if self.filtered(lambda a: not a.state == "draft"):
             raise ValidationError(_("The visit must be in draft state"))
-        events = self.create_calendar_event()
-        if events:
-            self.browse(events.mapped("res_id")).write({"state": "confirm"})
+        # events = self.create_calendar_event()
+        # if events:
+        #     self.browse(events.mapped("res_id")).write({"state": "confirm"})
 
     def action_done(self):
         if not self.state == "confirm":
@@ -150,8 +154,8 @@ class CrmSalespersonPlannerVisit(models.Model):
     def action_cancel(self, reason_id, image=None, notes=None):
         if self.state not in ["draft", "confirm"]:
             raise ValidationError(_("The visit must be in draft or validated state"))
-        if self.calendar_event_id:
-            self.calendar_event_id.with_context(bypass_cancel_visit=True).unlink()
+        # if self.calendar_event_id:
+        #     self.calendar_event_id.with_context(bypass_cancel_visit=True).unlink()
         self.write(
             {
                 "state": "cancel",
@@ -209,17 +213,17 @@ class CrmSalespersonPlannerVisit(models.Model):
 
     def write(self, values):
         ret_val = super().write(values)
-        if (values.get("date") or values.get("user_id")) and not self.env.context.get(
-            "bypass_update_event"
-        ):
-            new_vals = {}
-            for item in self.filtered(lambda a: a.calendar_event_id):
-                if values.get("date"):
-                    new_vals["start"] = values.get("date")
-                    new_vals["stop"] = values.get("date")
-                if values.get("user_id"):
-                    new_vals["user_id"] = values.get("user_id")
-                item.calendar_event_id.write(new_vals)
+        # if (values.get("date") or values.get("user_id")) and not self.env.context.get(
+        #     "bypass_update_event"
+        # ):
+        #     new_vals = {}
+        #     for item in self.filtered(lambda a: a.calendar_event_id):
+        #         if values.get("date"):
+        #             new_vals["start"] = values.get("date")
+        #             new_vals["stop"] = values.get("date")
+        #         if values.get("user_id"):
+        #             new_vals["user_id"] = values.get("user_id")
+        #         item.calendar_event_id.write(new_vals)
         return ret_val
 
 
@@ -243,7 +247,7 @@ class CrmSalespersonPlannerVisitCustomerLine(models.Model):
     partner_id = fields.Many2one(
         comodel_name="res.partner",
         string="Customer",
-        required=True,
+        
     )
     partner_phone = fields.Char(string="Phone", related="partner_id.phone")
     partner_mobile = fields.Char(string="Mobile", related="partner_id.mobile")

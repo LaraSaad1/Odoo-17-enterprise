@@ -12,7 +12,7 @@
         'security/ir.model.access.csv',
         'data/quality_inspection_templates.xml',
         'views/quality_point_views.xml',
-        'views/quality_inspection_views.xml',
+        'views/quality_inspection.xml',
         'views/quality_check.xml',
         'views/quality_inspection_template_views.xml',
       

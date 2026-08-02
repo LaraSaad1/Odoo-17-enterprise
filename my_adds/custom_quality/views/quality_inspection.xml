@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_custom_quality_inspection_form"
+            model="ir.ui.view">
+        <field name="name">custom.quality.inspection.form</field>
+        <field name="model">custom.quality.inspection</field>
+        <field name="arch" type="xml">
+            <form string="Quality Inspection">
+                <header>
+                    <button
+                        name="action_pass"
+                        string="Pass"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'draft'"/>
+                    <button
+                        name="action_fail"
+                        string="Fail"
+                        type="object"
+                        class="btn-danger"
+                        invisible="state != 'draft'"/>
+                    <field name="state"
+                           widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="product_id"/>
+                        </group>
+                        <group>
+                            <field name="quality_check_id"/>
+                            <field name="quality_point_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Inspection Results">
+                            <field name="inspection_line_ids">
+                                <kanban class="o_kanban_mobile">
+                                    <field name="name"/>
+                                    <field name="test_type"/>
+                                    <field name="required"/>
+                                    <field name="help_text"/>
+                                    <field name="value_text"/>
+                                    <field name="value_number"/>
+                                    <field name="value_passfail"/>
+                                    <field name="value_picture"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div class="oe_kanban_global_click p-2 border-bottom w-100">
+                                                <strong>
+                                                    <field name="name"/>
+                                                    <span class="text-danger" t-if="record.required.raw_value"> *</span>
+                                                </strong>
+                                                <div class="text-muted small" t-if="record.help_text.raw_value">
+                                                    <field name="help_text"/>
+                                                </div>
+                                                <div class="mt-1">
+                                                    <span t-if="record.test_type.raw_value == 'picture'"
+                                class="badge badge-secondary">
+                                                        <t t-if="record.value_picture.raw_value">Picture attached</t>
+                                                        <t t-else="">No picture yet</t>
+                                                    </span>
+                                                    <span t-if="record.test_type.raw_value == 'measure'"
+                                class="badge badge-secondary">
+                                                        <field name="value_number"/>
+                                                    </span>
+                                                    <span t-if="record.test_type.raw_value == 'passfail'"
+                                class="badge badge-secondary">
+                                                        <field name="value_passfail"/>
+                                                    </span>
+                                                    <span t-if="!['picture', 'measure', 'passfail'].includes(record.test_type.raw_value)"
+                                class="badge badge-secondary">
+                                                        <field name="value_text"/>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <form string="Inspection Result">
+                                    <sheet>
+                                        <group>
+                                            <field name="name" readonly="1"/>
+                                            <field name="test_type_id" readonly="1"/>
+                                            <field name="test_type" invisible="1"/>
+                                            <field name="required" readonly="1"/>
+                                            <field name="help_text" readonly="1"/>
+                                        </group>
+                                        <group>
+                                            <field name="value_picture" widget="image"
+                        invisible="test_type != 'picture'"/>
+                                            <field name="value_number"
+                       invisible="test_type != 'measure'"/>
+                                            <field name="value_passfail" widget="radio"
+                       invisible="test_type != 'passfail'"/>
+                                            <field name="value_text"
+                       invisible="test_type in ('picture', 'measure', 'passfail')"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

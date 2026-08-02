@@ -19,7 +19,7 @@
                 <field name="user_id" />
                 <field name="company_id" groups="base.group_multi_company"/>
                 <field name="state" readonly="1" />
-                <field name="region"/>
+                <field name="region_ids"/>
                 <field name="executed_visits_count" readonly="1"/>
                 <button
                     name="action_draft"
@@ -128,7 +128,7 @@
                             <field name="calendar_event_id" readonly="1" invisible="1"/>
                             <field name="sequence" invisible="1"/>
                             <field name="user_id" />
-                            <field name="region"/>
+                            <field name="region_ids" widget="many2many_tags"/>
                             <field name="visit_purpose_ids" widget="many2many_tags"/>
                             <field name="executed_visits_count" readonly="1"/>
                             <field

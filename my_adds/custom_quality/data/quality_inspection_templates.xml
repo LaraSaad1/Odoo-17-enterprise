@@ -1,427 +1,520 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <data noupdate="0">
-
         <!-- ===================================================== -->
         <!-- PRODUCT CATEGORIES                                    -->
         <!-- ===================================================== -->
-
         <record id="product_category_finished" model="product.category">
             <field name="name">منتج تام</field>
             <field name="parent_id" eval="False"/>
         </record>
-
         <record id="product_category_raw" model="product.category">
             <field name="name">خامات</field>
             <field name="parent_id" eval="False"/>
         </record>
-
         <record id="product_category_packaging" model="product.category">
             <field name="name">مواد التعبئة والتغليف</field>
             <field name="parent_id" eval="False"/>
         </record>
-
         <record id="product_category_stickers" model="product.category">
             <field name="name">الأستيكرات</field>
             <field name="parent_id" eval="False"/>
         </record>
-
-
         <!-- ===================================================== -->
         <!-- FINISHED PRODUCT INSPECTION FORM                      -->
         <!-- ===================================================== -->
-
         <record id="inspection_template_finished_product"
                 model="quality.inspection.template">
-
             <field name="name">
                 Finished Product Inspection - فحص المنتج التام
             </field>
-
             <field name="product_category_id"
                    ref="product_category_finished"/>
-
         </record>
-
-
         <!-- ===================================================== -->
         <!-- FINISHED PRODUCT INSPECTION FIELDS                    -->
         <!-- ===================================================== -->
-
         <record id="finished_product_product_name"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Product Name - اسم المنتج
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">10</field>
-
         </record>
-
-
         <record id="finished_product_batch_number"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Batch Number - رقم الشغيلة
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">20</field>
-
         </record>
-
-
         <record id="finished_product_formulation"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Formulation - التركيبة
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">30</field>
-
         </record>
-
-
         <record id="finished_product_color"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Color - اللون
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">40</field>
-
         </record>
-
-
         <record id="finished_product_density"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Density - الكثافة
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">50</field>
-
         </record>
-
-
         <record id="finished_product_alkalinity_acidity"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Alkalinity + Acidity - القلوية + الحموضة
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">60</field>
-
         </record>
-
-
         <record id="finished_product_suspensibility"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Suspensibility - قابلية التعليق
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">70</field>
-
         </record>
-
-
         <record id="finished_product_persistent_foam"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Persistent Foam - الرغوة المستمرة
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">80</field>
-
         </record>
-
-
         <record id="finished_product_solubility"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Solubility - الذوبانية
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">90</field>
-
         </record>
-
-
         <record id="finished_product_temperature"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Temperature - درجة الحرارة
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">100</field>
-
         </record>
-
-
         <record id="finished_product_ai"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 A.I - المادة الفعالة
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">110</field>
-
         </record>
-
-
         <record id="finished_product_production_date"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Production Date - تاريخ الإنتاج
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">120</field>
-
         </record>
-
-
         <record id="finished_product_concentration"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Concentration - التركيز
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">130</field>
-
         </record>
-
-
         <record id="finished_product_ph"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 pH - درجة الحموضة
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">140</field>
-
         </record>
-
-
         <record id="finished_product_flowability"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Flowability - قابلية التدفق
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">150</field>
-
         </record>
-
-
         <record id="finished_product_emulsion_stability"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Emulsion Stability - استقرار المستحلب
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">160</field>
-
         </record>
-
-
         <record id="finished_product_wettability"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Wettability - قابلية التبلل
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">170</field>
-
         </record>
-
-
         <record id="finished_product_molecular_sieve"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Molecular Sieve - المنخل الجزيئي
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">180</field>
-
         </record>
-
-
         <record id="finished_product_final_decision"
                 model="quality.inspection.template.field">
-
             <field name="template_id"
                    ref="inspection_template_finished_product"/>
-
             <field name="name">
                 Final Decision - القرار النهائي
             </field>
-
             <field name="required">True</field>
-
             <field name="sequence">999</field>
-
         </record>
-
-
         <!-- ===================================================== -->
         <!-- RAW MATERIALS INSPECTION FORM                         -->
         <!-- ===================================================== -->
-
         <record id="inspection_template_raw_materials"
                 model="quality.inspection.template">
-
             <field name="name">
                 Raw Materials Inspection - فحص الخامات
             </field>
-
             <field name="product_category_id"
                    ref="product_category_raw"/>
-
         </record>
-
-
+        <!-- ===================================================== -->
+        <!-- RAW MATERIALS INSPECTION FIELDS                       -->
+        <!-- ===================================================== -->
+        <record id="raw_materials_ai"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                A.I - المادة الفعالة
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="raw_materials_drawing"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                رسم الخام
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="raw_materials_batch_number"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                Batch Number - رقم الشغيلة
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="raw_materials_form"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                Form - الشكل
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="raw_materials_concentration_ai"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                Concentration of A.I - تركيز المادة الفعالة
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="raw_materials_color"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                Color - اللون
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">60</field>
+        </record>
+        <record id="raw_materials_ph"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                PH - درجة الحموضة
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">70</field>
+        </record>
+        <record id="raw_materials_density"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                Density - الكثافة
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">80</field>
+        </record>
+        <record id="raw_materials_solubility"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                Solubility - الذوبانية
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">90</field>
+        </record>
+        <record id="raw_materials_melting_point"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                Melting Point - نقطة الانصهار
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">100</field>
+        </record>
+        <record id="raw_materials_alkalinity_acidity"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                Alkalinity Acidity - القلوية الحموضة
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">110</field>
+        </record>
+        <record id="raw_materials_final_decision"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_raw_materials"/>
+            <field name="name">
+                Final Decision - القرار النهائي
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">999</field>
+        </record>
         <!-- ===================================================== -->
         <!-- PACKAGING MATERIALS INSPECTION FORM                   -->
         <!-- ===================================================== -->
-
         <record id="inspection_template_packaging"
                 model="quality.inspection.template">
-
             <field name="name">
                 Packaging Materials Inspection - فحص مواد التعبئة والتغليف
             </field>
-
             <field name="product_category_id"
                    ref="product_category_packaging"/>
-
         </record>
-
-
+        <!-- ===================================================== -->
+        <!-- PACKAGING MATERIALS INSPECTION FIELDS                 -->
+        <!-- ===================================================== -->
+        <record id="packaging_roundness"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_packaging"/>
+            <field name="name">
+                الأستدارة
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="packaging_storage"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_packaging"/>
+            <field name="name">
+                التخزين
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="packaging_drop_test"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_packaging"/>
+            <field name="name">
+                اختبار السقوط
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="packaging_weight"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_packaging"/>
+            <field name="name">
+                وزن العبوه
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="packaging_cap_test"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_packaging"/>
+            <field name="name">
+                اختبارا الغطاء
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="packaging_final_decision"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_packaging"/>
+            <field name="name">
+                Final Decision - القرار النهائي
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">999</field>
+        </record>
         <!-- ===================================================== -->
         <!-- STICKERS INSPECTION FORM                              -->
         <!-- ===================================================== -->
-
         <record id="inspection_template_stickers"
                 model="quality.inspection.template">
-
             <field name="name">
-                Stickers Inspection - فحص الأستيكرات
+                Stickers Inspection - فحص الاستيكرات
             </field>
-
             <field name="product_category_id"
                    ref="product_category_stickers"/>
-
         </record>
-
+        <!-- ===================================================== -->
+        <!-- STICKERS INSPECTION FIELDS                            -->
+        <!-- ===================================================== -->
+        <record id="stickers_adhesion"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_stickers"/>
+            <field name="name">
+                قوة الألتصاق
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="stickers_water_resistance"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_stickers"/>
+            <field name="name">
+                مقاومة الماء
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="stickers_data_test"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_stickers"/>
+            <field name="name">
+                أختبار الداتا
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="stickers_storage_test"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_stickers"/>
+            <field name="name">
+                أختبار التخزين
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="stickers_size_test"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_stickers"/>
+            <field name="name">
+                أختبار المقاس
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="stickers_qr_test"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_stickers"/>
+            <field name="name">
+                أختبار QR
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">60</field>
+        </record>
+        <record id="stickers_final_decision"
+                model="quality.inspection.template.field">
+            <field name="template_id"
+                   ref="inspection_template_stickers"/>
+            <field name="name">
+                Final Decision - القرار النهائي
+            </field>
+            <field name="required">True</field>
+            <field name="sequence">999</field>
+        </record>
     </data>
-
 </odoo>

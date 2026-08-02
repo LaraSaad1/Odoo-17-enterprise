@@ -170,7 +170,7 @@ class QualityInspection(models.Model):
             if not line.required:
                 continue
 
-            if not line.value:
+            if not line._has_value():
                 raise ValidationError(
                     _(
                         'The field "%s" is required.'
@@ -216,7 +216,13 @@ class QualityInspectionLine(models.Model):
     test_type_id = fields.Many2one(
         'quality.point.test_type',
         string='Test Type',
-        # readonly=True,
+    )
+
+    test_type = fields.Char(
+        related='test_type_id.technical_name',
+        string='Test Type Code',
+        store=True,
+        readonly=True,
     )
 
     required = fields.Boolean(
@@ -234,6 +240,27 @@ class QualityInspectionLine(models.Model):
         readonly=True,
     )
 
+    # OLD generic field — kept for backward compatibility if referenced elsewhere
     value = fields.Char(
         string='Result',
     )
+
+    # NEW typed fields
+    value_text = fields.Char(string='Result')
+    value_number = fields.Float(string='Measured Value')
+    value_passfail = fields.Selection([
+        ('pass', 'Pass'),
+        ('fail', 'Fail'),
+    ], string='Result')
+    value_picture = fields.Binary(string='Picture', attachment=True)
+    value_picture_filename = fields.Char(string='File Name')
+
+    def _has_value(self):
+        self.ensure_one()
+        if self.test_type == 'picture':
+            return bool(self.value_picture)
+        if self.test_type == 'measure':
+            return bool(self.value_number)
+        if self.test_type == 'passfail':
+            return bool(self.value_passfail)
+        return bool(self.value_text)

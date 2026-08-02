@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class QualityInspectionTemplate(models.Model):
@@ -24,6 +24,17 @@ class QualityInspectionTemplate(models.Model):
         string='Inspection Fields',
         copy=True,
     )
+
+    field_count = fields.Integer(
+        string='Field Count',
+        compute='_compute_field_count',
+        store=True,
+    )
+
+    @api.depends('inspection_field_ids')
+    def _compute_field_count(self):
+        for template in self:
+            template.field_count = len(template.inspection_field_ids)
 
 
 class QualityInspectionTemplateField(models.Model):

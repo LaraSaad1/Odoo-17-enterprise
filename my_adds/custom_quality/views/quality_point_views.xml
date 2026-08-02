@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <record id="view_quality_point_form_inherit_custom_quality"
             model="ir.ui.view">
-
         <field name="name">quality.point.form.inherit.custom.quality</field>
         <field name="model">quality.point</field>
         <field name="inherit_id" ref="quality.quality_point_view_form"/>
         <field name="arch" type="xml">
-
             <!-- Add invisible fields needed by standard domain expressions -->
             <xpath expr="//field[@name='product_category_ids']" position="after">
                 <field name="operation_id" invisible="1"/>
@@ -16,27 +13,27 @@
                 <field name="is_workorder_step" invisible="1"/>
                 <field name="is_multi_field"/>
             </xpath>
-
             <!-- Inspection Forms -->
             <xpath expr="//field[@name='product_category_ids']" position="after">
-                <field name="inspection_template_ids"
-                       widget="many2many_tags"
-                       invisible="not is_multi_field"/>
-
-                <button name="action_load_inspection_fields"
-                        type="object"
-                        string="Load Inspection Fields"
-                        class="oe_highlight"
-                        invisible="not is_multi_field"/>
+                <label for="inspection_template_ids" invisible="not is_multi_field"/>
+                <div class="o_row" invisible="not is_multi_field">
+                    <field name="inspection_template_ids"
+                            widget="many2many_tags"
+                            placeholder="Select templates..."/>
+                    <button name="action_load_inspection_fields"
+                            type="object"
+                            string="Load Fields"
+                            icon="fa-refresh"
+                            class="btn-secondary"
+                            options="{'always_reload': True}"/>
+                </div>
             </xpath>
-
             <!-- Inspection Fields -->
             <xpath expr="//notebook" position="inside">
                 <page string="Custom Inspection Fields" invisible="not is_multi_field">
                     <field name="inspection_field_ids">
                         <tree editable="bottom">
                             <field name="name"/>
-                      
                             <field name="template_id" readonly="1"/>
                             <field name="template_field_id" readonly="1"/>
                             <field name="test_type_id"/>
@@ -48,7 +45,6 @@
                             <sheet>
                                 <group>
                                     <field name="name"/>
-                                   
                                     <field name="template_id" readonly="1"/>
                                     <field name="template_field_id" readonly="1"/>
                                     <field name="test_type_id"/>
@@ -61,9 +57,6 @@
                     </field>
                 </page>
             </xpath>
-
         </field>
-
     </record>
-
 </odoo>

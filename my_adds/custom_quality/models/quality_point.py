@@ -140,10 +140,11 @@ class QualityPoint(models.Model):
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
+            'tag': 'reload',
             'params': {
                 'title': _('Success'),
                 'message': _(
-                    '%s inspection fields loaded from %s inspection forms, Kindly refresh the page to see the changes.'
+                    '%s inspection fields loaded from %s inspection forms'
                 ) % (
                     len(lines),
                     len(self.inspection_template_ids),
