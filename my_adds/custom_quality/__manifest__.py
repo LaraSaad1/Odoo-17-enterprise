@@ -15,6 +15,7 @@
         'views/quality_inspection.xml',
         'views/quality_check.xml',
         'views/quality_inspection_template_views.xml',
+        'reports/pdf_custom_quality_inspection.xml',
       
     ],
     'installable': True,

@@ -5,7 +5,35 @@
         <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
-                <button name="action_open_multi_field_inspection" type="object" string="Custom Inspection" class="btn-primary"/>
+                <button name="action_open_multi_field_inspection"
+                        type="object"
+                        string="Custom Inspection"
+                        class="btn-primary"/>
+                <button name="action_print_inspection_report"
+                        type="object"
+                        string="Print Report"
+                        icon="fa-print"
+                        invisible="not point_id or not point_id.is_multi_field"
+                        class="btn-secondary"/>
+            </xpath>
+            <!-- "Inspection History" tab  -->
+            <xpath expr="//page[@name='notes']" position="after">
+                <page string="Inspection History"
+                      name="custom_inspection_history">
+                    <field name="inspection_history_ids"
+                           nolabel="1"
+                           readonly="1">
+                        <tree create="0" delete="0" edit="0"
+                              decoration-success="state == 'pass'"
+                              decoration-danger="state == 'fail'">
+                            <field name="name" string="Reference"/>
+                            <field name="quality_check_id" string="Quality Check"/>
+                            <field name="quality_point_id" string="Control Point"/>
+                            <field name="create_date" string="Date"/>
+                            <field name="state" widget="badge"/>
+                        </tree>
+                    </field>
+                </page>
             </xpath>
         </field>
     </record>

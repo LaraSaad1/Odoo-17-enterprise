@@ -19,6 +19,11 @@
                         type="object"
                         class="btn-danger"
                         invisible="state != 'draft'"/>
+                    <button name="%(custom_quality.action_report_custom_quality_inspection)d"
+                        type="action"
+                        string="Print Report"
+                        icon="fa-print"
+                        class="btn-secondary"/>
                     <field name="state"
                            widget="statusbar"/>
                 </header>

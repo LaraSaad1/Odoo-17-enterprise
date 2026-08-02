@@ -1,0 +1,103 @@
+<odoo>
+    <!-- Report Action -->
+    <record id="action_report_custom_quality_inspection" model="ir.actions.report">
+        <field name="name">Quality Inspection Report</field>
+        <field name="model">custom.quality.inspection</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_quality.report_custom_quality_inspection</field>
+        <field name="report_file">custom_quality.report_custom_quality_inspection</field>
+        <field name="print_report_name">'Quality Inspection - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_custom_quality_inspection"/>
+        <field name="binding_type">report</field>
+    </record>
+    <!-- Report Template -->
+    <template id="report_custom_quality_inspection">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Quality Inspection Report / تقرير فحص الجودة</h2>
+                        <div class="row mt-3 mb-2">
+                            <div class="col-6">
+                                <strong>Reference / المرجع:</strong>
+                                <span t-field="o.name"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Date / التاريخ:</strong>
+                                <span t-if="o.check_date"
+                                      t-field="o.check_date"
+                                      t-options="{'widget': 'datetime'}"/>
+                                <span t-if="not o.check_date"
+                                      t-field="o.create_date"
+                                      t-options="{'widget': 'datetime'}"/>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <strong>Product / الصنف:</strong>
+                                <span t-field="o.product_id.display_name"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Quality Check / فحص الجودة:</strong>
+                                <span t-field="o.quality_check_id.display_name"/>
+                            </div>
+                        </div>
+                        <table class="table table-bordered mt-2">
+                            <thead>
+                                <tr style="background-color:#f2f2f2;">
+                                    <th>Test / الاختبار</th>
+                                    <th>Type / النوع</th>
+                                    <th>Result / النتيجة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.inspection_line_ids" t-as="line">
+                                    <td>
+                                        <span t-field="line.name"/>
+                                        <span t-if="line.required"> *</span>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.test_type_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.result_display"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="mt-4">
+                            <h4>
+                                Final Result / النتيجة النهائية:
+                                <span t-if="o.state == 'pass'"
+                                      class="text-success"
+                                      t-field="o.state"/>
+                                <span t-if="o.state == 'fail'"
+                                      class="text-danger"
+                                      t-field="o.state"/>
+                                <span t-if="o.state == 'draft'"
+                                      t-field="o.state"/>
+                            </h4>
+                        </div>
+                        <div class="mt-3">
+                            <strong>Checked By / تم التأكيد بواسطة:</strong>
+                            <span t-field="o.checked_by.name"/>
+                        </div>
+                        <div class="mt-5" style="page-break-inside: avoid;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="mb-0">Quality Responsible Signature</p>
+                                    <p class="text-muted">توقيع مسؤول الجودة</p>
+                                    <div style="border-bottom: 1px solid #000; height: 60px;"/>
+                                </div>
+                                <div class="col-6">
+                                    <p class="mb-0">Date / التاريخ</p>
+                                    <div style="border-bottom: 1px solid #000; height: 60px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

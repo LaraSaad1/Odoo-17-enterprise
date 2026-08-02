@@ -53,6 +53,17 @@ class QualityInspection(models.Model):
         string='Inspection Fields',
     )
 
+    checked_by = fields.Many2one(
+    'res.users',
+    string='Checked By',
+    readonly=True,
+    )
+
+    check_date = fields.Datetime(
+    string='Confirmation Date',
+    readonly=True,
+    )
+
     @api.model_create_multi
     def create(self, vals_list):
 
@@ -132,34 +143,28 @@ class QualityInspection(models.Model):
         self.inspection_line_ids = lines
 
     def action_pass(self):
-
         for inspection in self:
-
             inspection._validate_required_fields()
-
             inspection.state = 'pass'
+            inspection.checked_by = self.env.user
+            inspection.check_date = fields.Datetime.now()
 
             if inspection.quality_check_id:
                 inspection.quality_check_id.do_pass()
 
-        return {
-            'type': 'ir.actions.act_window_close'
-        }
+        return {'type': 'ir.actions.act_window_close'}
 
     def action_fail(self):
-
         for inspection in self:
-
             inspection._validate_required_fields()
-
             inspection.state = 'fail'
+            inspection.checked_by = self.env.user
+            inspection.check_date = fields.Datetime.now()
 
             if inspection.quality_check_id:
                 inspection.quality_check_id.do_fail()
 
-        return {
-            'type': 'ir.actions.act_window_close'
-        }
+        return {'type': 'ir.actions.act_window_close'}
 
     def _validate_required_fields(self):
 
@@ -255,6 +260,52 @@ class QualityInspectionLine(models.Model):
     value_picture = fields.Binary(string='Picture', attachment=True)
     value_picture_filename = fields.Char(string='File Name')
 
+    def _has_value(self):
+        self.ensure_one()
+        if self.test_type == 'picture':
+            return bool(self.value_picture)
+        if self.test_type == 'measure':
+            return bool(self.value_number)
+        if self.test_type == 'passfail':
+            return bool(self.value_passfail)
+        return bool(self.value_text)
+
+    result_display = fields.Char(
+        string='Result',
+        compute='_compute_result_display',
+    )
+ 
+    @api.depends(
+        'test_type',
+        'value_text',
+        'value_number',
+        'value_passfail',
+        'value_picture',
+    )
+    def _compute_result_display(self):
+        passfail_labels = dict(
+            self._fields['value_passfail'].selection
+        )
+        for line in self:
+            if line.test_type == 'picture':
+                line.result_display = (
+                    _('Picture attached')
+                    if line.value_picture
+                    else _('No picture')
+                )
+            elif line.test_type == 'measure':
+                line.result_display = (
+                    str(line.value_number)
+                    if line.value_number
+                    else ''
+                )
+            elif line.test_type == 'passfail':
+                line.result_display = passfail_labels.get(
+                    line.value_passfail, ''
+                )
+            else:
+                line.result_display = line.value_text or ''
+ 
     def _has_value(self):
         self.ensure_one()
         if self.test_type == 'picture':

@@ -1,9 +1,31 @@
 from odoo import models
 from odoo import api, fields
+from odoo.exceptions import UserError
+
 
 
 class QualityCheck(models.Model):
     _inherit = 'quality.check'
+
+    inspection_history_ids = fields.Many2many(
+        'custom.quality.inspection',
+        string="Inspection History",
+        compute='_compute_inspection_history_ids',
+    )
+ 
+    def _compute_inspection_history_ids(self):
+        Inspection = self.env['custom.quality.inspection']
+        for check in self:
+            if not check.product_id:
+                check.inspection_history_ids = Inspection
+                continue
+            check.inspection_history_ids = Inspection.search(
+                [
+                    ('product_id', '=', check.product_id.id),
+                    ('state', '!=', 'draft'),
+                ],
+                order='create_date desc',
+            )
 
     point_id = fields.Many2one(
         "quality.point",
@@ -50,6 +72,32 @@ class QualityCheck(models.Model):
         return super().action_open_quality_check_wizard(
             current_check_id
         )
+
+    def action_print_inspection_report(self):
+        
+        self.ensure_one()
+ 
+        inspection = self.env[
+            'custom.quality.inspection'
+        ].search(
+            [
+                ('quality_check_id', '=', self.id),
+            ],
+            limit=1,
+        )
+ 
+        if not inspection:
+            raise UserError(
+                _(
+                    'No Custom Inspection was found for this '
+                    'Quality Check yet. Please fill in the '
+                    'inspection first.'
+                )
+            )
+ 
+        return self.env.ref(
+            'custom_quality.action_report_custom_quality_inspection'
+        ).report_action(inspection)
 
     def action_open_multi_field_inspection(self):
         """
