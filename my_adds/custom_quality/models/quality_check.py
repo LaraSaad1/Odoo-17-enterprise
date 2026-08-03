@@ -31,6 +31,10 @@ class QualityCheck(models.Model):
         "quality.point",
         string="Control Point",
     )
+    is_multi_field = fields.Boolean(
+    related='point_id.is_multi_field',
+    string='Is Multi-Field Inspection',
+    )
 
     @api.onchange("product_id")
     def _onchange_product_id(self):

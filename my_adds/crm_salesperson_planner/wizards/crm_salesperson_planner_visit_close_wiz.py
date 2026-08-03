@@ -20,11 +20,11 @@ class CrmSalespersonPlannerVisitCloseWiz(models.TransientModel):
         )
         return visits.sequence
 
-    reason_id = fields.Many2one(
-        comodel_name="crm.salesperson.planner.visit.close.reason",
-        string="Reason",
-        required=True,
-    )
+    # reason_id = fields.Many2one(
+    #     comodel_name="crm.salesperson.planner.visit.close.reason",
+    #     string="Reason",
+    #     required=True,
+    # )
     image = fields.Image(max_width=1024, max_height=1024)
     new_date = fields.Date(default=lambda self: self._default_new_date())
     new_sequence = fields.Integer(
@@ -33,11 +33,11 @@ class CrmSalespersonPlannerVisitCloseWiz(models.TransientModel):
         default=lambda self: self._default_new_sequence(),
     )
     require_image = fields.Boolean(
-        string="Require Image", related="reason_id.require_image"
+        string="Require Image"
     )
     reschedule = fields.Boolean(default=True)
     allow_reschedule = fields.Boolean(
-        string="Allow Reschedule", related="reason_id.reschedule"
+        string="Allow Reschedule"
     )
     notes = fields.Text()
 
@@ -45,10 +45,11 @@ class CrmSalespersonPlannerVisitCloseWiz(models.TransientModel):
         visits = self.env["crm.salesperson.planner.visit"].browse(
             self.env.context.get("active_id")
         )
-        visit_close_find_method_name = "action_%s" % self.reason_id.close_type
+        visit_close_find_method_name = "action_%s" % self.action_type 
+        
         if hasattr(visits, visit_close_find_method_name):
             getattr(visits, visit_close_find_method_name)(
-                self.reason_id, self.image, self.notes
+                self.image, self.notes
             )
             if self.allow_reschedule and self.reschedule:
                 visits.copy(
@@ -59,5 +60,5 @@ class CrmSalespersonPlannerVisitCloseWiz(models.TransientModel):
                     }
                 ).action_confirm()
         else:
-            raise ValueError(_("The close reason type haven't a function."))
+            raise ValueError(_("The close action type hasn't a function."))
         return {"type": "ir.actions.act_window_close"}

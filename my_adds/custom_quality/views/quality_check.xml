@@ -5,6 +5,7 @@
         <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
+                <field name="is_multi_field" invisible="1"/>
                 <button name="action_open_multi_field_inspection"
                         type="object"
                         string="Custom Inspection"
@@ -13,7 +14,7 @@
                         type="object"
                         string="Print Report"
                         icon="fa-print"
-                        invisible="not point_id or not point_id.is_multi_field"
+                        invisible="not point_id or not is_multi_field"
                         class="btn-secondary"/>
             </xpath>
             <!-- "Inspection History" tab  -->

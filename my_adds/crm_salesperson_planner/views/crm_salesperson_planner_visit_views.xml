@@ -148,11 +148,6 @@
                             invisible="state not in ['cancel', 'incident']"
                         >
                             <group>
-                                <field
-                                    name="close_reason_id"
-                                    readonly="1"
-                                    options="{'no_edit': True, 'no_open': True}"
-                                />
                                 <field name="close_reason_notes" readonly="1" />
                                 <field
                                     name="close_reason_image"
@@ -223,20 +218,6 @@
                                 </form>
                             </field>
                         </page>
-                        <page string="Sale Orders">
-                            <field 
-                                name="sale_order_ids" 
-                                nolabel="1"
-                                domain="[('partner_id', '=', partner_id), ('user_id', '=', uid)]"
-                            >
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="partner_id"/>
-                                    <field name="amount_total"/>
-                                    <field name="state"/>
-                                </tree>
-                            </field>
-                        </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
@@ -263,7 +244,6 @@
                 />
                 <field name="user_id" />
                 <field name="date" />
-                <field name="sale_order_ids"/>
                 <separator />
                 <filter
                     string="My Visits"

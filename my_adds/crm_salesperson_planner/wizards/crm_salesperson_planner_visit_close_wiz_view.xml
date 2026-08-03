@@ -8,11 +8,6 @@
         <field name="arch" type="xml">
             <form string="Close Reason">
                 <group>
-                    <field
-                        name="reason_id"
-                        options="{'no_create': True, 'no_edit': True, 'no_open': True}"
-                        domain="[('close_type','=', context.get('att_close_type', 'cancel'))]"
-                    />
                     <field name="notes" />
                     <field name="allow_reschedule" invisible="1" />
                     <field name="reschedule" invisible="not allow_reschedule" />

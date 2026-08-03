@@ -59,14 +59,7 @@ class CrmSalespersonPlannerVisit(models.Model):
             ("groups_id", "in", [self.env.ref("sales_team.group_sale_salesman").id])
         ],
     )
-    sale_order_ids = fields.Many2many(
-        comodel_name="sale.order",
-        relation="crm_salesperson_planner_visit_sale_order_rel",
-        string="Sale Orders",
-        copy=False,
-
-    )
-
+   
     new_customers_count = fields.Integer(string="عدد العملاء الجدد")
     orders_count = fields.Integer(string="عدد الطلبيات")
     total_sales = fields.Float(string="إجمالي المبيعات")
@@ -92,9 +85,7 @@ class CrmSalespersonPlannerVisit(models.Model):
         ],
         default="draft",
     )
-    close_reason_id = fields.Many2one(
-        comodel_name="crm.salesperson.planner.visit.close.reason", string="Close Reason"
-    )
+ 
     close_reason_image = fields.Image(max_width=1024, max_height=1024, attachment=True)
     close_reason_notes = fields.Text()
     visit_template_id = fields.Many2one(
@@ -151,7 +142,7 @@ class CrmSalespersonPlannerVisit(models.Model):
             raise ValidationError(_("The visit must be in confirmed state"))
         self.write({"state": "done"})
 
-    def action_cancel(self, reason_id, image=None, notes=None):
+    def action_cancel(self, image=None, notes=None):
         if self.state not in ["draft", "confirm"]:
             raise ValidationError(_("The visit must be in draft or validated state"))
         # if self.calendar_event_id:
@@ -159,7 +150,7 @@ class CrmSalespersonPlannerVisit(models.Model):
         self.write(
             {
                 "state": "cancel",
-                "close_reason_id": reason_id.id,
+               
                 "close_reason_image": image,
                 "close_reason_notes": notes,
             }
@@ -194,13 +185,12 @@ class CrmSalespersonPlannerVisit(models.Model):
     #         events += event
     #     return events
 
-    def action_incident(self, reason_id, image=None, notes=None):
+    def action_incident(self, image=None, notes=None):
         if self.state not in ["draft", "confirm"]:
             raise ValidationError(_("The visit must be in draft or validated state"))
         self.write(
             {
                 "state": "incident",
-                "close_reason_id": reason_id.id,
                 "close_reason_image": image,
                 "close_reason_notes": notes,
             }
@@ -261,8 +251,20 @@ class CrmSalespersonPlannerVisitCustomerLine(models.Model):
     product_performance = fields.Char(string="اداء منتجاتنا ورضا العميل")
     cultivated_area = fields.Float(string="المساحة المزروعة (فدان)")
     crop_type = fields.Char(string="نوع المحصول")
-    growth_stage = fields.Char(string="مرحلة النمو")
-    crop_condition = fields.Char(string="حالة المحصول")
+    growth_stage = fields.Selection([
+    ('germination', 'انبات'),
+    ('vegetative', 'نمو خضري'),
+    ('flowering', 'تزهير'),
+    ('fruiting', 'عقد'),
+    ('harvest', 'حصاد')
+    ], string="مرحلة النمو")
+
+    crop_condition = fields.Selection([
+    ('excellent', 'ممتاز'),
+    ('good', 'جيد'),
+    ('average', 'متوسط'),
+    ('light', 'خفيف')
+    ], string="حالة المحصول")
     observed_issues = fields.Char(string="المشاكل الظاهرة")
     technical_recommendations = fields.Char(string="التوصيات الفنية المقدمة")
     next_visit_date = fields.Date(string="موعد الزيارة القادمة")
