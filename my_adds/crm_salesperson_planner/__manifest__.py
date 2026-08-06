@@ -13,6 +13,7 @@
         "data/crm_salesperson_planner_sequence.xml",
         "wizards/crm_salesperson_planner_visit_close_wiz_view.xml",
         "wizards/crm_salesperson_planner_visit_template_create.xml",
+        "views/res_country_state_views.xml",
         "views/crm_salesperson_planner_visit_views.xml",
         "views/crm_salesperson_planner_visit_close_reason_views.xml",
         "views/crm_salesperson_planner_visit_template_views.xml",

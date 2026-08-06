@@ -7,3 +7,4 @@ from . import crm_salesperson_planner_visit_close_reason
 from . import res_partner
 from . import crm_lead
 from . import calendar_event
+from . import res_country_state
