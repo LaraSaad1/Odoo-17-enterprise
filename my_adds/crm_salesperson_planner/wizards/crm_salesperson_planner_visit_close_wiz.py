@@ -8,6 +8,15 @@ class CrmSalespersonPlannerVisitCloseWiz(models.TransientModel):
     _name = "crm.salesperson.planner.visit.close.wiz"
     _description = "Get Close Reason"
 
+    action_type = fields.Selection(
+        [
+            ("cancel", "Cancelled"),
+            ("incident", "Incident"),
+        ],
+        string="Action Type",
+        required=True,
+    )
+
     def _default_new_date(self):
         visits = self.env["crm.salesperson.planner.visit"].browse(
             self.env.context.get("active_id")
@@ -47,18 +56,18 @@ class CrmSalespersonPlannerVisitCloseWiz(models.TransientModel):
         )
         visit_close_find_method_name = "action_%s" % self.action_type 
         
-        if hasattr(visits, visit_close_find_method_name):
-            getattr(visits, visit_close_find_method_name)(
-                self.image, self.notes
-            )
-            if self.allow_reschedule and self.reschedule:
-                visits.copy(
-                    {
-                        "date": self.new_date,
-                        "sequence": self.new_sequence,
-                        "opportunity_ids": visits.opportunity_ids.ids,
-                    }
-                ).action_confirm()
-        else:
-            raise ValueError(_("The close action type hasn't a function."))
+        # if hasattr(visits, visit_close_find_method_name):
+        #     getattr(visits, visit_close_find_method_name)(
+        #         self.image, self.notes
+        #     )
+        #     if self.allow_reschedule and self.reschedule:
+        #         visits.copy(
+        #             {
+        #                 "date": self.new_date,
+        #                 "sequence": self.new_sequence,
+        #                 "opportunity_ids": visits.opportunity_ids.ids,
+        #             }
+        #         ).action_confirm()
+        # else:
+        #     raise ValueError(_("The close action type hasn't a function."))
         return {"type": "ir.actions.act_window_close"}

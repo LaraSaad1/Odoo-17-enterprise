@@ -133,9 +133,7 @@ class CrmSalespersonPlannerVisit(models.Model):
     def action_confirm(self):
         if self.filtered(lambda a: not a.state == "draft"):
             raise ValidationError(_("The visit must be in draft state"))
-        # events = self.create_calendar_event()
-        # if events:
-        #     self.browse(events.mapped("res_id")).write({"state": "confirm"})
+        self.write({"state": "confirm"})
 
     def action_done(self):
         if not self.state == "confirm":
