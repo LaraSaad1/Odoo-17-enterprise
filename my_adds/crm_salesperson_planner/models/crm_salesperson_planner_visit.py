@@ -60,7 +60,11 @@ class CrmSalespersonPlannerVisit(models.Model):
         ],
     )
    
-    new_customers_count = fields.Integer(string="عدد العملاء الجدد")
+    new_customers_count = fields.Integer(
+    string="عدد العملاء الجدد",
+    compute='_compute_new_customers_count',
+    store=True,
+    )
     orders_count = fields.Integer(string="عدد الطلبيات")
     total_sales = fields.Float(string="إجمالي المبيعات")
     main_challenges = fields.Text(string="أهم التحديات")
@@ -111,6 +115,11 @@ class CrmSalespersonPlannerVisit(models.Model):
     def _compute_executed_visits_count(self):
         for visit in self:
             visit.executed_visits_count = len(visit.customer_line_ids)
+
+    @api.depends("customer_line_ids", "customer_line_ids.partner_id")
+    def _compute_new_customers_count(self):
+        for visit in self:
+            visit.new_customers_count = len(visit.customer_line_ids.mapped("partner_id"))        
 
     @api.model_create_multi
     def create(self, vals_list):
