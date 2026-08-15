@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <!-- This t-inherit extends account_reports.AccountReportFilterPartner, adding a
+         "Salesperson" row alongside the existing "Partners" and "Tags" rows. -->
+    <t t-inherit="account_reports.AccountReportFilterPartner" t-inherit-mode="extension">
+        <xpath expr="//div[contains(@class, 'dropdown-item')][2]" position="after">
+            <div class="dropdown-item">
+                <label>Salesperson</label>
+                <MultiRecordSelector t-props="getMultiRecordSelectorProps('res.users', 'partner_users')"/>
+            </div>
+        </xpath>
+    </t>
+</templates>
