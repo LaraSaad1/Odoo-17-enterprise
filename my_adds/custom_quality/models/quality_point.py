@@ -60,8 +60,7 @@ class QualityPoint(models.Model):
             'quality.inspection.template'
         ].search([
             (
-                'product_category_id',
-                'in',
+                'product_category_ids', 'in',
                 self.product_category_ids.ids,
             ),
         ])
@@ -73,7 +72,7 @@ class QualityPoint(models.Model):
     def action_load_inspection_fields(self):
         """
         Load all fields from all selected inspection forms
-        into this Quality Control Point.
+        into this Quality Control Point.s
 
         The product category is copied from the inspection template
         to each inspection field, just like the old version.
@@ -111,8 +110,8 @@ class QualityPoint(models.Model):
                         {
                             'template_id': template.id,
                             'template_field_id': template_field.id,
-                            'product_category_id': (
-                                template.product_category_id.id
+                            'product_category_ids': (
+                                template.product_category_ids.ids
                             ),
                             'name': template_field.name,
                             'test_type_id': (
@@ -180,11 +179,11 @@ class QualityPointInspectionField(models.Model):
         ondelete='set null',
     )
 
-    product_category_id = fields.Many2one(
+    product_category_ids = fields.Many2many(
         'product.category',
-        string='Product Category',
+        string='Product Categories',
         readonly=True,
-        ondelete='set null',
+        ondelete='cascade',
     )
 
     name = fields.Char(

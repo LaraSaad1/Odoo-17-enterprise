@@ -11,9 +11,9 @@ class QualityInspectionTemplate(models.Model):
         required=True,
     )
 
-    product_category_id = fields.Many2one(
+    product_category_ids = fields.Many2many(
         'product.category',
-        string='Product Category',
+        string='Product Categories',
         required=True,
         ondelete='restrict',
     )
@@ -42,7 +42,6 @@ class QualityInspectionTemplateField(models.Model):
     _description = 'Quality Inspection Form Field'
     _order = 'sequence, id'
 
-    product_category_id = fields.Many2one('product.category', string='Product Category')
 
     template_id = fields.Many2one(
         'quality.inspection.template',

@@ -18164,6 +18164,164 @@ const action=type==="action"&&name;const method=type==="object"&&name;this.appro
 onClickViewButton(params);},});}},async checkBeforeExecute(){this.approval.willCheck=true;if(!this.approval.resId){const model=this.props.record.model;const rec="resId"in model.root?model.root:this.props.record;await rec.save();}else if(this.props.record&&this.props.record.isDirty){await this.props.record.save();}
 return this.approval.checkApproval();},});ViewButton.props.push("studioApproval?");ViewButton.components=Object.assign(ViewButton.components||{},{StudioApproval});return __exports;});;
 
+/* /hr_holidays/static/src/components/hr_presence_status/hr_presence_status.js */
+odoo.define('@hr_holidays/components/hr_presence_status/hr_presence_status',['@web/core/utils/patch','@hr/components/hr_presence_status/hr_presence_status','@hr/components/hr_presence_status_private/hr_presence_status_private'],function(require){'use strict';let __exports={};const{patch}=require("@web/core/utils/patch");const{HrPresenceStatus}=require("@hr/components/hr_presence_status/hr_presence_status");const{HrPresenceStatusPrivate,hrPresenceStatusPrivate}=require("@hr/components/hr_presence_status_private/hr_presence_status_private");const patchHrPresenceStatus=()=>({get icon(){if(this.value.startsWith("presence_holiday")){return"fa-plane";}
+return super.icon;},get color(){if(this.value.startsWith("presence_holiday")){return`text-${this.value === "presence_holiday_present" ? "success" : "warning"}`;}
+return super.color;},});patch(HrPresenceStatus.prototype,patchHrPresenceStatus());patch(HrPresenceStatusPrivate.prototype,patchHrPresenceStatus());patch(HrPresenceStatusPrivate.prototype,{get label(){return this.props.record.data.current_leave_id?this.props.record.data.current_leave_id[1]:super.label;}});Object.assign(hrPresenceStatusPrivate,{fieldDependencies:[...(hrPresenceStatusPrivate.fieldDependencies||[]),{name:"current_leave_id",type:"many2one"}],});return __exports;});;
+
+/* /hr_holidays/static/src/dashboard/time_off_card.js */
+odoo.define('@hr_holidays/dashboard/time_off_card',['@web/core/popover/popover_hook','@hr_holidays/views/hooks','@web/core/utils/hooks','@odoo/owl'],function(require){'use strict';let __exports={};const{usePopover}=require("@web/core/popover/popover_hook");const{formatNumber,useNewAllocationRequest}=require("@hr_holidays/views/hooks");const{useService}=require("@web/core/utils/hooks");const{Component,onWillRender}=require("@odoo/owl");const TimeOffCardPopover=__exports.TimeOffCardPopover=class TimeOffCardPopover extends Component{setup(){this.actionService=useService("action");}
+async openLeaves(){this.actionService.doAction({type:"ir.actions.act_window",res_model:"hr.leave",views:[[false,"list"],[false,"form"],],domain:[["id","in",this.props.errorLeaves]],});}}
+TimeOffCardPopover.template="hr_holidays.TimeOffCardPopover";TimeOffCardPopover.props=["allocated","accrual_bonus","approved","planned","left","warning","closest","request_unit","exceeding_duration","close?","allows_negative","max_allowed_negative","onClickNewAllocationRequest?","errorLeaves","accrualExcess",];const TimeOffCard=__exports.TimeOffCard=class TimeOffCard extends Component{setup(){this.popover=usePopover(TimeOffCardPopover,{position:"bottom",popoverClass:"bg-view",});this.newAllocationRequest=useNewAllocationRequest();this.lang=this.env.services.user.lang;this.formatNumber=formatNumber;const{data}=this.props;this.errorLeaves=Object.values(data.virtual_excess_data).map((data)=>data.leave_id);this.errorLeavesDuration=Object.values(data.virtual_excess_data).reduce((acc,data)=>acc+data.amount,0);this.updateWarning();onWillRender(this.updateWarning);}
+updateWarning(){const{data}=this.props;const errorLeavesSignificant=data.allows_negative?this.errorLeavesDuration>data.max_allowed_negative:this.errorLeavesDuration>0;const accrualExcess=this.getAccrualExcess(data);const closeExpire=data.closest_allocation_duration&&data.closest_allocation_duration<data.virtual_remaining_leaves;this.warning=errorLeavesSignificant||accrualExcess||closeExpire;}
+onClickInfo(ev){const{data}=this.props;this.popover.open(ev.target,{allocated:formatNumber(this.lang,data.max_leaves),accrual_bonus:formatNumber(this.lang,data.accrual_bonus),approved:formatNumber(this.lang,data.leaves_approved),planned:formatNumber(this.lang,data.leaves_requested),left:formatNumber(this.lang,data.virtual_remaining_leaves),warning:this.warning,closest:data.closest_allocation_duration,request_unit:data.request_unit,exceeding_duration:data.exceeding_duration,allows_negative:data.allows_negative,max_allowed_negative:data.max_allowed_negative,onClickNewAllocationRequest:this.newAllocationRequestFrom.bind(this),errorLeaves:this.errorLeaves,accrualExcess:this.getAccrualExcess(data),});}
+getAccrualExcess(data){return data.allows_negative?-data.exceeding_duration>data.max_allowed_negative:-data.exceeding_duration>0;}
+async newAllocationRequestFrom(){this.popover.close();await this.newAllocationRequest(this.props.employeeId,this.props.holidayStatusId);}}
+TimeOffCard.template="hr_holidays.TimeOffCard";TimeOffCard.props=["name","data","requires_allocation","employeeId","holidayStatusId"];const TimeOffCardMobile=__exports.TimeOffCardMobile=class TimeOffCardMobile extends TimeOffCard{}
+TimeOffCardMobile.template="hr_holidays.TimeOffCardMobile";return __exports;});;
+
+/* /hr_holidays/static/src/dashboard/time_off_dashboard.js */
+odoo.define('@hr_holidays/dashboard/time_off_dashboard',['@hr_holidays/dashboard/time_off_card','@hr_holidays/views/hooks','@web/core/utils/hooks','@web/core/datetime/datetime_input','@odoo/owl'],function(require){'use strict';let __exports={};const{TimeOffCard}=require("@hr_holidays/dashboard/time_off_card");const{useNewAllocationRequest}=require("@hr_holidays/views/hooks");const{useBus,useService}=require("@web/core/utils/hooks");const{DateTimeInput}=require("@web/core/datetime/datetime_input");const{Component,useState,onWillStart}=require("@odoo/owl");const TimeOffDashboard=__exports.TimeOffDashboard=class TimeOffDashboard extends Component{setup(){this.orm=useService("orm");this.newRequest=useNewAllocationRequest();this.state=useState({date:luxon.DateTime.now(),today:luxon.DateTime.now(),holidays:[],});useBus(this.env.timeOffBus,"update_dashboard",async()=>{await this.loadDashboardData();});onWillStart(async()=>{await this.loadDashboardData();const context={};if(this.props&&this.props.employeeId!==null){context["employee_id"]=this.props.employeeId;}
+this.hasAccrualAllocation=await this.orm.call("hr.leave.type","has_accrual_allocation",[],{context:context,});});}
+async loadDashboardData(date=false){const context={from_dashboard:true};if(this.props&&this.props.employeeId!==null){context["employee_id"]=this.props.employeeId;}
+if(date){this.state.date=date;}
+this.state.holidays=await this.orm.call("hr.leave.type","get_allocation_data_request",[this.state.date],{context:context,});}
+async newAllocationRequest(){await this.newRequest(this.props.employeeId);}
+resetDate(){this.state.date=luxon.DateTime.now();this.loadDashboardData();}}
+TimeOffDashboard.components={TimeOffCard,DateTimeInput};TimeOffDashboard.template="hr_holidays.TimeOffDashboard";TimeOffDashboard.props=["employeeId"];return __exports;});;
+
+/* /hr_holidays/static/src/js/accrual_levels_widget.js */
+odoo.define('@hr_holidays/js/accrual_levels_widget',['@web/core/registry','@web/views/fields/x2many/x2many_field'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{X2ManyField,x2ManyField}=require("@web/views/fields/x2many/x2many_field");const AccrualLevelsX2ManyField=__exports.AccrualLevelsX2ManyField=class AccrualLevelsX2ManyField extends X2ManyField{};AccrualLevelsX2ManyField.template="hr_holidays.AccrualLevelsX2ManyField";const accrualLevelsX2ManyField=__exports.accrualLevelsX2ManyField={...x2ManyField,component:AccrualLevelsX2ManyField,};registry.category("fields").add("accrual_levels_one2many",accrualLevelsX2ManyField);return __exports;});;
+
+/* /hr_holidays/static/src/js/float_without_trailing_zeros.js */
+odoo.define('@hr_holidays/js/float_without_trailing_zeros',['@web/core/registry','@web/views/fields/float/float_field'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{floatField,FloatField}=require("@web/views/fields/float/float_field");const fieldRegistry=registry.category("fields");class FloatWithoutTrailingZeros extends FloatField{get formattedValue(){return super.formattedValue.replace(/\.0+$/,'');}}
+const floatWithoutTrailingZeros={...floatField,component:FloatWithoutTrailingZeros};fieldRegistry.add("float_without_trailing_zeros",floatWithoutTrailingZeros);return __exports;});;
+
+/* /hr_holidays/static/src/leave_stats/leave_stats.js */
+odoo.define('@hr_holidays/leave_stats/leave_stats',['@web/core/registry','@web/core/utils/hooks','@web/model/relational_model/utils','@web/core/l10n/dates','@odoo/owl'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{useService}=require("@web/core/utils/hooks");const{useRecordObserver}=require("@web/model/relational_model/utils");const{formatDate}=require("@web/core/l10n/dates");const{Component,useState,onWillStart}=require("@odoo/owl");const{DateTime}=luxon;const LeaveStatsComponent=__exports.LeaveStatsComponent=class LeaveStatsComponent extends Component{setup(){this.orm=useService("orm");this.state=useState({leaves:[],departmentLeaves:[],});this.date=this.props.record.data.date_from||DateTime.now();this.department=this.props.record.data.department_id;this.employee=this.props.record.data.employee_id;onWillStart(async()=>{await this.loadLeaves(this.date,this.employee);await this.loadDepartmentLeaves(this.date,this.department,this.employee);});useRecordObserver(async(record)=>{const dateFrom=record.data.date_from||DateTime.now();const dateChanged=this.date!==dateFrom;const employee=record.data.employee_id;const department=record.data.department_id;const proms=[];if(dateChanged||(employee&&(this.employee&&this.employee[0])!==employee[0])){proms.push(this.loadLeaves(dateFrom,employee));}
+if(dateChanged||(department&&(this.department&&this.department[0])!==department[0])){proms.push(this.loadDepartmentLeaves(dateFrom,department,employee));}
+await Promise.all(proms);this.date=dateFrom;this.employee=employee;this.department=department;});}
+get thisYear(){return this.date.toFormat("yyyy");}
+async loadDepartmentLeaves(date,department,employee){if(!(department&&employee&&date)){this.state.departmentLeaves=[];return;}
+const dateFrom=date.startOf("month");const dateTo=date.endOf("month");const departmentLeaves=await this.orm.searchRead("hr.leave",[["department_id","=",department[0]],["state","=","validate"],["holiday_type","=","employee"],["date_from","<=",dateTo],["date_to",">=",dateFrom],],["employee_id","date_from","date_to","number_of_days"]);this.state.departmentLeaves=departmentLeaves.map((leave)=>{return Object.assign({},leave,{dateFrom:formatDate(DateTime.fromSQL(leave.date_from,{zone:"utc"}).toLocal()),dateTo:formatDate(DateTime.fromSQL(leave.date_to,{zone:"utc"}).toLocal()),sameEmployee:leave.employee_id[0]===employee[0],});});}
+async loadLeaves(date,employee){if(!(employee&&date)){this.state.leaves=[];return;}
+const dateFrom=date.startOf("year");const dateTo=date.endOf("year");this.state.leaves=await this.orm.readGroup("hr.leave",[["employee_id","=",employee[0]],["state","=","validate"],["date_from","<=",dateTo],["date_to",">=",dateFrom],],["holiday_status_id","number_of_days:sum"],["holiday_status_id"]);}}
+LeaveStatsComponent.template="hr_holidays.LeaveStatsComponent";const leaveStatsComponent=__exports.leaveStatsComponent={component:LeaveStatsComponent,};registry.category("view_widgets").add("hr_leave_stats",leaveStatsComponent);return __exports;});;
+
+/* /hr_holidays/static/src/persona_service_patch.js */
+odoo.define('@hr_holidays/persona_service_patch',['@mail/core/common/persona_service','@web/core/l10n/dates','@web/core/l10n/translation','@web/core/utils/patch'],function(require){'use strict';let __exports={};const{personaService,PersonaService}=require("@mail/core/common/persona_service");const{deserializeDateTime}=require("@web/core/l10n/dates");const{_t}=require("@web/core/l10n/translation");const{patch}=require("@web/core/utils/patch");const{DateTime}=luxon;patch(personaService,{dependencies:[...new Set([...personaService.dependencies,"user"])],});patch(PersonaService.prototype,{setup(env,services){super.setup(env,services);this.userService=services.user;},outOfOfficeText(persona){if(!persona.out_of_office_date_end){return"";}
+const currentDate=new Date();const date=deserializeDateTime(persona.out_of_office_date_end);if(currentDate.getFullYear()!==date.year){}
+let localeCode=this.userService.lang.replace(/_/g,"-");if(localeCode==="sr@latin"){localeCode="sr-Latn-RS";}
+const fdate=date.toLocaleString(DateTime.DATE_MED);return _t("Out of office until %s",fdate);},});return __exports;});;
+
+/* /hr_holidays/static/src/radio_image_field/radio_image_field.js */
+odoo.define('@hr_holidays/radio_image_field/radio_image_field',['@web/core/registry','@web/views/fields/radio/radio_field'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{RadioField,radioField}=require("@web/views/fields/radio/radio_field");class RadioImageField extends RadioField{}
+RadioImageField.template="hr_holidays.RadioImageField";registry.category("fields").add("hr_holidays_radio_image",{...radioField,component:RadioImageField,});return __exports;});;
+
+/* /hr_holidays/static/src/thread_model_patch.js */
+odoo.define('@hr_holidays/thread_model_patch',['@mail/core/common/thread_model','@web/core/utils/patch'],function(require){'use strict';let __exports={};const{Thread}=require("@mail/core/common/thread_model");const{patch}=require("@web/core/utils/patch");patch(Thread,{get onlineMemberStatuses(){return super.onlineMemberStatuses+["leave_online","leave_away"];},});return __exports;});;
+
+/* /hr_holidays/static/src/thread_patch.js */
+odoo.define('@hr_holidays/thread_patch',['@mail/core/common/thread','@web/core/utils/hooks','@web/core/utils/patch'],function(require){'use strict';let __exports={};const{Thread}=require("@mail/core/common/thread");const{useService}=require("@web/core/utils/hooks");const{patch}=require("@web/core/utils/patch");patch(Thread.prototype,{setup(){super.setup();this.personaService=useService("mail.persona");},});return __exports;});;
+
+/* /hr_holidays/static/src/tours/hr_holidays_tour.js */
+odoo.define('@hr_holidays/tours/hr_holidays_tour',['@web/core/l10n/translation','@web/core/registry','@web_tour/tour_service/tour_utils'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{registry}=require("@web/core/registry");const{stepUtils}=require("@web_tour/tour_service/tour_utils");const leaveType="NotLimitedHR";const leaveDateFrom="01/17/2022";const leaveDateTo="01/17/2022";const description='Days off';registry.category("web_tour.tours").add('hr_holidays_tour',{url:'/web',rainbowManMessage:_t("Congrats, we can see that your request has been validated."),test:false,steps:()=>[stepUtils.showAppsMenuItem(),{trigger:'.o_app[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]',content:_t("Let's discover the Time Off application"),position:'bottom',},{trigger:'button.btn-time-off',content:_t("Click on any date or on this button to request a time-off"),position:'bottom',},{trigger:'div[name="holiday_status_id"] input',content:_t("Let's try to create a Sick Time Off, select it in the list"),run:`text ${leaveType.slice(0, leaveType.length - 1)}`,},{trigger:`.ui-autocomplete .ui-menu-item a:contains("${leaveType}")`,run:"click",auto:true,in_modal:false,},{trigger:'input[data-field=request_date_from]',extra_trigger:`.o_field_widget[name='holiday_status_id'] input:propValue("${leaveType}")`,content:_t("You can select the period you need to take off, from start date to end date"),position:'right',run:`text ${leaveDateFrom}`,},{trigger:'input[data-field=request_date_to]',content:_t("You can select the period you need to take off, from start date to end date"),position:'right',run:`text ${leaveDateTo}`,},{trigger:'div[name="name"] textarea',content:_t("Add some description for the people that will validate it"),run:`text ${description}`,position:'right'},{trigger:`button:contains(${_t('Save')})`,content:_t("Submit your request"),position:'bottom',},{trigger:'button[data-menu-xmlid="hr_holidays.menu_hr_holidays_management"]',content:_t("Let's go validate it"),position:'bottom'},{trigger:'a[data-menu-xmlid="hr_holidays.menu_open_department_leave_approve"]',content:_t("Select Time Off"),position:'right'},{trigger:'table.o_list_table',content:_t("Select the request you just created"),position:'bottom',run:function(actions){const rows=this.$anchor.find('tr.o_data_row');actions.click(rows[0]);}},{trigger:'button[name="action_approve"]',content:_t("Let's approve it"),position:'bottom',},{trigger:`tr.o_data_row:first:not(:has(button[name="action_approve"])),table tbody:not(tr.o_data_row)`,content:"Verify leave is approved",auto:true,isCheck:true,}]});return __exports;});;
+
+/* /hr_holidays/static/src/views/calendar/calendar_controller.js */
+odoo.define('@hr_holidays/views/calendar/calendar_controller',['@web/core/l10n/translation','@web/core/confirmation_dialog/confirmation_dialog','@web/views/calendar/calendar_controller','@web/views/view_dialogs/form_view_dialog','@web/core/dropdown/dropdown','@web/core/l10n/dates','@hr_holidays/views/calendar/filter_panel/calendar_filter_panel','@hr_holidays/views/view_dialog/form_view_dialog','@hr_holidays/views/hooks','@odoo/owl'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{ConfirmationDialog}=require("@web/core/confirmation_dialog/confirmation_dialog");const{CalendarController}=require("@web/views/calendar/calendar_controller");const{FormViewDialog}=require("@web/views/view_dialogs/form_view_dialog");const{Dropdown,DropdownItem}=require("@web/core/dropdown/dropdown");const{serializeDate}=require("@web/core/l10n/dates");const{TimeOffCalendarFilterPanel}=require("@hr_holidays/views/calendar/filter_panel/calendar_filter_panel");const{TimeOffFormViewDialog}=require("@hr_holidays/views/view_dialog/form_view_dialog");const{useLeaveCancelWizard}=require("@hr_holidays/views/hooks");const{EventBus,useSubEnv}=require("@odoo/owl");const TimeOffCalendarController=__exports.TimeOffCalendarController=class TimeOffCalendarController extends CalendarController{setup(){super.setup();useSubEnv({timeOffBus:new EventBus(),});this.leaveCancelWizard=useLeaveCancelWizard();}
+get employeeId(){return this.model.employeeId;}
+get filterPanelProps(){return{...super.filterPanelProps,employee_id:this.employeeId,};}
+newTimeOffRequest(){const context={};if(this.employeeId){context["default_employee_id"]=this.employeeId;}
+if(this.model.meta.scale=="day"){context["default_date_from"]=serializeDate(this.model.data.range.start.set({hours:7}),"datetime");context["default_date_to"]=serializeDate(this.model.data.range.end.set({hours:19}),"datetime");}
+this.displayDialog(FormViewDialog,{resModel:"hr.leave",title:_t("New Time Off"),viewId:this.model.formViewId,onRecordSaved:()=>{this.model.load();this.env.timeOffBus.trigger("update_dashboard");},context:context,});}
+_deleteRecord(resId,canCancel){if(!canCancel){this.displayDialog(ConfirmationDialog,{title:_t("Confirmation"),body:_t("Are you sure you want to delete this record?"),confirm:async()=>{await this.model.unlinkRecord(resId);this.env.timeOffBus.trigger("update_dashboard");},cancel:()=>{},});}else{this.leaveCancelWizard(resId,()=>{this.model.load();this.env.timeOffBus.trigger("update_dashboard");});}}
+deleteRecord(record){this._deleteRecord(record.id,record.rawRecord.can_cancel);}
+async editRecord(record,context={},shouldFetchFormViewId=true){const onDialogClosed=()=>{this.model.load();this.env.timeOffBus.trigger("update_dashboard");};return new Promise((resolve)=>{this.displayDialog(TimeOffFormViewDialog,{resModel:this.model.resModel,resId:record.id||false,context,title:_t("Time Off Request"),viewId:this.model.formViewId,onRecordSaved:onDialogClosed,onRecordDeleted:(record)=>this._deleteRecord(record.resId,record.data.can_cancel),onLeaveCancelled:onDialogClosed,size:"md",},{onClose:()=>resolve()});});}}
+TimeOffCalendarController.components={...TimeOffCalendarController.components,Dropdown,DropdownItem,FilterPanel:TimeOffCalendarFilterPanel,};TimeOffCalendarController.template="hr_holidays.CalendarController";return __exports;});;
+
+/* /hr_holidays/static/src/views/calendar/calendar_model.js */
+odoo.define('@hr_holidays/views/calendar/calendar_model',['@web/views/calendar/calendar_model','@web/core/l10n/dates'],function(require){'use strict';let __exports={};const{CalendarModel}=require('@web/views/calendar/calendar_model');const{deserializeDate,deserializeDateTime,serializeDate,serializeDateTime,}=require("@web/core/l10n/dates");const TimeOffCalendarModel=__exports.TimeOffCalendarModel=class TimeOffCalendarModel extends CalendarModel{setup(params,services){super.setup(params,services);this.data.mandatoryDays={};if(this.env.isSmall){this.meta.scale='month';}}
+normalizeRecord(rawRecord){let result=super.normalizeRecord(...arguments);if(rawRecord.employee_id){const employee=rawRecord.employee_id[1];result.title=[employee,result.title].join(' ');}
+return result;}
+makeContextDefaults(record){const context=super.makeContextDefaults(record);if(this.employeeId){context["default_employee_id"]=this.employeeId;}
+function deserialize(str){return str.length>10?deserializeDateTime(str):deserializeDate(str);}
+if("default_date_from"in context){context["default_date_from"]=serializeDateTime(deserialize(context["default_date_from"]).set({hours:7}));}
+if("default_date_to"in context){context["default_date_to"]=serializeDateTime(deserialize(context["default_date_to"]).set({hours:19}));}
+return context;}
+async updateData(data){await super.updateData(data);data.mandatoryDays=await this.fetchMandatoryDays(data);}
+fetchUnusualDays(data){return this.orm.call(this.meta.resModel,"get_unusual_days",[serializeDateTime(data.range.start),serializeDateTime(data.range.end),],{context:{'employee_id':this.employeeId,}});}
+async fetchMandatoryDays(data){return this.orm.call("hr.employee","get_mandatory_days",[this.employeeId,serializeDate(data.range.start,"datetime"),serializeDate(data.range.end,"datetime"),]);}
+get mandatoryDays(){return this.data.mandatoryDays;}
+get employeeId(){return this.meta.context.employee_id&&this.meta.context.employee_id[0]||null;}
+fetchRecords(data){const{fieldNames,resModel}=this.meta;const context={};if(!this.employeeId){context['short_name']=1;}
+return this.orm.searchRead(resModel,this.computeDomain(data),fieldNames,{context});}}
+return __exports;});;
+
+/* /hr_holidays/static/src/views/calendar/calendar_renderer.js */
+odoo.define('@hr_holidays/views/calendar/calendar_renderer',['@web/views/calendar/calendar_renderer','@hr_holidays/views/calendar/common/calendar_common_renderer','@hr_holidays/views/calendar/year/calendar_year_renderer','@hr_holidays/dashboard/time_off_dashboard'],function(require){'use strict';let __exports={};const{CalendarRenderer}=require('@web/views/calendar/calendar_renderer');const{TimeOffCalendarCommonRenderer}=require("@hr_holidays/views/calendar/common/calendar_common_renderer");const{TimeOffCalendarYearRenderer}=require("@hr_holidays/views/calendar/year/calendar_year_renderer");const{TimeOffDashboard}=require("@hr_holidays/dashboard/time_off_dashboard");const TimeOffCalendarRenderer=__exports.TimeOffCalendarRenderer=class TimeOffCalendarRenderer extends CalendarRenderer{get employeeId(){return this.props.model.employeeId;}
+get showDashboard(){return false;}}
+TimeOffCalendarRenderer.template='hr_holidays.CalendarRenderer';TimeOffCalendarRenderer.components={...TimeOffCalendarRenderer.components,day:TimeOffCalendarCommonRenderer,week:TimeOffCalendarCommonRenderer,month:TimeOffCalendarCommonRenderer,year:TimeOffCalendarYearRenderer,TimeOffDashboard,};const TimeOffDashboardCalendarRenderer=__exports.TimeOffDashboardCalendarRenderer=class TimeOffDashboardCalendarRenderer extends TimeOffCalendarRenderer{get showDashboard(){return!this.env.isSmall;}}
+return __exports;});;
+
+/* /hr_holidays/static/src/views/calendar/calendar_view.js */
+odoo.define('@hr_holidays/views/calendar/calendar_view',['@web/views/calendar/calendar_view','@hr_holidays/views/calendar/calendar_controller','@hr_holidays/views/calendar/calendar_model','@hr_holidays/views/calendar/calendar_renderer','@web/core/registry'],function(require){'use strict';let __exports={};const{calendarView}=require('@web/views/calendar/calendar_view');const{TimeOffCalendarController}=require("@hr_holidays/views/calendar/calendar_controller");const{TimeOffCalendarModel}=require("@hr_holidays/views/calendar/calendar_model");const{TimeOffCalendarRenderer,TimeOffDashboardCalendarRenderer}=require("@hr_holidays/views/calendar/calendar_renderer");const{registry}=require('@web/core/registry');const TimeOffCalendarView={...calendarView,Controller:TimeOffCalendarController,Renderer:TimeOffCalendarRenderer,Model:TimeOffCalendarModel,}
+registry.category('views').add('time_off_calendar',TimeOffCalendarView);registry.category('views').add('time_off_calendar_dashboard',{...TimeOffCalendarView,Renderer:TimeOffDashboardCalendarRenderer,});return __exports;});;
+
+/* /hr_holidays/static/src/views/calendar/common/calendar_common_popover.js */
+odoo.define('@hr_holidays/views/calendar/common/calendar_common_popover',['@web/views/calendar/calendar_common/calendar_common_popover','@web/core/utils/hooks'],function(require){'use strict';let __exports={};const{CalendarCommonPopover}=require("@web/views/calendar/calendar_common/calendar_common_popover");const{useService}=require("@web/core/utils/hooks");const TimeOffCalendarCommonPopover=__exports.TimeOffCalendarCommonPopover=class TimeOffCalendarCommonPopover extends CalendarCommonPopover{setup(){super.setup();this.dialog=useService('dialog');this.action=useService('action');}
+get isEventDeletable(){const record=this.props.record.rawRecord;const state=record.state;return record.can_cancel||state&&!['validate','refuse'].includes(state);}
+get isEventEditable(){const state=this.props.record.rawRecord.state;return state!==undefined;}}
+return __exports;});;
+
+/* /hr_holidays/static/src/views/calendar/common/calendar_common_renderer.js */
+odoo.define('@hr_holidays/views/calendar/common/calendar_common_renderer',['@web/views/calendar/calendar_common/calendar_common_renderer','@hr_holidays/views/hooks','@hr_holidays/views/calendar/common/calendar_common_popover'],function(require){'use strict';let __exports={};const{CalendarCommonRenderer}=require('@web/views/calendar/calendar_common/calendar_common_renderer');const{useMandatoryDays}=require("@hr_holidays/views/hooks");const{TimeOffCalendarCommonPopover}=require("@hr_holidays/views/calendar/common/calendar_common_popover");const TimeOffCalendarCommonRenderer=__exports.TimeOffCalendarCommonRenderer=class TimeOffCalendarCommonRenderer extends CalendarCommonRenderer{setup(){super.setup();this.mandatoryDays=useMandatoryDays(this.props);}
+onDayRender(info){super.onDayRender(info);this.mandatoryDays(info);}}
+TimeOffCalendarCommonRenderer.components={...TimeOffCalendarCommonRenderer,Popover:TimeOffCalendarCommonPopover,}
+return __exports;});;
+
+/* /hr_holidays/static/src/views/calendar/filter_panel/calendar_filter_panel.js */
+odoo.define('@hr_holidays/views/calendar/filter_panel/calendar_filter_panel',['@web/views/calendar/filter_panel/calendar_filter_panel','@hr_holidays/dashboard/time_off_card','@web/views/calendar/utils','@web/core/utils/hooks','@web/core/l10n/dates','@odoo/owl'],function(require){'use strict';let __exports={};const{CalendarFilterPanel}=require("@web/views/calendar/filter_panel/calendar_filter_panel");const{TimeOffCardMobile}=require("@hr_holidays/dashboard/time_off_card");const{getFormattedDateSpan}=require("@web/views/calendar/utils");const{useService}=require("@web/core/utils/hooks");const{serializeDate}=require("@web/core/l10n/dates");const{useState,onWillStart,onWillUpdateProps}=require("@odoo/owl");const TimeOffCalendarFilterPanel=__exports.TimeOffCalendarFilterPanel=class TimeOffCalendarFilterPanel extends CalendarFilterPanel{setup(){super.setup();this.orm=useService("orm");this.getFormattedDateSpan=getFormattedDateSpan;this.leaveState=useState({holidays:[],mandatoryDays:[],bankHolidays:[],});onWillStart(async()=>{await this.loadFilterData();await this.updateSpecialDays();});onWillUpdateProps(this.updateSpecialDays);}
+async updateSpecialDays(){const context={employee_id:this.props.employee_id,};const specialDays=await this.orm.call("hr.employee","get_special_days_data",[serializeDate(this.props.model.rangeStart,"datetime"),serializeDate(this.props.model.rangeEnd,"datetime"),],{context:context,});specialDays["bankHolidays"].forEach((bankHoliday)=>{bankHoliday.start=luxon.DateTime.fromISO(bankHoliday.start);bankHoliday.end=luxon.DateTime.fromISO(bankHoliday.end);});specialDays["mandatoryDays"].forEach((mandatoryDay)=>{mandatoryDay.start=luxon.DateTime.fromISO(mandatoryDay.start);mandatoryDay.end=luxon.DateTime.fromISO(mandatoryDay.end);});this.leaveState.bankHolidays=specialDays["bankHolidays"];this.leaveState.mandatoryDays=specialDays["mandatoryDays"];}
+async loadFilterData(){if(!this.env.isSmall){return;}
+const filterData={};const data=await this.orm.call("hr.leave.type","get_allocation_data_request",[]);data.forEach((leave)=>{filterData[leave[3]]=leave;});this.leaveState.holidays=filterData;}}
+TimeOffCalendarFilterPanel.template="hr_holidays.CalendarFilterPanel";TimeOffCalendarFilterPanel.components={...TimeOffCalendarFilterPanel.components,TimeOffCardMobile,};TimeOffCalendarFilterPanel.subTemplates={filter:"hr_holidays.CalendarFilterPanel.filter",};return __exports;});;
+
+/* /hr_holidays/static/src/views/calendar/year/calendar_year_popover.js */
+odoo.define('@hr_holidays/views/calendar/year/calendar_year_popover',['@web/core/dialog/dialog','@web/views/calendar/calendar_year/calendar_year_popover'],function(require){'use strict';let __exports={};const{Dialog}=require("@web/core/dialog/dialog");const{CalendarYearPopover}=require("@web/views/calendar/calendar_year/calendar_year_popover");const TimeOffCalendarYearPopover=__exports.TimeOffCalendarYearPopover=class TimeOffCalendarYearPopover extends CalendarYearPopover{}
+TimeOffCalendarYearPopover.components={Dialog};TimeOffCalendarYearPopover.template="web.CalendarYearPopover";TimeOffCalendarYearPopover.subTemplates={...CalendarYearPopover.subTemplates,body:"hr_holidays.MandatoryDayCalendarYearPopover.body",};return __exports;});;
+
+/* /hr_holidays/static/src/views/calendar/year/calendar_year_renderer.js */
+odoo.define('@hr_holidays/views/calendar/year/calendar_year_renderer',['@web/core/l10n/translation','@web/views/calendar/calendar_year/calendar_year_renderer','@web/core/utils/hooks','@hr_holidays/views/hooks','@web/views/calendar/hooks','@hr_holidays/views/calendar/year/calendar_year_popover','@odoo/owl'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{CalendarYearRenderer}=require("@web/views/calendar/calendar_year/calendar_year_renderer");const{useService}=require("@web/core/utils/hooks");const{useMandatoryDays}=require("@hr_holidays/views/hooks");const{useCalendarPopover}=require("@web/views/calendar/hooks");const{TimeOffCalendarYearPopover}=require("@hr_holidays/views/calendar/year/calendar_year_popover");const{useEffect}=require("@odoo/owl");const TimeOffCalendarYearRenderer=__exports.TimeOffCalendarYearRenderer=class TimeOffCalendarYearRenderer extends CalendarYearRenderer{setup(){super.setup();this.orm=useService("orm");this.mandatoryDays=useMandatoryDays(this.props);this.mandatoryDaysList=[];this.mandatoryDayPopover=useCalendarPopover(TimeOffCalendarYearPopover);useEffect((el)=>{for(const week of el){const row=week.parentElement;if(!row.children[1].classList.length&&!row.children[row.children.length-1].classList.length){row.remove();}}},()=>[this.rootRef.el&&this.rootRef.el.querySelectorAll(".fc-content-skeleton td.fc-week-number"),]);}
+get options(){return Object.assign(super.options,{weekNumbers:true,weekNumbersWithinDays:false,weekLabel:_t("Week"),});}
+async onDateClick(info){const is_mandatory_day=[...info.dayEl.classList].some((elClass)=>elClass.startsWith("hr_mandatory_day_"));this.mandatoryDayPopover.close();if(is_mandatory_day&&!this.env.isSmall){this.popover.close();const date=luxon.DateTime.fromISO(info.dateStr);const target=info.dayEl;const mandatory_days_data=await this.orm.call("hr.employee","get_mandatory_days_data",[date,date]);mandatory_days_data.forEach((mandatory_day_data)=>{mandatory_day_data["start"]=luxon.DateTime.fromISO(mandatory_day_data["start"]);mandatory_day_data["end"]=luxon.DateTime.fromISO(mandatory_day_data["end"]);});const records=Object.values(this.props.model.records).filter((r)=>luxon.Interval.fromDateTimes(r.start.startOf("day"),r.end.endOf("day")).contains(date));const props=this.getPopoverProps(date,records);props["records"]=mandatory_days_data.concat(props["records"]);this.mandatoryDayPopover.open(target,props,"o_cw_popover");}else{super.onDateClick(info);}}
+onDayRender(info){super.onDayRender(info);this.mandatoryDaysList=this.mandatoryDays(info);}}
+return __exports;});;
+
+/* /hr_holidays/static/src/views/hooks.js */
+odoo.define('@hr_holidays/views/hooks',['@web/core/l10n/translation','@web/core/utils/hooks','@web/views/view_dialogs/form_view_dialog','@odoo/owl'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{useService,useOwnedDialogs}=require("@web/core/utils/hooks");const{FormViewDialog}=require("@web/views/view_dialogs/form_view_dialog");const{useComponent}=require("@odoo/owl");__exports.formatNumber=formatNumber;function formatNumber(lang,number,maxDecimals=2){const userLang=lang.split("_").join("-");const numberFormat=new Intl.NumberFormat(userLang,{maximumFractionDigits:maxDecimals});return numberFormat.format(number);}
+__exports.useMandatoryDays=useMandatoryDays;function useMandatoryDays(props){return(info)=>{const date=luxon.DateTime.fromJSDate(info.date).toISODate();const mandatoryDay=props.model.mandatoryDays[date];if(mandatoryDay){const dayNumberElTop=info.view.el.querySelector(`.fc-day-top[data-date="${info.el.dataset.date}"]`);const dayNumberEl=info.view.el.querySelector(`.fc-day[data-date="${info.el.dataset.date}"]`);if(dayNumberElTop){dayNumberElTop.classList.add('hr_mandatory_day',`hr_mandatory_day_top_${mandatoryDay}`);}
+if(dayNumberEl){dayNumberEl.classList.add('hr_mandatory_day',`hr_mandatory_day_${mandatoryDay}`);}}
+return props.model.mandatoryDays;};}
+__exports.useLeaveCancelWizard=useLeaveCancelWizard;function useLeaveCancelWizard(){const action=useService("action");return(leaveId,callback)=>{action.doAction({name:_t("Delete Confirmation"),type:"ir.actions.act_window",res_model:"hr.holidays.cancel.leave",target:"new",views:[[false,"form"]],context:{default_leave_id:leaveId,},},{onClose:callback,});};}
+__exports.useNewAllocationRequest=useNewAllocationRequest;function useNewAllocationRequest(){const addDialog=useOwnedDialogs();const component=useComponent();return async(employeeId,holidayStatusId)=>{const context={form_view_ref:"hr_holidays.hr_leave_allocation_view_form_dashboard",is_employee_allocation:true,};if(employeeId){context["default_employee_id"]=employeeId;context["default_employee_ids"]=[employeeId];context["form_view_ref"]="hr_holidays.hr_leave_allocation_view_form_manager_dashboard";}
+if(holidayStatusId){context["default_holiday_status_id"]=holidayStatusId;}
+addDialog(FormViewDialog,{resModel:"hr.leave.allocation",title:_t("New Allocation"),context:context,onRecordSaved:()=>{component.env.timeOffBus.trigger("update_dashboard");},});};}
+return __exports;});;
+
+/* /hr_holidays/static/src/views/view_dialog/form_view_dialog.js */
+odoo.define('@hr_holidays/views/view_dialog/form_view_dialog',['@web/views/view_dialogs/form_view_dialog','@web/core/registry','@web/core/utils/hooks','@web/views/form/form_view','@web/views/form/form_controller','@hr_holidays/views/hooks'],function(require){'use strict';let __exports={};const{FormViewDialog}=require("@web/views/view_dialogs/form_view_dialog");const{registry}=require('@web/core/registry');const{useService}=require("@web/core/utils/hooks");const{formView}=require('@web/views/form/form_view');const{FormController}=require('@web/views/form/form_controller');const{useLeaveCancelWizard}=require("@hr_holidays/views/hooks");const TimeOffDialogFormController=__exports.TimeOffDialogFormController=class TimeOffDialogFormController extends FormController{setup(){super.setup();this.leaveCancelWizard=useLeaveCancelWizard();this.orm=useService("orm");}
+get record(){return this.model.root;}
+async onClick(action){const args=(action==='action_approve')?[this.record.resId,false]:[this.record.resId];await this.orm.call("hr.leave",action,args);this.props.onLeaveUpdated();}
+get canApprove(){return!this.model.root.isNew&&(this.record.data.can_approve&&['confirm','refuse',].includes(this.record.data.state));}
+get canValidate(){return!this.model.root.isNew&&(this.record.data.can_approve&&this.record.data.state==='validate1');}
+get canRefuse(){return!this.model.root.isNew&&(this.record.data.can_approve&&this.record.data.state&&['confirm','validate1','validate'].includes(this.record.data.state));}
+deleteRecord(){this.props.onRecordDeleted(this.record);this.props.onCancelLeave();if(this.record.data.can_cancel){this.leaveCancelWizard(this.record.resId,()=>{this.props.onLeaveCancelled();});}}
+get canDelete(){return!this.model.root.isNew&&(this.record.data.can_cancel||this.record.data.state&&!['validate','refuse'].includes(this.record.data.state));}}
+TimeOffDialogFormController.props={...FormController.props,onCancelLeave:Function,onRecordDeleted:Function,onLeaveCancelled:Function,onLeaveUpdated:Function,}
+registry.category('views').add('timeoff_dialog_form',{...formView,Controller:TimeOffDialogFormController,});const TimeOffFormViewDialog=__exports.TimeOffFormViewDialog=class TimeOffFormViewDialog extends FormViewDialog{setup(){super.setup();this.viewProps=Object.assign(this.viewProps,{type:"timeoff_dialog_form",buttonTemplate:'hr_holidays.FormViewDialog.buttons',onCancelLeave:()=>{this.props.close();},onLeaveUpdated:()=>{this.props.onRecordSaved();this.props.close();},onRecordDeleted:(record)=>{this.props.onRecordDeleted(record)},onLeaveCancelled:this.props.onLeaveCancelled.bind(this),})}}
+TimeOffFormViewDialog.props={...TimeOffFormViewDialog.props,onRecordDeleted:Function,onLeaveCancelled:Function,}
+return __exports;});;
+
 /* /web_hierarchy/static/src/hierarchy_arch_parser.js */
 odoo.define('@web_hierarchy/hierarchy_arch_parser',['@web/core/utils/xml','@web/views/fields/field','@web/views/utils'],function(require){'use strict';let __exports={};const{visitXML}=require("@web/core/utils/xml");const{Field}=require("@web/views/fields/field");const{archParseBoolean,getActiveActions}=require("@web/views/utils");const HierarchyArchParser=__exports.HierarchyArchParser=class HierarchyArchParser{parse(xmlDoc,models,modelName){const archInfo={activeActions:getActiveActions(xmlDoc),draggable:false,icon:"fa-share-alt o_hierarchy_icon",parentFieldName:"parent_id",fieldNodes:{},templateDocs:{},xmlDoc,};const fieldNextIds={};const fields=models[modelName];visitXML(xmlDoc,(node)=>{if(node.hasAttribute("t-name")){archInfo.templateDocs[node.getAttribute("t-name")]=node;return;}
 if(node.tagName==="hierarchy"){if(node.hasAttribute("parent_field")){const parentFieldName=node.getAttribute("parent_field");if(!(parentFieldName in fields)){throw new Error(`The parent field set (${parentFieldName}) is not defined in the model (${modelName}).`);}else if(fields[parentFieldName].type!=="many2one"){throw new Error(`Invalid parent field, it should be a Many2One field.`);}else if(fields[parentFieldName].relation!==modelName){throw new Error(`Invalid parent field, the co-model should be same model than the current one (expected: ${modelName}).`);}
@@ -20321,6 +20479,161 @@ async onCellClicked(record,column,ev){if(!this.isEditable){return;}
 return await super.onCellClicked(record,column,ev);}}
 CommonSkillsListRenderer.rowsTemplate="hr_skills.SkillsListRenderer.Rows";return __exports;});;
 
+/* /hr_contract/static/src/widgets/tooltip_warning_widget.js */
+odoo.define('@hr_contract/widgets/tooltip_warning_widget',['@web/core/registry','@web/core/l10n/translation','@odoo/owl'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{_t}=require("@web/core/l10n/translation");const{Component}=require("@odoo/owl");const ContractWarningTooltip=__exports.ContractWarningTooltip=class ContractWarningTooltip extends Component{get tooltipInfo(){return JSON.stringify({"text":_t("Calendar Mismatch: The employee's calendar does not match this contract's calendar. This could lead to unexpected behaviors."),})}}
+ContractWarningTooltip.template="hr_contract.ContractWarningTooltip";const contractWarningTooltip=__exports.contractWarningTooltip={component:ContractWarningTooltip,};registry.category("view_widgets").add("contract_warning_tooltip",contractWarningTooltip);return __exports;});;
+
+/* /hr_work_entry_contract/static/src/views/work_entry_calendar/work_entry_calendar_controller.js */
+odoo.define('@hr_work_entry_contract/views/work_entry_calendar/work_entry_calendar_controller',['@web/core/registry','@web/views/calendar/calendar_controller','@hr_work_entry_contract/views/work_entry_calendar/work_entry_calendar_model','@web/views/calendar/calendar_view','@hr_work_entry_contract/views/work_entry_hook'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{CalendarController}=require('@web/views/calendar/calendar_controller');const{WorkEntryCalendarModel}=require("@hr_work_entry_contract/views/work_entry_calendar/work_entry_calendar_model");const{calendarView}=require("@web/views/calendar/calendar_view");const{useWorkEntry}=require("@hr_work_entry_contract/views/work_entry_hook");const WorkEntryCalendarController=__exports.WorkEntryCalendarController=class WorkEntryCalendarController extends CalendarController{setup(){super.setup(...arguments);const{onRegenerateWorkEntries}=useWorkEntry({getEmployeeIds:this.getEmployeeIds.bind(this),getRange:this.model.computeRange.bind(this.model),onClose:this.model.load.bind(this.model)});this.onRegenerateWorkEntries=onRegenerateWorkEntries;}
+getEmployeeIds(){return[...new Set(Object.values(this.model.records).map(rec=>rec.rawRecord.employee_id[0]))];}}
+const WorkEntryCalendarView=__exports.WorkEntryCalendarView={...calendarView,Controller:WorkEntryCalendarController,Model:WorkEntryCalendarModel,buttonTemplate:"hr_work_entry_contract.calendar.controlButtons",}
+registry.category("views").add("work_entries_calendar",WorkEntryCalendarView);return __exports;});;
+
+/* /hr_work_entry_contract/static/src/views/work_entry_calendar/work_entry_calendar_model.js */
+odoo.define('@hr_work_entry_contract/views/work_entry_calendar/work_entry_calendar_model',['@web/core/l10n/translation','@web/views/calendar/calendar_model','@hr_work_entry_contract/views/work_entry_hook'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{CalendarModel}=require("@web/views/calendar/calendar_model");const{useWorkEntry}=require("@hr_work_entry_contract/views/work_entry_hook");const{DateTime}=luxon;const WorkEntryCalendarModel=__exports.WorkEntryCalendarModel=class WorkEntryCalendarModel extends CalendarModel{setup(){super.setup(...arguments);const{generateWorkEntries}=useWorkEntry({getRange:this.computeRange.bind(this)});this.generateWorkEntries=generateWorkEntries;}
+computeRange(){const{scale,date}=this.meta;const start=date.startOf(scale);const end=date.endOf(scale);return{start,end};}
+makeFilterAll(){return{...super.makeFilterAll(...arguments),label:_t("Everybody's work entries"),active:true,};}
+async updateData(data){const{start}=this.computeRange();const shouldGenerateWorkEntries=start<=DateTime.now();if(shouldGenerateWorkEntries){await this.generateWorkEntries();}
+await super.updateData(data);}}
+return __exports;});;
+
+/* /hr_work_entry_contract/static/src/views/work_entry_hook.js */
+odoo.define('@hr_work_entry_contract/views/work_entry_hook',['@web/core/l10n/dates','@web/core/utils/hooks'],function(require){'use strict';let __exports={};const{serializeDate}=require("@web/core/l10n/dates");const{useService}=require("@web/core/utils/hooks");__exports.useWorkEntry=useWorkEntry;function useWorkEntry({getEmployeeIds,getRange,onClose}){const orm=useService("orm");const action=useService("action");return{onRegenerateWorkEntries:()=>{const{start,end}=getRange();action.doAction('hr_work_entry_contract.hr_work_entry_regeneration_wizard_action',{additionalContext:{default_employee_ids:getEmployeeIds(),date_start:serializeDate(start),date_end:serializeDate(end),},onClose:onClose});},generateWorkEntries:()=>{const{start,end}=getRange();return orm.call('hr.employee','generate_work_entries',[[],serializeDate(start),serializeDate(end)]);},}}
+return __exports;});;
+
+/* /hr_work_entry_contract_enterprise/static/src/work_entries_gantt_controller.js */
+odoo.define('@hr_work_entry_contract_enterprise/work_entries_gantt_controller',['@web_gantt/gantt_controller','@hr_work_entry_contract/views/work_entry_hook'],function(require){'use strict';let __exports={};const{GanttController}=require("@web_gantt/gantt_controller");const{useWorkEntry}=require("@hr_work_entry_contract/views/work_entry_hook");const{DateTime}=luxon;const WorkEntriesGanttController=__exports.WorkEntriesGanttController=class WorkEntriesGanttController extends GanttController{setup(){super.setup(...arguments);const{onRegenerateWorkEntries}=useWorkEntry({getEmployeeIds:()=>{const{rows}=this.model.data;if(rows.length===1){const{groupedByField,resId}=rows[0];if(groupedByField==="employee_id"&&Boolean(resId)){return[resId];}}
+return[];},getRange:()=>this.model.getRange(),onClose:()=>this.model.fetchData({}),});this.onRegenerateWorkEntries=onRegenerateWorkEntries;}
+openDialog(props,options={}){if(!props.resId){const date=new Date(props['context']['default_date_stop']);date.setHours(9,0,0);props['context']['default_date_start']=date.toISOString().replace(/T|Z/g,' ').trim().substring(0,19);date.setHours(17,0,0)
+props['context']['default_date_stop']=date.toISOString().replace(/T|Z/g,' ').trim().substring(0,19);}
+super.openDialog(...arguments);}
+onAddClicked(){const{scale,startDate,stopDate}=this.model.metaData;const today=DateTime.local().startOf("day");if(scale.id!=="day"&&startDate<=today.endOf("day")&&today<=stopDate){let start=today;let stop;if(["week","month"].includes(scale.id)){start=today.set({hours:9,minutes:0,seconds:0});stop=today.set({hours:17,minutes:0,seconds:0});}else{stop=today.endOf(scale.interval);}
+const context=this.model.getDialogContext({start,stop,withDefault:true});this.create(context);return;}
+super.onAddClicked(...arguments);}}
+return __exports;});;
+
+/* /hr_work_entry_contract_enterprise/static/src/work_entries_gantt_model.js */
+odoo.define('@hr_work_entry_contract_enterprise/work_entries_gantt_model',['@web_gantt/gantt_model','@hr_work_entry_contract/views/work_entry_hook'],function(require){'use strict';let __exports={};const{GanttModel}=require("@web_gantt/gantt_model");const{useWorkEntry}=require("@hr_work_entry_contract/views/work_entry_hook");const{DateTime}=luxon;const WorkEntriesGanttModel=__exports.WorkEntriesGanttModel=class WorkEntriesGanttModel extends GanttModel{setup(){super.setup(...arguments);const{generateWorkEntries}=useWorkEntry({getRange:()=>this.getRange()});this.generateWorkEntries=generateWorkEntries;}
+getRange(){const{startDate,stopDate}=this._buildMetaData();return{start:startDate,end:stopDate};}
+async _fetchData(metaData){const{startDate}=metaData;if(startDate<=DateTime.local().plus({months:1})){await this.generateWorkEntries();}
+return super._fetchData(...arguments);}}
+return __exports;});;
+
+/* /hr_work_entry_contract_enterprise/static/src/work_entries_gantt_view.js */
+odoo.define('@hr_work_entry_contract_enterprise/work_entries_gantt_view',['@web_gantt/gantt_view','@web/core/registry','@hr_work_entry_contract_enterprise/work_entries_gantt_controller','@hr_work_entry_contract_enterprise/work_entries_gantt_model'],function(require){'use strict';let __exports={};const{ganttView}=require("@web_gantt/gantt_view");const{registry}=require("@web/core/registry");const{WorkEntriesGanttController}=require("@hr_work_entry_contract_enterprise/work_entries_gantt_controller");const{WorkEntriesGanttModel}=require("@hr_work_entry_contract_enterprise/work_entries_gantt_model");const viewRegistry=registry.category("views");const workEntriesGanttView=__exports.workEntriesGanttView={...(viewRegistry.content.hr_gantt?.[1]??ganttView),Controller:WorkEntriesGanttController,Model:WorkEntriesGanttModel,buttonTemplate:"hr_work_entry_contract_enterprise.WorkEntriesGanttView.Buttons",};viewRegistry.add("work_entries_gantt",workEntriesGanttView);function updateWorkEntriesGanttView(evt){const{operation,key,value}=evt.detail;if(key==="hr_gantt"&&operation==="add"){Object.assign(workEntriesGanttView,{...value,Controller:WorkEntriesGanttController,Model:WorkEntriesGanttModel,buttonTemplate:"hr_work_entry_contract_enterprise.WorkEntriesGanttView.Buttons",});viewRegistry.removeEventListener("UPDATE",updateWorkEntriesGanttView);}}
+if(!viewRegistry.content.hr_gantt){viewRegistry.addEventListener("UPDATE",updateWorkEntriesGanttView);}
+return __exports;});;
+
+/* /hr_payroll/static/src/components/add_payslips/add_payslips.js */
+odoo.define('@hr_payroll/components/add_payslips/add_payslips',['@web/core/registry','@web/views/widgets/standard_widget_props','@odoo/owl','@hr_payroll/views/add_payslips_hook'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{standardWidgetProps}=require("@web/views/widgets/standard_widget_props");const{Component,}=require("@odoo/owl");const{useAddPayslips}=require("@hr_payroll/views/add_payslips_hook");const AddPayslips=__exports.AddPayslips=class AddPayslips extends Component{setup(){super.setup();this.addPayslips=useAddPayslips();}
+async onAddPayslips(){await this.addPayslips(this.props.record);}}
+AddPayslips.template="hr_payroll.AddPayslips";AddPayslips.props={...standardWidgetProps,string:{type:String},};const addPayslips=__exports.addPayslips={component:AddPayslips,extractProps:({attrs})=>{const{string}=attrs;return{string};},};registry.category("view_widgets").add("add_payslips",addPayslips);return __exports;});;
+
+/* /hr_payroll/static/src/components/dashboard/action_box/action_box.js */
+odoo.define('@hr_payroll/components/dashboard/action_box/action_box',['@web/core/utils/hooks','@odoo/owl'],function(require){'use strict';let __exports={};const{useService}=require("@web/core/utils/hooks");const{Component,useState,onWillStart}=require("@odoo/owl");const PayrollDashboardActionBox=__exports.PayrollDashboardActionBox=class PayrollDashboardActionBox extends Component{setup(){this.actionService=useService("action");this.rpc=useService("rpc");this.state=useState({loading:true,warnings:{},})
+onWillStart(()=>{this.rpc('get_payroll_warnings').then(data=>{this.state.warnings=data;this.state.loading=false;})
+return Promise.resolve(true);})}}
+PayrollDashboardActionBox.template='hr_payroll.ActionBox';return __exports;});;
+
+/* /hr_payroll/static/src/components/dashboard/payroll_dashboard.js */
+odoo.define('@hr_payroll/components/dashboard/payroll_dashboard',['@web/core/registry','@web/core/utils/hooks','@hr_payroll/components/dashboard/action_box/action_box','@hr_payroll/components/dashboard/payslip_batch/payslip_batch','@hr_payroll/components/dashboard/todo_list/todo_list','@hr_payroll/components/dashboard/payroll_stats/payroll_stats','@odoo/owl'],function(require){'use strict';let __exports={};const{registry}=require('@web/core/registry');const{useService}=require("@web/core/utils/hooks");const{PayrollDashboardActionBox}=require('@hr_payroll/components/dashboard/action_box/action_box');const{PayrollDashboardPayslipBatch}=require('@hr_payroll/components/dashboard/payslip_batch/payslip_batch');const{PayrollDashboardTodo}=require('@hr_payroll/components/dashboard/todo_list/todo_list');const{PayrollDashboardStats}=require('@hr_payroll/components/dashboard/payroll_stats/payroll_stats');const{Component,onWillStart}=require("@odoo/owl");class PayrollDashboardComponent extends Component{setup(){this.orm=useService('orm');onWillStart(async()=>{this.dashboardData=await this.orm.call('hr.payslip','get_payroll_dashboard_data',[]);});}
+async updateNoteMemo(id,memo){await this.orm.write('hr.payroll.note',[id],{memo});this.reloadNotes();}
+async reloadNotes(){const kwargs={sections:['notes']};const newData=await this.orm.call('hr.payslip','get_payroll_dashboard_data',[],kwargs);this.dashboardData.notes=newData.notes;this.render();}}
+PayrollDashboardComponent.template='hr_payroll.Dashboard';PayrollDashboardComponent.components={PayrollDashboardActionBox,PayrollDashboardPayslipBatch,PayrollDashboardTodo,PayrollDashboardStats,};registry.category('actions').add('hr_payroll_dashboard',PayrollDashboardComponent);__exports[Symbol.for("default")]=PayrollDashboardComponent;return __exports;});;
+
+/* /hr_payroll/static/src/components/dashboard/payroll_stats/payroll_stats.js */
+odoo.define('@hr_payroll/components/dashboard/payroll_stats/payroll_stats',['@web/core/assets','@web/core/utils/hooks','@web/core/colors/colors','@web/core/browser/cookie','@odoo/owl'],function(require){'use strict';let __exports={};const{loadJS}=require("@web/core/assets");const{useService}=require("@web/core/utils/hooks");const{getColor}=require("@web/core/colors/colors");const{cookie}=require("@web/core/browser/cookie");const{Component,onWillUnmount,useEffect,useRef,useState,onWillStart}=require("@odoo/owl");const PayrollDashboardStats=__exports.PayrollDashboardStats=class PayrollDashboardStats extends Component{setup(){this.actionService=useService("action");this.canvasRef=useRef('canvas');this.state=useState({monthly:true});onWillStart(()=>loadJS("/web/static/lib/Chart/Chart.js"));useEffect(()=>this.renderChart());onWillUnmount(()=>{if(this.chart){this.chart.destroy();}});}
+get tooltipInfo(){return JSON.stringify({help:this.props.help,});}
+toggle(){this.state.monthly=!this.state.monthly;}
+get graphData(){return this.props.data[this.state.monthly?'monthly':'yearly'];}
+renderChart(){if(this.chart){this.chart.destroy();}
+const ctx=this.canvasRef.el.getContext('2d');this.chart=new Chart(ctx,this.getChartConfig());}
+getChartConfig(){const type=this.props.type;if(type==='line'){return this.getLineChartConfig();}else if(type==='bar'){return this.getBarChartConfig();}else if(type==='stacked_bar'){return this.getStackedBarChartConfig();}
+return{};}
+getLineChartConfig(){const data=this.graphData
+const labels=data.map(function(pt){return pt.x;});const borderColor=this.props.is_sample?'#dddddd':'#875a7b';const backgroundColor=this.props.is_sample?'#ebebeb':'#dcd0d9';return{type:'line',data:{labels:labels,datasets:[{data:data,fill:'start',label:this.props.label,backgroundColor:backgroundColor,borderColor:borderColor,borderWidth:2,}],},options:{plugins:{legend:{display:false},tooltip:{intersect:false,position:'nearest',caretSize:0,},},scales:{y:{display:false,beginAtZero:true,},x:{display:false},},maintainAspectRatio:false,elements:{line:{tension:0.000001,},},},};}
+getBarChartConfig(){const data=[];const labels=[];const backgroundColors=[];const color19=getColor(19,cookie.get("color_scheme"));this.graphData.forEach((pt)=>{data.push(pt.value);labels.push(pt.label);let color;if(this.props.is_sample){color='#ebebeb';}else if(pt.type==='past'){color='#ccbdc8';}else if(pt.type==='future'){color='#a5d8d7';}else{color=color19;}
+backgroundColors.push(color);});return{type:'bar',data:{labels:labels,datasets:[{data:data,fill:'start',label:this.props.label,backgroundColor:backgroundColors,}],},options:{plugins:{legend:{display:false},tooltip:{intersect:false,position:'nearest',caretSize:0,},},scales:{yAxes:{display:false,beginAtZero:true,}},maintainAspectRatio:false,elements:{line:{tension:0.000001}}}};}
+getStackedBarChartConfig(){const labels=[];const datasets=[];const datasets_labels=[];let colors;if(this.props.is_sample){colors=['#e7e7e7','#dddddd','#f0f0f0','#fafafa'];}else{colors=[getColor(13,cookie.get("color_scheme")),'#a5d8d7','#ebebeb','#ebebeb'];}
+Object.entries(this.graphData).forEach(([code,graphData])=>{datasets_labels.push(code);const dataset_data=[];const formatted_data=[]
+graphData.forEach(function(pt){if(!labels.includes(pt.label)){labels.push(pt.label);}
+formatted_data.push(`${code}: ${pt.formatted_value || pt.value}`);dataset_data.push(pt.value);})
+datasets.push({data:dataset_data,label:code,backgroundColor:colors[datasets_labels.length-1],formatted_data:formatted_data})});return{type:'bar',data:{labels:labels,datasets:datasets,},options:{responsive:true,plugins:{legend:{display:false},tooltip:{intersect:false,position:'nearest',caretSize:0,callbacks:{label:(tooltipItem)=>{const{datasetIndex,index}=tooltipItem;return datasets[datasetIndex].formatted_data[index];},},},},scales:{x:{stacked:true,},y:{display:false,stacked:true,beginAtZero:true,}},maintainAspectRatio:false,elements:{line:{tension:0.000001}}}}}}
+PayrollDashboardStats.template='hr_payroll.DashboardStats';return __exports;});;
+
+/* /hr_payroll/static/src/components/dashboard/payslip_batch/payslip_batch.js */
+odoo.define('@hr_payroll/components/dashboard/payslip_batch/payslip_batch',['@web/core/l10n/translation','@web/core/utils/hooks','@odoo/owl'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{useService}=require("@web/core/utils/hooks");const{Component}=require("@odoo/owl");const PayrollDashboardPayslipBatch=__exports.PayrollDashboardPayslipBatch=class PayrollDashboardPayslipBatch extends Component{setup(){this.actionService=useService("action");}
+onClickTitle(){this.actionService.doAction('hr_payroll.action_hr_payslip_run_tree');}
+getColorFromState(state){const colorMap={'New':'text-bg-secondary','Confirmed':'text-bg-success','Done':'text-bg-primary','Paid':'text-bg-warning',};return colorMap[state]||'text-bg-primary'}
+onClickLine(batchID,batchName){this.actionService.doAction({type:'ir.actions.act_window',name:_t('Employee Payslips'),res_model:'hr.payslip.run',res_id:batchID,views:[[false,'form']],});}}
+PayrollDashboardPayslipBatch.template='hr_payroll.PayslipBatch';return __exports;});;
+
+/* /hr_payroll/static/src/components/dashboard/todo_list/todo_list.js */
+odoo.define('@hr_payroll/components/dashboard/todo_list/todo_list',['@web/core/l10n/translation','@odoo/owl','@web/core/confirmation_dialog/confirmation_dialog','@web/core/utils/hooks','@web/search/utils/order_by','@web/views/fields/field','@web/model/record','@web/webclient/actions/action_hook'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{Component,onWillStart,useState}=require("@odoo/owl");const{ConfirmationDialog}=require("@web/core/confirmation_dialog/confirmation_dialog");const{useAutofocus,useService}=require("@web/core/utils/hooks");const{orderByToString}=require("@web/search/utils/order_by");const{Field}=require("@web/views/fields/field");const{Record}=require("@web/model/record");const{useSetupAction}=require("@web/webclient/actions/action_hook");const PayrollDashboardTodo=__exports.PayrollDashboardTodo=class PayrollDashboardTodo extends Component{setup(){this.company=useService("company");this.user=useService("user");this.orm=useService("orm");this.dialog=useService("dialog");this.state=useState({activeNoteId:-1,isEditingNoteName:false,records:[],});this.recordInfo={model:"hr.payroll.note",specification:{name:{}},};this.autofocusInput=useAutofocus({selectAll:true});useSetupAction({beforeLeave:()=>this.saveNote(),beforeUnload:()=>{if(this.editedNote){return this.editedNote.urgentSave();}},});onWillStart(async()=>{this.state.records=(await this.orm.webSearchRead(this.recordInfo.model,[],{specification:this.recordInfo.specification,order:orderByToString(this.props.orderBy),})).records;const record=this.state.records[0];this.state.activeNoteId=record&&record.id;});}
+async createNoteForm(){const result=await this.orm.create("hr.payroll.note",[{name:"Untitled",company_id:this.company.currentCompany.id,note:'',},]);const noteId=result[0];const specification=this.recordInfo.specification;const createdNote=(await this.orm.webRead(this.recordInfo.model,[noteId],{specification}))[0];this.state.records.push(createdNote);this.state.activeNoteId=noteId;this.startNameEdition(createdNote);}
+async onClickNoteTab(record){if(record.id===this.state.activeNoteId){return;}
+await this.saveNote();this.state.isEditingNoteName=false;this.state.activeNoteId=record.id;}
+onRecordChanged(editedRecord){this.editedNote=editedRecord;}
+startNameEdition(record){if(record.id===this.state.activeNoteId){this.state.isEditingNoteName=true;this.bufferedText=record.name;}}
+onInputNoteNameInput(ev){this.bufferedText=ev.target.value;}
+handleBlur(){this._applyNoteRename();}
+onKeyDownNoteNameInput(ev){switch(ev.key){case"Enter":this._applyNoteRename();break;case"Escape":this.state.isEditingNoteName=false;break;}}
+async _applyNoteRename(){const value=this.bufferedText.trim();const record=this.state.records.find((record)=>record.id===this.state.activeNoteId);if(value!==record.name){record.name=value;this.orm.write(this.recordInfo.model,[record.id],{name:value});}
+this.state.isEditingNoteName=false;}
+async onNoteDelete(){const message=_t("Are you sure you want to delete this note? All content will be definitely lost.");this.dialog.add(ConfirmationDialog,{body:message,confirm:()=>this._deleteNote(this.state.activeNoteId),});}
+async _deleteNote(noteId){await this.orm.unlink(this.recordInfo.model,[noteId]);this.state.records=this.state.records.filter((record)=>record.id!==noteId);this.state.activeNoteId=this.state.records.length&&this.state.records[0].id;}
+async onClickCreateNote(){await this.saveNote();this.createNoteForm();}
+async saveNote(){if(this.editedNote){this.editedNote.save();}}}
+PayrollDashboardTodo.template="hr_payroll.TodoList";PayrollDashboardTodo.components={Field,Record,};return __exports;});;
+
+/* /hr_payroll/static/src/js/hr_payroll_report_pivot_model.js */
+odoo.define('@hr_payroll/js/hr_payroll_report_pivot_model',['@web/views/pivot/pivot_model'],function(require){'use strict';let __exports={};const{PivotModel}=require("@web/views/pivot/pivot_model");const HrPayrollReportPivotModel=__exports.HrPayrollReportPivotModel=class HrPayrollReportPivotModel extends PivotModel{setup(params){const countryCode=this.env.searchModel._context.country_code;if(countryCode){for(var fieldName in params.metaData.fields){if((fieldName.startsWith('l10n')&&!fieldName.startsWith('l10n_'+countryCode))||(fieldName.startsWith('x_l10n')&&!fieldName.startsWith('x_l10n_'+countryCode))){delete params.metaData.fields[fieldName];}}}
+super.setup(...arguments);}}
+return __exports;});;
+
+/* /hr_payroll/static/src/js/hr_payroll_report_pivot_view.js */
+odoo.define('@hr_payroll/js/hr_payroll_report_pivot_view',['@hr_payroll/js/hr_payroll_report_pivot_model','@web/views/pivot/pivot_view','@web/core/registry'],function(require){'use strict';let __exports={};const{HrPayrollReportPivotModel}=require("@hr_payroll/js/hr_payroll_report_pivot_model");const{pivotView}=require("@web/views/pivot/pivot_view");const{registry}=require("@web/core/registry");const viewRegistry=registry.category("views");const hrPayrollPivotView={...pivotView,Model:HrPayrollReportPivotModel};viewRegistry.add("hr_payroll_report_pivot",hrPayrollPivotView);return __exports;});;
+
+/* /hr_payroll/static/src/js/hr_work_entries_gantt.js */
+odoo.define('@hr_payroll/js/hr_work_entries_gantt',['@web/core/utils/patch','@hr_payroll/views/work_entry_calendar/work_entry_calendar_hook','@hr_work_entry_contract_enterprise/work_entries_gantt_controller'],function(require){'use strict';let __exports={};const{patch}=require("@web/core/utils/patch");const{useWorkEntryPayslip}=require('@hr_payroll/views/work_entry_calendar/work_entry_calendar_hook');const{WorkEntriesGanttController}=require("@hr_work_entry_contract_enterprise/work_entries_gantt_controller");patch(WorkEntriesGanttController.prototype,{setup(){super.setup(...arguments);this.onGeneratePayslips=useWorkEntryPayslip({getEmployeeIds:()=>this.getActiveEmployeeIds(),getRange:()=>this.model.getRange(),});},checkConflicts(){return this.model.data.records.some((record)=>record.state==="conflict");},getActiveEmployeeIds(){const employeeIds=new Set();for(const rec of this.model.data.records){if(rec.employee_id){employeeIds.add(rec.employee_id[0]);}}
+return[...employeeIds];},getShowGeneratePayslipsButton(){return this.model.data.records.some((record)=>record.state!=="validated");},});return __exports;});;
+
+/* /hr_payroll/static/src/js/payslip_line_one2many.js */
+odoo.define('@hr_payroll/js/payslip_line_one2many',['@web/core/registry','@web/core/utils/hooks','@web/views/fields/field','@web/views/fields/x2many/x2many_field','@web/views/list/list_renderer','@odoo/owl'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{useService}=require("@web/core/utils/hooks");const{Field}=require("@web/views/fields/field");const{X2ManyField,x2ManyField}=require("@web/views/fields/x2many/x2many_field");const{ListRenderer}=require("@web/views/list/list_renderer");const{useEnv}=require("@odoo/owl");const WorkedDaysField=__exports.WorkedDaysField=class WorkedDaysField extends Field{setup(){super.setup(...arguments);this.actionService=useService("action");this.orm=useService("orm");}
+get fieldComponentProps(){const props=super.fieldComponentProps;const record=this.props.record;if(!record.isWorkedDaysField){record.isWorkedDaysField=true;const oldUpdate=record.update.bind(record);record.update=async(changes)=>{if('amount'in changes||'quantity'in changes){await oldUpdate(changes,{save:true});const wizardId=record.model.config.resId;if(wizardId){const action=await this.orm.call("hr.payroll.edit.payslip.lines.wizard","recompute_worked_days_lines",[wizardId]);await this.actionService.doAction(action);}}else{await oldUpdate(changes);}}}
+return props;}}
+const WorkedDaysRenderer=__exports.WorkedDaysRenderer=class WorkedDaysRenderer extends ListRenderer{}
+WorkedDaysRenderer.components={...ListRenderer.components,Field:WorkedDaysField,}
+const WorkedDaysLineOne2Many=__exports.WorkedDaysLineOne2Many=class WorkedDaysLineOne2Many extends X2ManyField{async onAdd({context,editable}){const wizardId=this.props.record.resId;return super.onAdd({context:{...context,default_edit_payslip_lines_wizard_id:wizardId,},editable});}}
+WorkedDaysLineOne2Many.components={...X2ManyField.components,ListRenderer:WorkedDaysRenderer};const workedDaysLineOne2Many=__exports.workedDaysLineOne2Many={...x2ManyField,component:WorkedDaysLineOne2Many,};const PayslipLineField=__exports.PayslipLineField=class PayslipLineField extends Field{setup(){super.setup(...arguments);this.actionService=useService("action");this.orm=useEnv().services.orm;}
+get fieldComponentProps(){const props=super.fieldComponentProps;const record=this.props.record;if(!record.isPayslipLineField){record.isPayslipLineField=true;const oldUpdate=record.update.bind(record);record.update=async(changes)=>{if('amount'in changes||'quantity'in changes){await oldUpdate(changes,{save:true});const wizardId=record.model.config.resId;if(wizardId){const line_id=record.resId;const action=await this.orm.call("hr.payroll.edit.payslip.lines.wizard","recompute_following_lines",[wizardId,line_id]);await this.actionService.doAction(action);}}else{await oldUpdate(changes);}}}
+return props;}}
+const PayslipLineRenderer=__exports.PayslipLineRenderer=class PayslipLineRenderer extends ListRenderer{}
+PayslipLineRenderer.components={...ListRenderer.components,Field:PayslipLineField}
+const PayslipLineOne2Many=__exports.PayslipLineOne2Many=class PayslipLineOne2Many extends X2ManyField{async onAdd({context,editable}){const wizardId=this.props.record.resId;return super.onAdd({context:{...context,default_edit_payslip_lines_wizard_id:wizardId,},editable});}}
+PayslipLineOne2Many.components={...X2ManyField.components,ListRenderer:PayslipLineRenderer};const payslipLineOne2Many=__exports.payslipLineOne2Many={...x2ManyField,component:PayslipLineOne2Many,};registry.category("fields").add("payslip_line_one2many",payslipLineOne2Many);registry.category("fields").add("worked_days_line_one2many",workedDaysLineOne2Many);return __exports;});;
+
+/* /hr_payroll/static/src/js/tours/hr_payroll.js */
+odoo.define('@hr_payroll/js/tours/hr_payroll',['@web/core/l10n/translation','@web/core/registry','@odoo/owl'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{registry}=require("@web/core/registry");const{markup}=require("@odoo/owl");registry.category("web_tour.tours").add('payroll_tours',{url:"/web",rainbowManMessage:()=>markup(_t("<strong>Congrats, Your first payslip is now finished. It's time for you to explore the Payroll app by yourself.</strong>")),sequence:80,steps:()=>[{trigger:`.o_app[data-menu-xmlid='hr_work_entry_contract_enterprise.menu_hr_payroll_root']`,content:markup(_t("Click on Payroll to manage your employee's <strong>Work Entries</strong>, <strong>Contracts</strong> and <strong>Payslips</strong>.")),position:'bottom',},{trigger:"button[data-menu-xmlid='hr_payroll.menu_hr_payroll_employees_root']",content:markup(_t("First, we'll create a new <strong>Contract</strong>.")),position:'bottom',},{trigger:"a[data-menu-xmlid='hr_payroll.hr_menu_all_contracts']",content:markup(_t('Click on Employees to pick one of your <strong>Employees</strong>.')),position:'right',},{trigger:`.o_list_button_add`,content:markup(_t('Click here to create a new <strong>Contract</strong>.')),position:'bottom',},{trigger:`div[name='name'] input`,content:markup(_t('Add a <strong>name</strong> to the contract.')),position:'bottom',run:'text Test',},{trigger:".o_field_widget[name='employee_id'] input",content:_t("Add a employee to your contract"),position:"right",run:'click',},{trigger:".ui-autocomplete > li > a:not(:has(i.fa))",auto:true,id:'hr_payroll_start',},{trigger:'.o_hr_contract_salary_information',content:markup(_t('Click on <strong>Salary Information</strong> to access additional fields.')),position:'bottom',},{trigger:`.o_notebook div[name='wage'] input`,content:markup(_t('Define a <strong>Wage</strong>.')),position:'bottom',run:'text 1000',},{trigger:"button.o_form_button_save",content:"Save Contract",position:'bottom',run:"click",},{trigger:`.o_form_statusbar button[data-value='open']`,content:markup(_t('Set the Contract as <strong><q>Running</q></strong>.')),position:'bottom',},{trigger:`button[data-menu-xmlid='hr_work_entry_contract_enterprise.menu_hr_payroll_work_entries_root']`,content:markup(_t('Click on the <strong>Work Entries</strong> menu.')),position:'bottom',},{trigger:`a[data-menu-xmlid='hr_work_entry_contract_enterprise.menu_work_entry']`,content:markup(_t('Check the <strong>Work Entries</strong> linked to your newly created Contract.')),position:'right',},{trigger:".o_searchview .o_facet_remove",content:_t('Remove "Conflicting" filter'),run:"click",},{trigger:'.o_gantt_pill_wrapper',content:markup(_t('Work Entries are generated for each <strong>time period</strong> defined in the Working Schedule of the Contract.')),position:'top',},{trigger:'button.btn-payslip-generate',content:markup(_t('Click here to generate a <strong>Batch</strong> for the displayed Employees.')),position:'bottom',},{trigger:`button[name='action_open_payslips']`,content:markup(_t('On the smartbutton, you can find all the <strong>Payslips</strong> included in the Batch.')),position:'top',},{trigger:`table.o_list_table tr.o_data_row:last .o_data_cell[name='number']`,content:markup(_t('Click on the <strong>Payslip</strong>.')),position:'top',},{trigger:`.o_hr_payroll_worked_days_input`,content:markup(_t('On the first tab is the amount of worked time giving you a <strong>gross amount</strong>.')),position:'top',},{trigger:`.o_hr_payroll_salary_computation`,content:markup(_t('On the second tab is the computation of the rules linked to the Structure resulting in a <strong>net amount</strong>.')),position:'top',},{trigger:`button[name='action_payslip_done']`,content:markup(_t('Confirm the <strong>Payslip</strong>.')),position:'bottom',run:'click',},]});return __exports;});;
+
+/* /hr_payroll/static/src/views/add_payslips_hook.js */
+odoo.define('@hr_payroll/views/add_payslips_hook',['@web/core/l10n/translation','@web/core/utils/hooks','@web/views/view_dialogs/select_create_dialog'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{useOwnedDialogs,useService}=require("@web/core/utils/hooks");const{SelectCreateDialog}=require("@web/views/view_dialogs/select_create_dialog");__exports.useAddPayslips=useAddPayslips;function useAddPayslips(){const addDialog=useOwnedDialogs();const notification=useService("notification");const orm=useService('orm');return async(record)=>{if(!await record.save()){return;}
+addDialog(SelectCreateDialog,{resModel:'hr.payslip',title:_t('Add Payslips'),noCreate:true,domain:[['payslip_run_id','=',false]],onSelected:async(resIds)=>{const slipIds=resIds.map((id)=>id);await orm.write('hr.payslip',slipIds,{'payslip_run_id':record.resId,});await record.load();notification.add(_t('The payslips(s) are now added to the batch'),{type:'success'});}});}}
+return __exports;});;
+
+/* /hr_payroll/static/src/views/payslip_batch_form/payslip_batch_form.js */
+odoo.define('@hr_payroll/views/payslip_batch_form/payslip_batch_form',['@web/core/l10n/translation','@web/core/registry','@web/views/form/form_controller','@web/views/form/form_view','@hr_payroll/views/add_payslips_hook'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{registry}=require("@web/core/registry");const{FormController}=require("@web/views/form/form_controller");const{formView}=require("@web/views/form/form_view");const{useAddPayslips}=require("@hr_payroll/views/add_payslips_hook");const PayslipBatchFormController=__exports.PayslipBatchFormController=class PayslipBatchFormController extends FormController{setup(){super.setup();this.addPayslips=useAddPayslips();}
+getStaticActionMenuItems(){const menuItems=super.getStaticActionMenuItems();if(['draft','verify'].includes(this.model.root.data.state)){menuItems.add_payslips={sequence:50,description:_t('Add Payslips'),callback:async()=>{await this.addPayslips(this.model.root);},};}
+return menuItems;}}
+registry.category("views").add("hr_payslip_batch_form",{...formView,Controller:PayslipBatchFormController,});return __exports;});;
+
+/* /hr_payroll/static/src/views/work_entry_calendar/work_entry_calendar_controller.js */
+odoo.define('@hr_payroll/views/work_entry_calendar/work_entry_calendar_controller',['@web/core/utils/patch','@hr_work_entry_contract/views/work_entry_calendar/work_entry_calendar_controller','@hr_payroll/views/work_entry_calendar/work_entry_calendar_hook'],function(require){'use strict';let __exports={};const{patch}=require("@web/core/utils/patch");const{WorkEntryCalendarController}=require('@hr_work_entry_contract/views/work_entry_calendar/work_entry_calendar_controller');const{useWorkEntryPayslip}=require('@hr_payroll/views/work_entry_calendar/work_entry_calendar_hook');patch(WorkEntryCalendarController.prototype,{setup(){super.setup(...arguments);this.onGeneratePayslips=useWorkEntryPayslip({getEmployeeIds:this.getEmployeeIds.bind(this),getRange:this.model.computeRange.bind(this.model),});},checkConflicts(){return Object.values(this.model.records).some(record=>record.rawRecord.state==='conflict')?"disabled":"";},getShowGeneratePayslipsButton(){const allValidated=Object.values(this.model.records).every(record=>record.rawRecord.state==='validated');return!allValidated&&Object.keys(this.model.records).length!==0;},});return __exports;});;
+
+/* /hr_payroll/static/src/views/work_entry_calendar/work_entry_calendar_hook.js */
+odoo.define('@hr_payroll/views/work_entry_calendar/work_entry_calendar_hook',['@web/core/l10n/dates','@web/core/utils/hooks'],function(require){'use strict';let __exports={};const{serializeDate}=require("@web/core/l10n/dates");const{useService}=require("@web/core/utils/hooks");__exports.useWorkEntryPayslip=useWorkEntryPayslip;function useWorkEntryPayslip({getEmployeeIds,getRange}){const action=useService("action");return()=>{const{start,end}=getRange();action.doAction("hr_payroll.action_generate_payslips_from_work_entries",{additionalContext:{default_date_start:serializeDate(start),default_date_end:serializeDate(end),active_employee_ids:getEmployeeIds()}});}}
+return __exports;});;
+
 /* /stock_account/static/src/stock_account_forecasted/forecasted_header.js */
 odoo.define('@stock_account/stock_account_forecasted/forecasted_header',['@web/core/l10n/translation','@web/core/utils/patch','@stock/stock_forecasted/forecasted_header'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{patch}=require("@web/core/utils/patch");const{ForecastedHeader:Parent}=require("@stock/stock_forecasted/forecasted_header");const StockAccountForecastedHeader=__exports.StockAccountForecastedHeader=class StockAccountForecastedHeader extends Parent{}
 patch(Parent.prototype,{async _onClickValuation(){const context=this._getActionContext();return this.action.doAction({name:_t('Stock Valuation'),res_model:'stock.valuation.layer',type:'ir.actions.act_window',view_mode:'list,form',views:[[false,'list'],[false,'form']],target:'current',context:context,});}});StockAccountForecastedHeader.template='stock_account.ForecastedHeader';return __exports;});;
@@ -21431,6 +21744,26 @@ return __exports;});;
 odoo.define('@quality_mrp_workorder/mrp_display/mrp_display_record',['@web/core/utils/patch','@mrp_workorder/mrp_display/mrp_display_record'],function(require){'use strict';let __exports={};const{patch}=require("@web/core/utils/patch");const{MrpDisplayRecord}=require("@mrp_workorder/mrp_display/mrp_display_record");patch(MrpDisplayRecord.prototype,{async validate(){const{resModel,resId}=this.props.record;if(resModel==="mrp.production"){if(this.record.quality_check_todo){const action=await this.model.orm.call(resModel,"check_quality",[resId]);return this._doAction(action);}}
 return super.validate();},get displayCloseProductionButton(){return super.displayCloseProductionButton&&!this.props.production.data.quality_check_todo;},});return __exports;});;
 
+/* /hr_payroll_holidays/static/src/js/hr_payslip_form.js */
+odoo.define('@hr_payroll_holidays/js/hr_payslip_form',['@hr_payroll_holidays/views/hooks','@web/core/registry','@web/views/form/form_controller','@web/views/form/form_view'],function(require){'use strict';let __exports={};const{TimeOffToDeferWarning,useTimeOffToDefer}=require("@hr_payroll_holidays/views/hooks");const{registry}=require("@web/core/registry");const{FormController}=require("@web/views/form/form_controller");const{formView}=require("@web/views/form/form_view");const PayslipFormController=__exports.PayslipFormController=class PayslipFormController extends FormController{setup(){super.setup();this.timeOff=useTimeOffToDefer();}}
+PayslipFormController.template="hr_payroll_holidays.PayslipFormController";PayslipFormController.components={...PayslipFormController.components,TimeOffToDeferWarning};registry.category("views").add("hr_payslip_form",{...formView,Controller:PayslipFormController,});return __exports;});;
+
+/* /hr_payroll_holidays/static/src/js/hr_payslip_list.js */
+odoo.define('@hr_payroll_holidays/js/hr_payslip_list',['@hr_payroll_holidays/views/hooks','@web/core/registry','@web/views/list/list_renderer','@web/views/list/list_view'],function(require){'use strict';let __exports={};const{TimeOffToDeferWarning,useTimeOffToDefer}=require("@hr_payroll_holidays/views/hooks");const{registry}=require("@web/core/registry");const{ListRenderer}=require("@web/views/list/list_renderer");const{listView}=require("@web/views/list/list_view");class PayslipListRenderer extends ListRenderer{setup(){super.setup();this.timeOff=useTimeOffToDefer();}}
+PayslipListRenderer.template="hr_payroll_holidays.PayslipListRenderer";PayslipListRenderer.components={...ListRenderer.components,TimeOffToDeferWarning};const PayslipListView={...listView,Renderer:PayslipListRenderer,};registry.category("views").add("hr_payroll_payslip_tree",PayslipListView);return __exports;});;
+
+/* /hr_payroll_holidays/static/src/js/hr_work_entries_gantt.js */
+odoo.define('@hr_payroll_holidays/js/hr_work_entries_gantt',['@web/core/utils/patch','@hr_payroll_holidays/views/hooks','@hr_work_entry_contract_enterprise/work_entries_gantt_controller'],function(require){'use strict';let __exports={};const{patch}=require("@web/core/utils/patch");const{TimeOffToDeferWarning,useTimeOffToDefer}=require("@hr_payroll_holidays/views/hooks");const{WorkEntriesGanttController}=require('@hr_work_entry_contract_enterprise/work_entries_gantt_controller');patch(WorkEntriesGanttController.prototype,{setup(){super.setup(...arguments);this.timeOff=useTimeOffToDefer();}});patch(WorkEntriesGanttController,{components:{...WorkEntriesGanttController.components,TimeOffToDeferWarning},template:"hr_payroll_holidays.WorkEntriesGanttController"});return __exports;});;
+
+/* /hr_payroll_holidays/static/src/views/hooks.js */
+odoo.define('@hr_payroll_holidays/views/hooks',['@odoo/owl','@web/core/l10n/translation','@web/core/utils/hooks'],function(require){'use strict';let __exports={};const{Component,onWillStart}=require("@odoo/owl");const{_t}=require("@web/core/l10n/translation");const{useService}=require("@web/core/utils/hooks");const TimeOffToDeferWarning=__exports.TimeOffToDeferWarning=class TimeOffToDeferWarning extends Component{setup(){this.actionService=useService("action");}
+get timeOffButtonText(){const[,before,inside,after]=_t("You have some <button>time off</button> to defer to the next month.").match(/(.*)<button>(.*)<\/button>(.*)/)||[];return{before,inside,after};}
+onTimeOffToDefer(){this.actionService.doAction("hr_payroll_holidays.hr_leave_action_open_to_defer");}};TimeOffToDeferWarning.template="hr_payroll_holidays.TimeOffToDeferWarning";__exports.useTimeOffToDefer=useTimeOffToDefer;function useTimeOffToDefer(){const user=useService("user");const orm=useService("orm");const timeOff={};onWillStart(async()=>{const result=await orm.searchCount('hr.leave',[["payslip_state","=","blocked"],["state","=","validate"],["employee_company_id","in",user.context.allowed_company_ids]]);timeOff.hasTimeOffToDefer=result>0;});return timeOff;}
+return __exports;});;
+
+/* /hr_payroll_holidays/static/src/views/work_entry_calendar/hr_work_entry_calendar_controller.js */
+odoo.define('@hr_payroll_holidays/views/work_entry_calendar/hr_work_entry_calendar_controller',['@hr_payroll_holidays/views/hooks','@hr_work_entry_contract/views/work_entry_calendar/work_entry_calendar_controller','@web/core/utils/patch'],function(require){'use strict';let __exports={};const{TimeOffToDeferWarning,useTimeOffToDefer}=require("@hr_payroll_holidays/views/hooks");const{WorkEntryCalendarController}=require("@hr_work_entry_contract/views/work_entry_calendar/work_entry_calendar_controller");const{patch}=require("@web/core/utils/patch");patch(WorkEntryCalendarController.prototype,{setup(){super.setup(...arguments);this.timeOff=useTimeOffToDefer();},});patch(WorkEntryCalendarController,{template:"hr_payroll_holidays.WorkEntryCalendarController",components:{...WorkEntryCalendarController.components,TimeOffToDeferWarning},});return __exports;});;
+
 /* /account_bank_statement_import/static/src/account_bank_statement_import_model.js */
 odoo.define('@account_bank_statement_import/account_bank_statement_import_model',['@base_import/import_model','@web/core/utils/patch','@web/core/l10n/translation'],function(require){'use strict';let __exports={};const{BaseImportModel}=require("@base_import/import_model");const{patch}=require("@web/core/utils/patch");const{_t}=require("@web/core/l10n/translation");patch(BaseImportModel.prototype,{async init(){await super.init(...arguments);if(this.resModel==="account.bank.statement"){this.importTemplates.push({label:_t("Import Template for Bank Statements"),template:"/account_bank_statement_import/static/csv/account.bank.statement.csv",});}}});return __exports;});;
 
@@ -21963,6 +22296,12 @@ return super.availableViews(...arguments);},});return __exports;});;
 
 /* /crm_iap_mine/static/src/js/tours/crm_iap_lead.js */
 odoo.define('@crm_iap_mine/js/tours/crm_iap_lead',['@web/core/registry','@web/core/l10n/translation','@crm/js/tours/crm','@web/core/utils/patch','@odoo/owl'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{_t}=require("@web/core/l10n/translation");require("@crm/js/tours/crm");const{patch}=require("@web/core/utils/patch");const{markup}=require("@odoo/owl");patch(registry.category("web_tour.tours").get("crm_tour"),{steps(){const originalSteps=super.steps();const DragOppToWonStepIndex=originalSteps.findIndex((step)=>step.id==="drag_opportunity_to_won_step");originalSteps.splice(DragOppToWonStepIndex+1,0,{trigger:".o_button_generate_leads",content:markup(_t("Looking for more opportunities?<br>Try the <b>Lead Generation</b> tool.")),position:"bottom",run:function(actions){actions.auto('.o_button_generate_leads');},},{trigger:".modal-body .o_industry",content:_t("Which Industry do you want to target?"),position:"right",},{trigger:".modal-footer button[name=action_submit]",content:_t("Now, just let the magic happen!"),position:"bottom",run:function(actions){actions.auto(".modal-footer button[special=cancel]");},});return originalSteps},});return __exports;});;
+
+/* /hr_contract_reports/static/src/js/hr_contract_employee_report_views.js */
+odoo.define('@hr_contract_reports/js/hr_contract_employee_report_views',['@web/core/registry','@web/core/utils/hooks','@web/views/graph/graph_view','@web/views/pivot/pivot_view','@odoo/owl'],function(require){'use strict';let __exports={};const{registry}=require("@web/core/registry");const{useService}=require("@web/core/utils/hooks");const{graphView}=require("@web/views/graph/graph_view");const{pivotView}=require("@web/views/pivot/pivot_view");const{useComponent}=require("@odoo/owl");const viewRegistry=registry.category("views");function useOpenView(){const comp=useComponent();const{title}=comp.model.metaData;const actionService=useService("action");const orm=useService("orm");return async(domain,views,context)=>{const res=await orm.call("hr.contract.employee.report","search_read",[],{context:context,domain:domain,fields:["id"],});const contractDomain=[["id","in",res.map((r)=>r.id)]];actionService.doAction({type:"ir.actions.act_window",name:title,res_model:"hr.contract",views:[[false,"list"],[false,"form"],],target:"current",context,domain:contractDomain,});};}
+const HrContractEmployeeReportGraphRenderer=__exports.HrContractEmployeeReportGraphRenderer=class HrContractEmployeeReportGraphRenderer extends graphView.Renderer{setup(){super.setup();this.openView=useOpenView();}}
+viewRegistry.add("contract_employee_report_graph",{...graphView,Renderer:HrContractEmployeeReportGraphRenderer,});const HrContractEmployeeReportPivotRenderer=__exports.HrContractEmployeeReportPivotRenderer=class HrContractEmployeeReportPivotRenderer extends pivotView.Renderer{setup(){super.setup();this.openView=useOpenView();}}
+viewRegistry.add("contract_employee_report_pivot",{...pivotView,Renderer:HrContractEmployeeReportPivotRenderer,});return __exports;});;
 
 /* /hr_expense_extract/static/src/js/tours/expense_tour.js */
 odoo.define('@hr_expense_extract/js/tours/expense_tour',['@web/core/l10n/translation','@web/core/registry','@web_tour/tour_service/tour_utils','@odoo/owl'],function(require){'use strict';let __exports={};const{_t}=require("@web/core/l10n/translation");const{registry}=require("@web/core/registry");const{stepUtils}=require("@web_tour/tour_service/tour_utils");const{markup}=require("@odoo/owl");registry.category("web_tour.tours").add('hr_expense_extract_tour',{url:"/web",rainbowMan:true,rainbowManMessage:()=>markup(_t("<b>Congratulations</b>, you are now an expert of Expenses.")),sequence:42,steps:()=>[stepUtils.showAppsMenuItem(),{trigger:'.o_app[data-menu-xmlid="hr_expense.menu_hr_expense_root"]',content:_t("Wasting time recording your receipts? Let’s try a better way."),position:'bottom',},{trigger:'.o_nocontent_help a.btn-primary',content:_t("Try the AI with a sample receipt."),position:'bottom',width:200,},{trigger:".o_expense_flex",content:_t("Choose a receipt."),position:'top',width:120,},{trigger:"button[name='action_submit_expenses']",content:_t("Report this expense to your manager for validation."),position:'bottom',},{trigger:'.dropdown-toggle[data-menu-xmlid="hr_expense.menu_hr_expense_report"]',content:_t("Your manager will have to approve (or refuse) your expense reports."),position:'bottom',},{trigger:'.dropdown-item[data-menu-xmlid="hr_expense.menu_hr_expense_sheet_all_to_approve"]',content:_t("Your manager will have to approve (or refuse) your expense reports."),position:'bottom',}]});return __exports;});;
@@ -29464,7 +29803,10 @@ return __exports;});
 
 <t t-name="mail.ImStatus">
         <div class="o-mail-ImStatus d-flex justify-content-center flex-shrink-0 align-items-center rounded-circle bg-inherit" t-att-class="props.className" t-att-style="props.style">
-            <span class="d-flex flex-column" name="icon">
+            <i t-if="props.persona.im_status === 'leave_online'" class="fa fa-plane text-success" title="Online" role="img" aria-label="User is online"/>
+            <i t-elif="props.persona.im_status === 'leave_away'" class="fa fa-plane o-away" title="Idle" role="img" aria-label="User is idle"/>
+            <i t-elif="props.persona.im_status === 'leave_offline'" class="fa fa-plane text-700" title="Out of office" role="img" aria-label="User is out of office"/>
+            <t t-else=""><span class="d-flex flex-column" name="icon">
                 <t t-if="!props.thread or !typingService.hasTypingMembers(props.thread)">
                     <i t-if="props.persona.im_status === 'online'" class="fa fa-circle text-success" title="Online" role="img" aria-label="User is online"/>
                     <i t-elif="props.persona.im_status === 'away'" class="fa fa-circle o-away" title="Idle" role="img" aria-label="User is idle"/>
@@ -29474,6 +29816,7 @@ return __exports;});
                 </t>
                 <Typing t-if="props.thread" channel="props.thread" size="'medium'" displayText="false"/>
             </span>
+        </t>
         </div>
     </t>
 
@@ -29922,7 +30265,8 @@ return __exports;});
     </t>
 
 <t t-name="mail.Thread">
-    <t t-if="env.inChatter" t-call="mail.Thread.jumpPresent"/> 
+    <t t-if="env.inChatter" t-call="mail.Thread.jumpPresent"/>
+            <div t-if="props.thread.model === 'discuss.channel' and props.thread.correspondent and personaService.outOfOfficeText(props.thread.correspondent)" class="alert alert-primary rounded-0" t-esc="personaService.outOfOfficeText(props.thread.correspondent)" role="alert"/>
     <div class="o-mail-Thread position-relative flex-grow-1 d-flex flex-column overflow-auto" t-att-class="{ 'pb-4':  props.showJumpPresent and !state.showJumpPresent }" t-ref="messages" tabindex="-1">
         <t t-if="!props.thread.isEmpty or props.thread.loadOlder or props.thread.hasLoadingFailed" name="content">
             <div class="d-flex flex-column position-relative flex-grow-1" t-att-class="{'justify-content-end': !env.inChatter and props.thread.type !== 'mailbox'}">
@@ -30043,7 +30387,10 @@ return __exports;});
             <t t-elif="props.thread.type === 'chat' and chatPartner">
                 <Typing t-if="typingService.hasTypingMembers(props.thread)" channel="props.thread" size="props.size" displayText="false"/>
             <t t-else=""><t name="chat">
-                    <t name="chat_static">
+                    <div t-if="chatPartner.im_status === 'leave_online'" class="o-mail-ThreadIcon-online fa fa-fw fa-plane" title="Online"/>
+            <div t-elif="chatPartner.im_status === 'leave_offline'" class="fa fa-fw fa-plane" title="Out of office"/>
+            <div t-elif="chatPartner.im_status === 'leave_away'" class="fa fa-fw fa-plane o-yellow" title="Away"/>
+            <t t-else=""><t name="chat_static">
                         <div t-if="chatPartner.im_status === 'online'" class="fa fa-fw fa-circle text-success" title="Online"/>
                         <div t-elif="chatPartner.im_status === 'offline'" class="fa fa-fw fa-circle-o" title="Offline"/>
                         <div t-elif="chatPartner.im_status === 'away'" class="fa fa-fw fa-circle o-yellow" title="Away"/>
@@ -30051,6 +30398,7 @@ return __exports;});
                         <div t-else="" class="fa fa-fw fa-question-circle" title="No IM status available"/>
                     </t>
                 </t>
+        </t>
             </t>
         </t>
             <div t-elif="props.thread.type === 'group'" class="o-mail-ThreadIcon fa fa-fw fa-users" title="Grouped Chat"/>
@@ -31821,6 +32169,9 @@ return __exports;});
                             <i t-elif="user.im_status === 'offline'" class="fa fa-fw fa-circle-o text-700" title="Offline" role="img" aria-label="User is offline"/>
                             <i t-elif="user.im_status === 'bot'" class="fa fa-fw fa-heart text-success" title="Bot" role="img" aria-label="User is a bot"/>
                             <i t-elif="!user.im_status" class="fa fa-fw fa-question-circle" title="No IM status available"/>
+            <i t-elif="user.im_status === 'leave_online'" class="fa fa-fw fa-plane text-success" title="Online" role="img" aria-label="User is online"/>
+            <i t-elif="user.im_status === 'leave_away'" class="fa fa-fw fa-plane text-warning" title="Idle" role="img" aria-label="User is idle"/>
+            <i t-elif="user.im_status === 'leave_offline'" class="fa fa-fw fa-plane text-700" title="Out of office" role="img" aria-label="User is out of office"/>
                         </span>
                     </span>
                     <div class="d-flex flex-column o_card_user_infos overflow-hidden">
@@ -41175,6 +41526,377 @@ return __exports;});
         </Dialog>
     </t>
 
+<div t-name="hr_holidays.TimeOffCard" class="o_timeoff_card py-3 text-primary">
+        <t t-set="data" t-value="props.data"/>
+        <t t-set="duration" t-value="props.requires_allocation ? data.virtual_remaining_leaves : data.virtual_leaves_taken"/>
+        <t t-set="parsed_duration" t-value="formatNumber(this.lang, duration)"/>
+        <t t-set="show_popover" t-value="true"/>
+
+        <strong class="o_timeoff_name"><t t-esc="props.name"/></strong>
+        <span class="o_timeoff_duration">
+            <t t-if="data and data.icon">
+                <img t-att-src="data.icon"/>
+            </t>
+            <span t-att-style="data.holds_changes ? 'color: #B6D369;' : ''">
+                <t t-esc="parsed_duration"/>
+            </span>
+        </span>
+        <span t-att-class="'text-uppercase o_timeoff_details p-1' + (warning ? ' alert alert-warning' : '')" t-on-click.stop="(ev) =&gt; (show_popover &amp;&amp; this.onClickInfo(ev))">
+            <t t-if="data.request_unit == 'hour'" name="duration_unit">hours</t>
+            <t t-else="">days</t>
+            <t t-if="props.requires_allocation" name="duration_type">
+                available
+            </t>
+            <t t-else="">
+                taken
+            </t>
+            <span t-if="show_popover" t-att-class="'o_timeoff_info fa' + (warning ? ' fa-exclamation-triangle' : ' fa-question-circle-o')"/>
+        </span>
+        <span t-if="props.requires_allocation and data.closest_allocation_expire !== false" class="text-uppercase o_timeoff_validity">
+            <t t-if="data.closest_allocation_remaining != data.virtual_remaining_leaves">
+                (<t t-esc="data.closest_allocation_remaining"/> <t t-if="data.request_unit == 'hour'">hours</t><t t-else="">days</t>
+                valid until <span t-esc="data.closest_allocation_expire"/>)
+            </t>
+            <t t-else="">
+                (valid until <span t-esc="data.closest_allocation_expire"/>)
+            </t>
+        </span>
+    </div>
+
+    <t t-name="hr_holidays.TimeOffCardMobile">
+        <t t-set="data" t-value="props.data"/>
+        <t t-set="duration" t-value="props.requires_allocation ? data.virtual_remaining_leaves : data.virtual_leaves_taken"/>
+
+        <span class="float-end o_timeoff_card_mobile">
+            <t t-if="props.requires_allocation" name="duration_type">
+                <strong t-esc="duration" class="o_timeoff_green text-success"/> / <span t-esc="data.max_leaves"/> <t t-if="data.request_unit == 'hour'">Hours</t><t t-else="">Days</t> <span class="o_timeoff_green text-success">Available</span>
+            </t>
+            <t t-else="">
+                <strong t-esc="duration"/> <t t-if="data.request_unit == 'hour'">Hours</t><t t-else="">Days</t> <span class="text-primary">Taken</span>
+            </t>
+        </span>
+    </t>
+
+    <t t-name="hr_holidays.TimeOffCardPopover">
+        <ul class="list-unstyled p-3 mb-0">
+            <li class="d-flex justify-content-between">
+                <span>Allocated (<span class="btn-link p-0 cursor-pointer" t-on-click="props.onClickNewAllocationRequest">new request</span>):</span>
+                <span class="ps-1" t-esc="props.allocated"/>
+            </li>
+            <li class="d-flex justify-content-between" t-if="props.accrual_bonus">
+                Accrual (Future): <span class="ps-1" t-esc="props.accrual_bonus"/>
+            </li>
+            <li class="d-flex justify-content-between">Approved: <span class="ps-1" t-esc="props.approved"/></li>
+            <li class="d-flex justify-content-between border-bottom">Planned: <span class="ps-1" t-esc="props.planned"/></li>
+            <li class="d-flex justify-content-between">Available: <span class="ps-1" t-esc="props.left"/></li>
+        </ul>
+        <div t-if="props.warning" class="alert alert-warning mb-0 pb-0 o_time_off_card_popover_warning">
+            <span class="d-inline-block m-0 mb-3" t-if="props.errorLeaves.length">
+                Some leaves cannot be linked to any allocation. To see those leaves, 
+                <a t-on-click="() =&gt; this.openLeaves()" class="cursor-pointer">click here</a>.
+            </span>
+            <span class="d-inline-block m-0 mb-3" t-if="props.closest &amp;&amp; props.closest &lt; props.left">
+                <i class="fa fa-warning"/> Only <t t-esc="props.closest"/>
+                <t t-if="props.request_unit == 'hour'"> hours</t>
+                <t t-else=""> days</t>
+                can be used before the allocation expires.
+            </span>
+            <span class="d-inline-block m-0 mb-3" t-if="props.accrualExcess">
+                The leaves planned in the future are exceeding the maximum value of the allocation.
+                It will not be possible to take all of them.
+            </span>
+        </div>
+    </t>
+<div t-name="hr_holidays.TimeOffDashboard" class="o_timeoff_dashboard">
+        <t t-foreach="state.holidays" t-as="holiday" t-key="holiday[3]">
+            <TimeOffCard name="holiday[0]" data="holiday[1]" requires_allocation="holiday[2] == 'yes'" holidayStatusId="holiday[3]" employeeId="props.employeeId"/>
+        </t>
+        <div class="o_timeoff_card p-0 d-flex justify-content-around">
+            <div class="row justify-content-center align-items-center border-bottom h-50 w-100 p-1" t-if="hasAccrualAllocation">
+                Balance at the
+                <div class="p-1" style="max-width: 100px!important">
+                    <DateTimeInput type="'date'" value="state.date" onChange="(date) =&gt; this.loadDashboardData(date)" minDate="state.today" placeholder="'Today'"/>
+                </div>
+                <button class="o_timeoff_today_button btn btn-secondary" t-on-click="resetDate">Today</button>
+            </div>
+            <div class="row justify-content-center align-items-center h-50 w-100">
+                <button class="btn btn-secondary m-auto" t-on-click="newAllocationRequest" type="button" style="width: fit-content;">
+                    <t t-if="employeeId">Grant Time</t>
+                    <t t-else="">New Allocation Request</t>
+                </button>
+            </div>
+        </div>
+    </div>
+<div t-name="hr_holidays.LeaveStatsComponent" class="o_leave_stats">
+        <div t-if="employee" id="o_leave_stats_employee">
+            <div class="o_hr_leave_subtitle">
+                <t t-esc="employee[1]"/> in <t t-esc="thisYear"/>
+            </div>
+            <div t-if="state.leaves.length === 0">
+                None
+            </div>
+            <div t-foreach="state.leaves" t-as="leave" t-key="leave_index" class="d-flex flex-row justify-content-between">
+                <span t-esc="leave.holiday_status_id[1]"/>
+                <span><t t-esc="leave.number_of_days"/> day(s)</span>
+            </div>
+        </div>
+
+        <div t-if="department" id="o_leave_stats_department">
+            <div class="o_horizontal_separator o_hr_leave_subtitle">
+                <t t-esc="department[1]"/>
+            </div>
+            <div t-if="state.departmentLeaves.length === 0">
+                None
+            </div>
+            <div t-foreach="state.departmentLeaves" t-as="leave" t-key="leave_index" t-attf-class="d-flex flex-row justify-content-between {{leave.sameEmployee ? 'fw-bold': ''}}">
+                <span><t t-esc="leave.employee_id[1]"/>: <t t-esc="leave.number_of_days"/> day(s)</span>
+                <span><t t-esc="leave.dateFrom"/> - <t t-esc="leave.dateTo"/></span>
+            </div>
+        </div>
+    </div>
+<t t-name="hr_holidays.RadioImageField">
+        <div role="radiogroup" class="d-flex flex-wrap gap-4" t-att-aria-label="string">
+            <t t-if="props.readonly">
+                <t t-if="value !== false">
+                    <div>
+                        <img t-attf-src="/hr_holidays/static/src/img/icons/{{items.find((item) =&gt; item[0] === value)[1]}}" width="48" height="48"/>
+                    </div>
+                </t>
+            </t>
+            <t t-else="">
+                <t t-foreach="items" t-as="item" t-key="item[0]">
+                    <div class="form-check o_radio_item" aria-atomic="true">
+                        <input type="radio" class="form-check-input o_radio_input" t-att-checked="item[0] === value" t-att-disabled="props.readonly" t-att-name="id" t-att-data-value="item[0]" t-att-data-index="item_index" t-att-id="\`\${id}_\${item[0]}\`" t-on-change="() =&gt; this.onChange(item)"/>
+                        <label class="form-check-label o_form_label" t-att-for="\`\${id}_\${item[0]}\`">
+                            <img t-attf-src="/hr_holidays/static/src/img/icons/{{item[1]}}" width="48" height="48"/>
+                        </label>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </t>
+
+<t t-name="hr_holidays.CalendarController">
+        <div t-att-class="className" t-ref="root">
+            <Layout className="model.useSampleModel ? 'o_view_sample_data' : ''" display="props.display">
+                <t t-set-slot="control-panel-additional-actions">
+                    <CogMenu/>
+                </t>
+                <t t-set-slot="layout-buttons">
+                    <t t-call="{{ props.buttonTemplate }}"/>
+                </t>
+                <t t-set-slot="layout-actions">
+                    <SearchBar t-if="searchBarToggler.state.showSearchBar"/>
+                </t>
+                <t t-set-slot="control-panel-navigation-additional">
+                    <t t-component="searchBarToggler.component" t-props="searchBarToggler.props"/>
+                </t>
+                <div class="o_calendar_container d-flex d-md-grid flex-column h-100 bg-view">
+                    <div class="o_calendar_header d-flex align-items-center gap-1 px-3 py-2 border-bottom">
+                        <div t-if="!env.isSmall" class="o_calendar_navigation_buttons btn-group">
+                            <button class="o_calendar_button_prev btn btn-secondary d-none d-md-block" title="Previous" aria-label="Previous" t-on-click.stop="() =&gt; this.setDate('previous')"><i class="oi oi-arrow-left"/></button>
+                            <button class="o_calendar_button_next btn btn-secondary d-none d-md-block" title="Next" aria-label="Next" t-on-click.stop="() =&gt; this.setDate('next')"><i class="oi oi-arrow-right"/></button>
+                        </div>
+                        <ViewScaleSelector scales="scales" currentScale="model.scale" isWeekendVisible="state.isWeekendVisible" setScale.bind="setScale" toggleWeekendVisibility.bind="toggleWeekendVisibility" dropdownClass="'order-3 order-lg-0'"/>
+                        <button class="btn btn-secondary o_calendar_button_today order-2 order-lg-0 ms-auto ms-lg-0" t-att-class="env.isSmall ? 'btn-sm btn-light' : 'btn-secondary'" t-on-click.stop="() =&gt; this.setDate('today')">   <span t-if="env.isSmall" class="position-relative pt-1"><t t-esc="today"/><i class="fa fa-calendar-o position-absolute top-50 start-50 translate-middle fs-1"/></span>
+                            <t t-else="">Today</t>
+                        </button>
+                        <h5 class="d-inline-flex ms-lg-2 mb-0">
+                            <t t-if="model.meta.scale === 'year'">
+                                <t t-esc="currentYear"/>
+                            </t>
+                            <t t-elif="model.meta.scale === 'month'">
+                                <t t-esc="currentMonth"/>
+                            </t>
+                            <t t-elif="model.meta.scale === 'week'">
+                                <t t-esc="weekHeader"/> <span t-if="model.meta.scale === 'week'" class="badge bg-100 rounded px-1 ms-1">Week <t t-esc="currentWeek"/></span>
+                            </t>
+                            <t t-else="">
+                                <t t-esc="dayHeader"/>
+                            </t>
+                        </h5>
+                        <button class="btn btn-light d-none d-md-block order-4 oi oi-panel-right ms-lg-auto collapsed lh-base" t-on-click="toggleSideBar"/>
+                    </div>
+                    <MobileFilterPanel t-if="env.isSmall" t-props="mobileFilterPanelProps"/>
+                    <t t-if="showCalendar" t-component="props.Renderer" t-props="rendererProps"/>
+                    <div t-if="showSideBar" class="o_calendar_sidebar_container col-auto overflow-x-hidden overflow-y-auto">
+                        <div class="o_calendar_sidebar">
+                            <FilterPanel t-props="filterPanelProps"/>
+                        </div>
+                    </div>
+                </div>
+            <t t-set-slot="control-panel-create-button">
+                <span class="o_timeoff_buttons btn-group">
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-time-off " t-on-click="newTimeOffRequest" type="button">
+                            New
+                        </button>
+                    </div>
+                </span>
+            </t>
+            </Layout>
+        </div>
+    </t>
+
+    <t t-name="hr_holidays.CalendarRenderer">
+        <div class="o_timeoff_calendar d-flex flex-column">
+            <TimeOffDashboard t-if="showDashboard" employeeId="employeeId"/>
+            <t t-call="web.CalendarRenderer"/>
+        </div>
+    </t>
+
+<t t-name="hr_holidays.CalendarFilterPanel">
+        <t t-foreach="props.model.filterSections" t-as="section" t-key="section.fieldName">
+            <t t-if="section.filters.length gt 0">
+                <div class="o_calendar_filter d-flex flex-column gap-1 mt-4 mb-2" t-att-class="{'o-calendar-filter-panel--section-collapsed': isSectionCollapsed(section)}" t-att-data-name="section.fieldName">
+                    <t t-if="section.label">
+                        <div class="o_calendar_filter_items_checkall o-checkbox form-check" data-value="section">
+                            <t t-set="filterId" t-value="nextFilterId"/>
+                            <input type="checkbox" name="select-all" class="form-check-input" t-attf-id="o_calendar_filter_{{filterId}}" t-att-checked="isAllActive(section)" t-on-change="(ev) =&gt; this.onAllFilterInputChange(section, ev)"/>
+                             <t t-if="section.canCollapse">
+                                <label class="d-flex align-items-center" type="button" t-on-click.stop.prevent="() =&gt; this.toggleSection(section, ev)">
+                                    <span class="o_cw_filter_label fw-bolder" t-esc="section.label"/>
+                                    <i class="o_cw_filter_collapse_icon fa ms-1" t-attf-class="fa-caret-{{ isSectionCollapsed(section) ? 'left' : 'down' }}"/>
+                                </label>
+                            </t>
+                            <t t-else="">
+                                <label class="o_cw_filter_label fw-bolder" t-esc="section.label"/>
+                            </t>
+                        </div>
+                    </t>
+                    <Transition visible="!isSectionCollapsed(section)" name="'o-section-slide'" leaveDuration="350" t-slot-scope="transition">
+                        <div class="o_calendar_filter_items d-flex flex-column gap-1" t-att-class="transition.className">
+                            <t t-foreach="getSortedFilters(section)" t-as="filter" t-key="filter.value">
+                                <t t-set="filterId" t-value="nextFilterId"/>
+                                <t t-call="{{ constructor.subTemplates.filter }}"/>
+                            </t>
+                        </div>
+                    </Transition>
+                    <t t-if="section.canAddFilter">
+                        <AutoComplete t-props="getAutoCompleteProps(section)"/>
+                    </t>
+                </div>
+            </t>
+        </t>
+            <div class="o_calendar_filter mt-4">
+                <h5>Legend</h5>
+                <div class="d-flex flex-column">
+                    <span class="align-middle"><img class="o_calendar_filter_plain" src="/hr/static/src/img/icons/plain.svg"/> Validated</span>
+                    <span class="align-middle"><img class="o_calendar_filter_hatched" src="/hr/static/src/img/icons/hatched.svg"/> To Approve</span>
+                    <span class="align-middle"><img class="o_calendar_filter_line" src="/hr/static/src/img/icons/line.svg"/> Refused</span>
+                </div>
+
+                <div class="d-flex flex-column mt-4" t-if="leaveState.mandatoryDays.length">
+                    <h5>Mandatory Days</h5>
+                    <ul class="ps-0">
+                        <li t-foreach="leaveState.mandatoryDays" t-as="mandatoryDay" t-key="mandatoryDay.id" class="mt-2 list-unstyled">
+                            <strong t-esc="getFormattedDateSpan(mandatoryDay.start, mandatoryDay.end)" t-att-class="'hr_mandatory_day_'+mandatoryDay.colorIndex"/>
+                            : <t t-esc="mandatoryDay.title"/>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="d-flex flex-column mt-4" t-if="leaveState.bankHolidays.length">
+                    <h5>Public Holidays</h5>
+                    <ul class="ps-0">
+                        <li t-foreach="leaveState.bankHolidays" t-as="bankHoliday" t-key="bankHoliday.id" class="mt-2 list-unstyled">
+                            <strong t-esc="getFormattedDateSpan(bankHoliday.start, bankHoliday.end)"/>
+                            : <t t-esc="bankHoliday.title"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </t>
+
+    <t t-name="hr_holidays.CalendarFilterPanel.filter">
+        <div class="o_calendar_filter_item o-checkbox form-check position-relative w-100 overflow-hidden cursor-pointer" t-att-class="getFilterColor(filter)" t-att-data-value="filter.value">
+            <input type="checkbox" name="selection" class="o_cw_filter_input_bg form-check-input" t-att-style="filter.colorIndex and typeof filter.colorIndex !== 'number' ? \`border-color: \${filter.colorIndex}; background-color: \${filter.colorIndex};\` : ''" t-attf-id="o_calendar_filter_item_{{filterId}}" t-att-checked="filter.active" t-on-change="(ev) =&gt; this.onFilterInputChange(section, filter, ev)"/>
+            <label class="d-flex align-items-center gap-1" t-attf-for="o_calendar_filter_item_{{filterId}}">
+                <t t-if="section.hasAvatar and filter.hasAvatar">
+                    <img class="o_cw_filter_avatar o_avatar rounded" t-attf-src="/web/image/{{ section.avatar.model }}/{{ filter.value }}/{{ section.avatar.field }}" alt="Avatar"/>
+                </t>
+                <t t-elif="filter.type === 'all'">
+                    <i class="o_cw_filter_avatar o_avatar fa fa-users fa-fw flex-shrink-0 me-1" role="img" aria-label="Avatar" title="Avatar"/>
+                </t>
+                <span class="o_cw_filter_title flex-grow-1 text-truncate lh-base">
+                <t t-esc="filter.label"/>
+
+                <t t-if="env.isSmall">
+                    <t t-set="holiday" t-value="leaveState.holidays[filter.value]"/>
+                    <TimeOffCardMobile t-if="holiday" name="holiday[0]" id="holiday[3]" data="holiday[1]" requires_allocation="holiday[2] === 'yes'"/>
+                </t>
+            </span>
+        </label>
+            <t t-if="filter.canRemove">
+                <button class="o_remove btn position-absolute top-50 end-0 py-0 px-2 bg-view text-700 transition-base" role="img" title="Remove this favorite from the list" aria-label="Remove this favorite from the list" t-on-click="() =&gt; this.onFilterRemoveBtnClick(section, filter)">
+                    <i class="oi oi-close"/>
+                </button>
+            </t>
+        </div>
+    </t>
+
+<t t-name="hr_holidays.MandatoryDayCalendarYearPopover.body">
+        <t t-foreach="recordGroups" t-as="recordGroup" t-key="recordGroup.title">
+            <div class="fw-bold mt-2" t-esc="recordGroup.title"/>
+            <t t-foreach="recordGroup.records" t-as="record" t-key="record.id">
+                <t t-if="record.id &lt; 0">
+                    <p class="">
+                        <t t-if="record.startHour"><t t-esc="record.startHour"/> </t>
+                        <t t-esc="record.title"/>
+                    </p>
+                </t>
+                <t t-else="">
+                    <t t-call="{{ constructor.subTemplates.record }}"/>
+                </t>
+            </t>
+        </t>
+    </t>
+<t t-name="hr_holidays.FormViewDialog.buttons">
+        <div class="o_cp_buttons d-flex align-items-baseline w-100" role="toolbar" aria-label="Main actions" t-ref="cpButtons">
+            <div t-if="model.root.isInEdition" class="o_form_buttons_edit d-flex gap-1">
+                <button class="btn btn-primary o_form_button_save" t-on-click="saveButtonClicked" data-hotkey="q">Save</button>
+        <button type="button" class="btn btn-secondary o_form_button_cancel" data-hotkey="j" t-on-click.stop="discard">
+                    Discard
+                </button>
+            <button class="btn btn-secondary" t-if="canDelete" t-on-click="deleteRecord" data-hotkey="x">Delete</button>
+                <button t-if="props.removeRecord" class="btn btn-secondary o_form_button_remove" t-on-click="props.removeRecord" data-hotkey="x">
+                    Remove
+                </button>
+            </div>
+            <div t-elif="canCreate" class="o_form_buttons_view">
+                <button type="button" class="btn btn-secondary o_form_button_create" data-hotkey="c" t-on-click.stop="create">
+                    New
+                </button>
+            </div>
+            <div class="flex-grow-1 d-flex flex-row-reverse gap-1">
+                <button class="btn btn-secondary" t-if="canRefuse" t-on-click="() =&gt; this.onClick('action_refuse')" data-hotkey="z">Refuse</button>
+                <button class="btn btn-secondary" t-if="canApprove" t-on-click="() =&gt; this.onClick('action_approve')" data-hotkey="g">Approve</button>
+                <button class="btn btn-secondary" t-if="canValidate" t-on-click="() =&gt; this.onClick('action_validate')" data-hotkey="v">Validate</button>
+            </div>
+        </div>
+    </t>
+<t t-name="hr_holidays.AccrualLevelsX2ManyField">
+            <ListRenderer t-if="props.viewMode === 'list'" t-props="rendererProps"/><KanbanRenderer t-elif="props.viewMode" t-props="rendererProps"/><div t-att-class="className">
+            <div class="o_x2m_control_panel d-empty-none mb-4">
+                <t t-if="displayControlPanelButtons">
+                    <div class="o_cp_buttons gap-1" role="toolbar" aria-label="Control panel buttons" t-ref="buttons">
+                        <t t-foreach="creates" t-as="create" t-key="create_index">
+                            <button t-if="create.type === 'create'" type="button" class="btn btn-secondary" t-att-class="create.class" t-on-click.stop.prevent="() =&gt; this.onAdd({ context: create.context })">
+                                <t t-esc="create.string"/>
+                            </button>
+                            <ViewButton t-if="create.type === 'button'" className="\`\${create.className}\`" clickParams="create.clickParams" icon="create.icon" record="props.record.data[props.name]" string="create.string" title="create.title"/>
+                        </t>
+                    </div>
+                </t>
+                <div t-if="props.record.data[props.name].count &gt; props.record.data[props.name].limit" class="o_cp_pager" role="search">
+                    <Pager t-props="pagerProps"/>
+                </div>
+            </div>
+
+
+        </div>
+    </t>
+
 <t t-name="web_hierarchy.HierarchyCard">
         <div class="o_hierarchy_node_container d-flex flex-column" t-att-class="classNames" t-att-data-node-id="props.node.id">
             <div class="o_hierarchy_node_button_container w-100 d-flex justify-content-center">
@@ -44481,6 +45203,185 @@ return __exports;});
 </t>
 
 
+<t t-name="hr_work_entry.work_entry_button">
+        <button t-if="disabled" disabled="" title="Solve conflicts first" t-attf-class="btn {{primary?'btn-primary':'btn-secondary'}} btn-work-entry {{ event_class }}" type="button" t-esc="button_text"/>
+        <button t-else="" t-attf-class="btn {{primary?'btn-primary':'btn-secondary'}} btn-work-entry {{ event_class }}" type="button" t-esc="button_text"/>
+    </t>
+<t t-name="hr_contract.ContractWarningTooltip">
+        <span class="fa fa-exclamation-triangle text-danger o_calendar_warning ms-3" data-tooltip-template="hr_contract.CalendarMismatch" t-att-data-tooltip-info="tooltipInfo"/>
+    </t>
+<t t-name="hr_contract.CalendarMismatch">
+        <div class="o-tooltip px-1 py-2">
+            <p style="font-size: 12px;" class="text-danger" t-esc="text"/>
+        </div>
+    </t>
+<t t-name="hr_work_entry_contract.calendar.controlButtons">
+            <span class="btn-regenerate-work-entries">
+                <button class="btn btn-secondary ms-3" t-on-click="onRegenerateWorkEntries">
+                    Regenerate Work Entries
+                </button>
+            </span>
+            <button t-if="getShowGeneratePayslipsButton()" t-att-disabled="checkConflicts()" class="btn btn-primary btn-payslip-generate ms-3" t-on-click="onGeneratePayslips">
+                Generate Payslips
+            </button></t>
+
+<t t-name="hr_work_entry_contract_enterprise.WorkEntriesGanttView.Buttons">
+        <div class="d-flex gap-1">
+            <button t-if="getShowGeneratePayslipsButton()" t-att-disabled="checkConflicts()" class="btn btn-primary btn-payslip-generate" t-on-click="onGeneratePayslips">
+                Generate Payslips
+            </button>
+            <button class="btn btn-secondary" t-on-click="onRegenerateWorkEntries">
+                Regenerate Work Entries
+            </button>
+        </div>
+    </t>
+
+<t t-name="hr_payroll.AddPayslips">
+        <button class="btn btn-secondary" t-on-click="() =&gt; this.onAddPayslips()">
+            <t t-esc="props.string"/>
+        </button>
+    </t>
+<t t-name="hr_payroll.ActionBox">
+        <div class="o_hr_payroll_dashboard_block card h-100">
+            <div class="card-header bg-view border-0">
+                <h2 class="card-title">
+                    Warnings
+                </h2>
+            </div>
+            <t t-if="this.state.loading">
+                <div class="position-absolute top-0 bottom-0 start-0 end-0 d-flex align-items-center justify-content-center">
+                    <i class="fa fa-3x fa-spin fa-spinner mx-auto text-o-color-2"/>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="list-group list-group-flush">
+                    <t t-foreach="this.state.warnings" t-as="action" t-key="action_index">
+                        <a t-if="action.count &gt; 0" class="list-group-item list-group-item-action row d-flex justify-content-between align-items-center g-0" href="#" t-on-click="() =&gt; this.actionService.doAction(action.action)">
+                            <span class="col-1 text-end" t-out="action.count"/>
+                            <div class="col-10">
+                                <t t-esc="action.string"/>
+                            </div>
+                        </a>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
+<t t-name="hr_payroll.Dashboard">
+        <div class="o_hr_payroll_dashboard_sheet container-fluid h-100 overflow-auto m-2 m-md-3 p-0">
+            <div class="row g-0 g-lg-3 h-lg-100">
+                <div class="col-12 col-lg-7 row p-0 pe-3 pe-lg-0 m-0 h-100">
+                    <div class="row g-0 g-md-3 mt-0 h-100 pe-0 ">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0 o_payroll_dashboard_panel">
+                            <PayrollDashboardActionBox actions="dashboardData.actions"/>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3 mb-md-0 o_payroll_dashboard_panel">
+                            <PayrollDashboardPayslipBatch batches="dashboardData.batches"/>
+                        </div>
+                        <t t-set="stats" t-value="dashboardData.stats"/>
+                        <t t-foreach="stats" t-as="stat" t-key="stat.id" t-if="stats &amp;&amp; stats.length &gt; 0">
+                            <div class="col-12 col-md-6 mb-2 o_payroll_dashboard_panel">
+                                <PayrollDashboardStats t-props="stat"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5 h-100 m-0 pt-2 pt-md-3 pe-md-3 ps-0">
+                    <PayrollDashboardTodo orderBy="[{name: 'id', asc: true}]"/>
+                </div>
+            </div>
+        </div>
+    </t>
+<t t-name="hr_payroll.DashboardStats">
+        <div class="o_hr_payroll_dashboard_block o_hr_payroll_dashboard_block_stats card d-flex align-items-stretch flex-column h-100">
+            <div class="card-header d-flex flex-wrap justify-content-between align-items-center w-100 border-0 bg-view">
+                <h2 class="card-title" t-out="props.title"/>
+                <i class="fa fa-question-circle-o" t-if="props.help" data-tooltip-template="hr_payroll.Tooltip" t-att-data-tooltip-info="tooltipInfo"/>
+                <div class="d-flex" id="period_selection_toggle">
+                    Annually
+                    <div class="o_boolean_toggle cursor-pointer form-check form-switch o_switch_toggle ms-2" t-on-click.stop.prevent="toggle">
+                        <input type="checkbox" class="form-check-input" role="switch" t-att-checked="state.monthly"/>
+                    </div>
+                    Monthly
+                </div>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-between">
+                <t t-foreach="props.actions" t-as="action" t-key="action_index">
+                    <a t-if="action.count &gt; 0" class="d-flex w-100" href="#" t-on-click="() =&gt; this.actionService.doAction(action.action)">
+                        <span class="me-1" t-out="action.count"/>
+                        <t t-esc="action.string"/>
+                    </a>
+                </t>
+                <div t-att-class="'canvas-container mt-auto d-flex align-items-end ' + (props.type === 'line' ? 'payroll_line' : 'payroll_bar')">
+                    <canvas t-ref="canvas" class="w-100"/>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="hr_payroll.Tooltip">
+        <div class="o-tooltip px-2 py-1">
+            <p t-out="help"/>
+        </div>
+    </t>
+<t t-name="hr_payroll.PayslipBatch">
+        <div class="o_hr_payroll_dashboard_block o_hr_payroll_dashboard_batches h-100 card m-auto">
+            <div class="card-header border-0 d-flex justify-content-between align-items-center bg-view">
+                <h2 class="card-title">
+                    Batches
+                </h2>
+                <a class="btn btn-link" t-on-click="onClickTitle">
+                    All
+                </a>
+            </div>
+            <ul class="list-group list-group-flush">
+                <a t-foreach="props.batches" t-as="batch" t-key="batch.id" class="list-group-item list-group-item-action d-flex justify-content-start align-items-center" href="#" t-on-click="() =&gt; this.onClickLine(batch.id, batch.name)">
+                    <div t-att-class="'badge rounded-pill o_readonly_modifier o_required_modifier o_field_widget fs-6 ' + this.getColorFromState(batch.state)">
+                        <t t-out="batch.state"/>
+                    </div>
+                    <div class="o_hr_payroll_dashboard_batch text-end mw-75 ms-auto p-0">
+                        <t t-esc="batch.name" class="mw-100"/> <br/> <span t-esc="batch.payslip_count" class="text-nowrap"/>
+                    </div>
+                </a>
+            </ul>
+        </div>
+        </t>
+<t t-name="hr_payroll.TodoList">
+        <div class="o_hr_payroll_dashboard_block o_hr_payroll_dashboard_todo card h-100 g-0 d-flex flex-column ms-md-1 ms-lg-0 me-3 me-lg-4 position-relative">
+            <div class="card-header d-flex bg-view border-bottom-0 p-0 bg-view">
+                <ul class="o_hr_payroll_todo_tabs nav nav-tabs flex-nowrap overflow-x-auto w-100 border-bottom-0 border-start-0">
+                    <t t-foreach="state.records" t-as="rec" t-key="rec.id">
+                        <t t-set="isActiveNote" t-value="rec.id === state.activeNoteId"/>
+                        <li class="o_hr_payroll_todo_tab nav-item flex-shrink-0 border-end  cursor-pointer" t-att-class="((isActiveNote) ? '' : ' border-bottom ')" t-on-click="() =&gt; this.onClickNoteTab(rec)" t-on-dblclick="() =&gt; this.startNameEdition(rec)">
+                            <a t-attf-class="mb-0 nav-link text-dark {{ (isActiveNote) ? 'd-flex align-items-center justify-content-between gap-2 active border-0 border-odoo border-top ' : '' }}">
+                                <t t-if="state.isEditingNoteName &amp;&amp; isActiveNote">
+                                    <input type="text" t-ref="autofocus" t-att-value="this.bufferedText" t-on-input="onInputNoteNameInput" t-on-keydown="onKeyDownNoteNameInput" t-on-blur="handleBlur" class="o_input"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-esc="(rec.name || 'untitled').substring(0, 30)"/>
+                                    <button type="button" class="btn p-0" aria-label="Close" t-if="isActiveNote" t-on-click="onNoteDelete">
+                                        <i class="oi oi-close"/>
+                                    </button>
+                                </t>
+                            </a>
+                        </li>
+                    </t>
+                    <li class="flex-grow-1 border-bottom border-end order-2"/>
+                </ul>
+                <button class="o_hr_payroll_todo_tab o_hr_payroll_todo_create btn d-flex align-items-center border-bottom rounded-0" t-on-click="onClickCreateNote">
+                    <i title="Create new todo note" class="fa fa-plus"/>
+                </button>
+            </div>
+
+            <div class="card-body content overflow-hidden">
+                <div class="o_hr_payroll_todo_value overflow-auto h-100">
+                    <Record t-if="state.activeNoteId" resModel="recordInfo.model" fieldNames="['note']" resId="state.activeNoteId" t-slot-scope="data" mode="'edit'" onRecordChanged.bind="onRecordChanged">
+                        <Field name="'note'" record="data.record" class="'h-100'" wysiwygOptions="{}" isCollaborative="true"/>
+                    </Record>
+                </div>
+            </div>
+        </div>
+    </t>
 <t t-name="account_reports.AccountReport">
         <t t-call="{{ env.template('AccountReport') }}"/>
     </t>
@@ -45086,6 +45987,10 @@ return __exports;});
             <div class="dropdown-item">
                 <label>Tags</label>
                 <MultiRecordSelector t-props="getMultiRecordSelectorProps('res.partner.category', 'partner_categories')"/>
+            </div>
+            <div class="dropdown-item">
+                <label>Salesperson</label>
+                <MultiRecordSelector t-props="getMultiRecordSelectorProps('res.users', 'partner_users')"/>
             </div>
         </Dropdown>
     </t>
@@ -48570,6 +49475,245 @@ return __exports;});
                 </span>
             </t>
         </span>
+    </t>
+<t t-name="hr_payroll_holidays.PayslipFormController">
+        <div t-att-class="className" t-ref="root">
+            <div class="o_form_view_container">
+                <Layout className="model.useSampleModel ? 'o_view_sample_data' : ''" display="display">
+                    <t t-set-slot="control-panel-create-button">
+                        <t t-if="canCreate">
+                            <button type="button" class="btn btn-secondary o_form_button_create" data-hotkey="c" t-on-click.stop="create">New</button>
+                        </t>
+                    </t>
+
+                    <t t-set-slot="layout-buttons">
+                        <t t-if="env.inDialog">
+                            <t t-if="footerArchInfo">
+                                <t t-component="props.Renderer" record="model.root" Compiler="props.Compiler" archInfo="footerArchInfo"/>
+                            </t>
+                            <t t-else="">
+                                <t t-call="{{ props.buttonTemplate }}"/>
+                            </t>
+                        </t>
+                    </t>
+
+                    <t t-set-slot="layout-actions">
+                        <t t-if="buttonBoxTemplate">
+                            <t t-call="{{ buttonBoxTemplate }}" t-call-context="{ __comp__: Object.assign(Object.create(this), { this, props: { ...this.props, record: this.model.root } }) }"/>
+                        </t>
+                    </t>
+
+                    <t t-set-slot="control-panel-additional-actions">
+                        <CogMenu getActiveIds="() =&gt; model.root.isNew ? [] : [model.root.resId]" context="props.context" items="props.info.actionMenus ? this.actionMenuItems : {}" isDomainSelected="model.root.isDomainSelected" resModel="model.root.resModel" domain="props.domain" onActionExecuted="() =&gt; model.load({ resId: model.root.resId, resIds: model.root.resIds })" shouldExecuteAction.bind="shouldExecuteAction"/>
+                    </t>
+
+                    <t t-set-slot="control-panel-status-indicator">
+                        <t t-if="canEdit">
+                            <FormStatusIndicator model="model" discard.bind="discard" save.bind="saveButtonClicked"/>
+                        </t>
+                    </t>
+                    <t t-set-slot="control-panel-create-button">
+                        <t t-if="canCreate">
+                            <button type="button" class="btn btn-outline-primary o_form_button_create" data-hotkey="c" t-on-click.stop="create">New</button>
+                        </t>
+                    </t>
+            <TimeOffToDeferWarning t-if="timeOff.hasTimeOffToDefer"/>
+                    <t t-component="props.Renderer" record="model.root" Compiler="props.Compiler" archInfo="archInfo" translateAlert="translateAlert" onNotebookPageChange.bind="onNotebookPageChange" activeNotebookPages="props.state and props.state.activeNotebookPages" saveRecord="() =&gt; this.save()"/>
+            <t t-set-slot="control-panel-knowledge-button">
+                <button class="o_knowledge_icon_search btn opacity-trigger-hover" type="button" t-on-click="onClickSearchKnowledgeArticle" title="Search Knowledge Articles">
+                    <t t-call="Knowledge.KnowledgeIcon"/>
+                </button>
+            </t>
+                </Layout>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="hr_payroll_holidays.PayslipListRenderer">
+        <t t-set="_canSelectRecord" t-value="canSelectRecord"/>
+            <TimeOffToDeferWarning t-if="timeOff.hasTimeOffToDefer"/>
+        <div class="o_list_renderer o_renderer table-responsive" t-att-class="uniqueRendererClass" tabindex="-1" t-ref="root">
+            <t t-if="showNoContentHelper" t-call="web.ActionHelper">
+                <t t-set="noContentHelp" t-value="props.noContentHelp"/>
+            </t>
+            <table t-attf-class="o_list_table table table-sm table-hover position-relative mb-0 {{props.list.isGrouped ? 'o_list_table_grouped' : 'o_list_table_ungrouped table-striped'}}" t-ref="table">
+                <thead>
+                    <tr>
+                        <th t-if="hasSelectors" class="o_list_record_selector o_list_controller align-middle pe-1 cursor-pointer" tabindex="-1" t-on-keydown="(ev) =&gt; this.onCellKeydown(ev)" t-on-click.stop="toggleSelection">
+                            <CheckBox disabled="!_canSelectRecord" value="selectAll" className="'d-flex m-0'" onChange.bind="toggleSelection"/>
+                        </th>
+                        <t t-foreach="state.columns" t-as="column" t-key="column.id">
+                            <th t-if="column.type === 'field'" t-att-data-name="column.name" t-att-class="getColumnClass(column) + ' opacity-trigger-hover'" t-on-pointerup="onColumnTitleMouseUp" t-on-click="() =&gt; this.onClickSortColumn(column)" t-on-keydown="(ev) =&gt; this.onCellKeydown(ev)" t-att-data-tooltip-template="isDebugMode ? 'web.FieldTooltip' : 'web.ListHeaderTooltip'" t-att-data-tooltip-info="makeTooltip(column)" data-tooltip-delay="1000" tabindex="-1">
+                                <t t-if="column.hasLabel and column.widget !== 'handle'">
+                                <t t-set="isNumeric" t-value="isNumericColumn(column)"/>
+                                    <div t-att-class="{'d-flex': true, 'flex-row-reverse': shouldReverseHeader(column)}">
+                                        <span class="d-block min-w-0 text-truncate flex-grow-1" t-att-class="isNumeric ? 'o_list_number_th' : ''" t-esc="column.label"/>
+                                        <i t-att-class="getSortableIconClass(column)"/>
+                                    </div>
+                                    <span class="o_resize position-absolute top-0 end-0 bottom-0 ps-1 bg-black-25 opacity-0 opacity-50-hover z-index-1" t-on-pointerdown.stop.prevent="onStartResize"/>
+                                </t>
+                            </th>
+                            <th t-else="" t-on-keydown="(ev) =&gt; this.onCellKeydown(ev)" t-att-class="{o_list_button: column.type === 'button_group'}"/>
+                        </t>
+                        <th t-if="props.onOpenFormView" t-on-keydown="(ev) =&gt; this.onCellKeydown(ev)" class="o_list_open_form_view"/>
+                        <th t-if="displayOptionalFields or activeActions.onDelete" t-on-keydown="(ev) =&gt; this.onCellKeydown(ev)" class="o_list_controller o_list_actions_header position-sticky end-0">
+        <t t-set="_isStudioEditable" t-value="this.isStudioEditable ? this.isStudioEditable() : false"/>
+                            <Dropdown t-if="displayOptionalFields" class="'o_optional_columns_dropdown text-center border-top-0'" togglerClass="'btn p-0'" skipTogglerTabbing="true" listRendererClass="uniqueRendererClass" position="'bottom-end'">
+                                <t t-set-slot="toggler">
+                                    <i class="o_optional_columns_dropdown_toggle oi oi-fw oi-settings-adjust"/>
+                                </t>
+
+                                <t t-foreach="optionalFieldGroups" t-as="group" t-key="group_index">
+                                    <div t-if="!group_first" role="separator" class="dropdown-divider"/>
+                                    <DropdownItem t-if="group.displayName" parentClosingMode="'none'" onSelected="() =&gt; this.toggleOptionalFieldGroup(group.id)">
+                                        <div class="fw-bold" t-esc="group.displayName"/>
+                                    </DropdownItem>
+                                    <t t-foreach="group.optionalFields" t-as="field" t-key="field_index">
+                                        <DropdownItem parentClosingMode="'none'" onSelected="() =&gt; this.toggleOptionalField(field.name)">
+                                            <CheckBox onChange="() =&gt; this.toggleOptionalField(field.name)" value="field.value" name="field.name">
+                                                <span class="d-flex align-items-center"><span class="text-truncate" t-esc="field.label"/><span class="ps-1" t-if="env.debug" t-esc="' (' + field.name + ')'"/></span>
+                                            </CheckBox>
+                                        </DropdownItem>
+                                    </t>
+                                </t>
+        <t t-if="_isStudioEditable">
+            <div t-if="hasOptionalFields" class="dropdown-divider"/>
+            <DropdownItem parentClosingMode="'none'" onSelected="() =&gt; this.onSelectedAddCustomField()" class="'dropdown-item-studio'">
+                <i class="fa fa-plus fa-fw me-2"/>
+                <span>Add Custom Field</span>
+            </DropdownItem>
+        </t>
+                            </Dropdown>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="ui-sortable">
+                    <t t-call="{{ constructor.rowsTemplate }}">
+                        <t t-set="list" t-value="props.list"/>
+                    </t>
+                </tbody>
+                <tfoot t-on-click="() =&gt; props.list.leaveEditMode()" class="o_list_footer cursor-default" t-att-class="{o_sample_data_disabled: props.list.model.useSampleModel}">
+                    <tr>
+                        <td t-if="hasSelectors"/>
+                        <t t-foreach="state.columns" t-as="column" t-key="column.id">
+                            <t t-set="aggregate" t-value="aggregates[column.name]"/>
+                            <td t-if="aggregate" class="o_list_number">
+                                <span t-esc="aggregate.value" t-att-data-tooltip="aggregate.help"/>
+                            </td>
+                            <td t-else=""/>
+                        </t>
+                        <td t-if="props.onOpenFormView"/>
+                        <td t-if="displayOptionalFields or activeActions.onDelete"/>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </t>
+
+    <t t-name="hr_payroll_holidays.WorkEntriesGanttController">
+        <div t-att-class="className" t-ref="root">
+            <Layout className="model.useSampleModel ? 'o_view_sample_data' : ''" display="props.display">
+                <t t-set-slot="control-panel-create-button">
+                    <button t-if="model.metaData.canCreate" class="o_gantt_button_add btn btn-primary" data-hotkey="r" t-on-click="onAddClicked">
+                        New
+                    </button>
+                </t>
+                <t t-set-slot="control-panel-additional-actions">
+                    <CogMenu/>
+                </t>
+                <t t-set-slot="layout-buttons">
+                    <t t-call="{{ props.buttonTemplate }}"/>
+                </t>
+                <t t-set-slot="layout-actions">
+                    <SearchBar t-if="searchBarToggler.state.showSearchBar"/>
+                </t>
+                <t t-set-slot="control-panel-navigation-additional">
+                    <t t-component="searchBarToggler.component" t-props="searchBarToggler.props"/>
+                </t>
+                <t t-set-slot="default" t-slot-scope="layout">
+                    <t t-if="showNoContentHelp">
+                        <t t-if="props.info.noContentHelp" t-call="web.ActionHelper">
+                            <t t-set="noContentHelp" t-value="props.info.noContentHelp"/>
+                        </t>
+                        <t t-else="" t-call="web.NoContentHelper"/>
+                    </t>
+            <TimeOffToDeferWarning t-if="timeOff.hasTimeOffToDefer"/>
+                    <t t-component="props.Renderer" class="model.useSampleModel ? 'o_sample_data_disabled' : ''" model="model" arch="props.arch" create.bind="create" openDialog.bind="openDialog" scrollPosition="props.scrollPosition" contentRef="layout.contentRef"/>
+                </t>
+            </Layout>
+        </div>
+    </t>
+
+    <t t-name="hr_payroll_holidays.TimeOffToDeferWarning" owl="1">
+        <div class="alert alert-warning text-center mb-0" role="alert">
+            <p class="mb-0">
+                <t t-esc="timeOffButtonText.before"/>
+                <button class="btn btn-link p-0 o_open_defer_time_off" role="button" t-on-click="onTimeOffToDefer" t-esc="timeOffButtonText.inside"/>
+                <t t-esc="timeOffButtonText.after"/>
+            </p>
+        </div>
+    </t>
+<t t-name="hr_payroll_holidays.WorkEntryCalendarController">
+        <div t-att-class="className" t-ref="root">
+            <Layout className="model.useSampleModel ? 'o_view_sample_data' : ''" display="props.display">
+                <t t-set-slot="control-panel-additional-actions">
+                    <CogMenu/>
+                </t>
+                <t t-set-slot="layout-buttons">
+                    <t t-call="{{ props.buttonTemplate }}"/>
+                </t>
+                <t t-set-slot="layout-actions">
+                    <SearchBar t-if="searchBarToggler.state.showSearchBar"/>
+                </t>
+                <t t-set-slot="control-panel-navigation-additional">
+                    <t t-component="searchBarToggler.component" t-props="searchBarToggler.props"/>
+                </t>
+            <TimeOffToDeferWarning t-if="timeOff.hasTimeOffToDefer"/>
+                <div class="o_calendar_container d-flex d-md-grid flex-column h-100 bg-view">
+                    <div class="o_calendar_header d-flex align-items-center gap-1 px-3 py-2 border-bottom">
+                        <div t-if="!env.isSmall" class="o_calendar_navigation_buttons btn-group">
+                            <button class="o_calendar_button_prev btn btn-secondary d-none d-md-block" title="Previous" aria-label="Previous" t-on-click.stop="() =&gt; this.setDate('previous')"><i class="oi oi-arrow-left"/></button>
+                            <button class="o_calendar_button_next btn btn-secondary d-none d-md-block" title="Next" aria-label="Next" t-on-click.stop="() =&gt; this.setDate('next')"><i class="oi oi-arrow-right"/></button>
+                        </div>
+                        <ViewScaleSelector scales="scales" currentScale="model.scale" isWeekendVisible="state.isWeekendVisible" setScale.bind="setScale" toggleWeekendVisibility.bind="toggleWeekendVisibility" dropdownClass="'order-3 order-lg-0'"/>
+                        <button class="btn btn-secondary o_calendar_button_today order-2 order-lg-0 ms-auto ms-lg-0" t-att-class="env.isSmall ? 'btn-sm btn-light' : 'btn-secondary'" t-on-click.stop="() =&gt; this.setDate('today')">   <span t-if="env.isSmall" class="position-relative pt-1"><t t-esc="today"/><i class="fa fa-calendar-o position-absolute top-50 start-50 translate-middle fs-1"/></span>
+                            <t t-else="">Today</t>
+                        </button>
+                        <h5 class="d-inline-flex ms-lg-2 mb-0">
+                            <t t-if="model.meta.scale === 'year'">
+                                <t t-esc="currentYear"/>
+                            </t>
+                            <t t-elif="model.meta.scale === 'month'">
+                                <t t-esc="currentMonth"/>
+                            </t>
+                            <t t-elif="model.meta.scale === 'week'">
+                                <t t-esc="weekHeader"/> <span t-if="model.meta.scale === 'week'" class="badge bg-100 rounded px-1 ms-1">Week <t t-esc="currentWeek"/></span>
+                            </t>
+                            <t t-else="">
+                                <t t-esc="dayHeader"/>
+                            </t>
+                        </h5>
+                        <button class="btn btn-light d-none d-md-block order-4 oi oi-panel-right ms-lg-auto collapsed lh-base" t-on-click="toggleSideBar"/>
+                    </div>
+                    <MobileFilterPanel t-if="env.isSmall" t-props="mobileFilterPanelProps"/>
+                    <t t-if="showCalendar" t-component="props.Renderer" t-props="rendererProps"/>
+                    <div t-if="showSideBar" class="o_calendar_sidebar_container col-auto overflow-x-hidden overflow-y-auto">
+                        <div class="o_calendar_sidebar">
+                            <DatePicker t-if="!env.isSmall" t-props="datePickerProps"/>
+                            <FilterPanel t-props="filterPanelProps"/>
+                        </div>
+                    </div>
+                </div>
+            </Layout>
+        </div>
+    </t>
+
+    <t t-name="warning.time.off.to.defer">
+        <div class="alert alert-warning text-center mb-0" role="alert">
+            <p class="mb-0">
+                You have some <button class="btn btn-link p-0 o_open_defer_time_off" role="button">time off</button> to defer to the next month.
+            </p>
+        </div>
     </t>
 <t t-name="account_base_import.accountImportTemplate">
         <ControlPanel display="{             'top-right': false,             'bottom-left': false,             'bottom-right': false,         }"/>

@@ -28,8 +28,8 @@
             <field name="name">
                 Finished Product Inspection - فحص المنتج التام
             </field>
-            <field name="product_category_id"
-                   ref="product_category_finished"/>
+            <field name="product_category_ids"
+                   eval="[ref('product_category_finished')]"/>
         </record>
         <!-- ===================================================== -->
         <!-- FINISHED PRODUCT INSPECTION FIELDS                    -->
@@ -232,8 +232,8 @@
             <field name="name">
                 Raw Materials Inspection - فحص الخامات
             </field>
-            <field name="product_category_id"
-                   ref="product_category_raw"/>
+            <field name="product_category_ids"
+                   eval="[ref('product_category_raw')]"/>
         </record>
         <!-- ===================================================== -->
         <!-- RAW MATERIALS INSPECTION FIELDS                       -->
@@ -366,8 +366,8 @@
             <field name="name">
                 Packaging Materials Inspection - فحص مواد التعبئة والتغليف
             </field>
-            <field name="product_category_id"
-                   ref="product_category_packaging"/>
+            <field name="product_category_ids"
+                   eval="[ref('product_category_packaging')]"/>
         </record>
         <!-- ===================================================== -->
         <!-- PACKAGING MATERIALS INSPECTION FIELDS                 -->
@@ -440,8 +440,8 @@
             <field name="name">
                 Stickers Inspection - فحص الاستيكرات
             </field>
-            <field name="product_category_id"
-                   ref="product_category_stickers"/>
+            <field name="product_category_ids"
+                   eval="[ref('product_category_stickers')]"/>
         </record>
         <!-- ===================================================== -->
         <!-- STICKERS INSPECTION FIELDS                            -->
