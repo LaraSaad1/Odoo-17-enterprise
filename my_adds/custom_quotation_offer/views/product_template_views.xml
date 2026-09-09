@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Visible header button on the Product form. Calls the model method
+         directly (type="object") with self = the current record - no
+         context guessing needed. -->
+    <record id="view_product_template_form_quotation_offer_button" model="ir.ui.view">
+        <field name="name">product.template.form.quotation.offer.button</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_open_quotation_offer_wizard"
+                            type="object"
+                            string="طباعة عرض سعر"
+                            class="btn-primary"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+    <!-- Server action bound to product.template on both list and form views,
+         so it shows in the ⚙ Actions menu too - on the list view it runs
+         against every ticked product, on the form view against the open
+         record. Calls the same method as the header button above. -->
+    <record id="action_server_quotation_offer" model="ir.actions.server">
+        <field name="name">طباعة عرض سعر</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_open_quotation_offer_wizard()</field>
+    </record>
+</odoo>
