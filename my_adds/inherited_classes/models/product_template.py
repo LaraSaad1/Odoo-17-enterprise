@@ -14,3 +14,7 @@ class ProductTemplate(models.Model):
     crop = fields.Char(
         string='المحصول',
     )
+
+    usage_rate = fields.Char(
+            string='معدل الاستخدام',
+        )

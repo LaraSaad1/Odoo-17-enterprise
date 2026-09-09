@@ -6,7 +6,7 @@
                 <!--  Which optional columns actually have data on at least one line  -->
                 <t t-set="show_pests" t-value="any(l.product_tmpl_id.pests for l in doc.line_ids)"/>
                 <t t-set="show_formulation" t-value="any(l.product_tmpl_id.formulation for l in doc.line_ids)"/>
-                <t t-set="show_crop" t-value="any(l.product_tmpl_id.crop for l in doc.line_ids)"/>
+                <t t-set="show_usage_rate" t-value="any(l.product_tmpl_id.usage_rate for l in doc.line_ids)"/>
                 <t t-set="show_unit" t-value="any(l.attribute_value_id for l in doc.line_ids)"/>
                 <t t-set="show_price" t-value="any(l.price_unit for l in doc.line_ids)"/>
                 <div class="page" dir="rtl" style="font-family: Arial, 'Helvetica Neue', sans-serif; color:#222; font-size:12px;">
@@ -44,7 +44,7 @@ SPARK
                                 <th style="border:1px solid #999; padding:4px; text-align:center;">اسم الصنف</th>
                                 <th t-if="show_pests" style="border:1px solid #999; padding:4px; text-align:center;">الآفه</th>
                                 <th t-if="show_formulation" style="border:1px solid #999; padding:4px; text-align:center;">اسم الماده الفعاله</th>
-                                <th t-if="show_crop" style="border:1px solid #999; padding:4px; text-align:center;">المحصول</th>
+                                <th t-if="show_usage_rate" style="border:1px solid #999; padding:4px; text-align:center;">معدل الاستخدام</th>
                                 <th t-if="show_unit" style="border:1px solid #999; padding:4px; text-align:center;">الوحده</th>
                                 <th t-if="show_price" style="border:1px solid #999; padding:4px; text-align:center;">سعر الوحده</th>
                             </tr>
@@ -70,9 +70,9 @@ SPARK
                                             <span t-esc="line.product_tmpl_id.formulation"/>
                                         </t>
                                     </td>
-                                    <td t-if="show_crop" style="border:1px solid #ccc; padding:4px; text-align:center;">
-                                        <t t-if="line.product_tmpl_id.crop">
-                                            <span t-esc="line.product_tmpl_id.crop"/>
+                                    <td t-if="show_usage_rate" style="border:1px solid #ccc; padding:4px; text-align:center;">
+                                        <t t-if="line.product_tmpl_id.usage_rate">
+                                            <span t-esc="line.product_tmpl_id.usage_rate"/>
                                         </t>
                                     </td>
                                     <td t-if="show_unit" style="border:1px solid #ccc; padding:4px; text-align:center;">
@@ -90,17 +90,20 @@ SPARK
                         </tbody>
                     </table>
                     <p style="margin-top:24px; font-size:19px;">وتفضلوا بقبول فائق الاحترام ....</p>
-                    <div style="margin-top:60px; font-size:17px;">
+                    <div style="margin-top:60px; font-size:18px;">
                         <p>* الأسعار شاملة كافة الضرائب والدمغات والرسوم وكذلك القيمة المضافة حال خضوعها .</p>
-                        <p>* خصم 1% في حالة عدم وجود شهادة دفعات مقدمه .</p>
                         <p>* النقل والتوصيل إلى مخازن العميل .</p>
                     </div>
-                    <div style="margin-top:20px; font-weight:bold; font-size:17px;">
-                        <p>مقدما لسيادتكم</p>
-                        <p>شركة سبارك للكيماويات</p>
+                    <div style="margin-top:20px; font-weight:bold; font-size:17px; direction:rtl; text-align:left; line-height:1.8;">
+                        <div style="margin:0;">
+        مقدماً لسيادتكم，
+    </div>
+                        <div style="margin:0;">
+        شركة سبارك للكيماويات
+    </div>
                     </div>
                     <!--  ===== Footer / company address =====  -->
-                    <div style="position:fixed; bottom:0; left:0; right:0; text-align:left; font-size:15px; color:#2aa7a0; direction:ltr;">
+                    <div style="position:fixed; bottom:0; left:0; right:0; text-align:right; font-size:17px; color:#2aa7a0; direction:ltr;">
                         <div t-esc="company.street"/>
                         <div>
                             <span t-if="company.phone">
