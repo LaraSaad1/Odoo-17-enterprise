@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_telesales_customer_tree" model="ir.ui.view">
+        <field name="name">telesales.customer.tree</field>
+        <field name="model">telesales.customer</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="governorate_id"/>
+                <field name="district"/>
+                <field name="category"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_telesales_customer_form" model="ir.ui.view">
+        <field name="name">telesales.customer.form</field>
+        <field name="model">telesales.customer</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="اسم العميل"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="phone"/>
+                            <field name="category"/>
+                        </group>
+                        <group>
+                            <field name="governorate_id"/>
+                            <field name="district"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="ملاحظات..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_telesales_customer_search" model="ir.ui.view">
+        <field name="name">telesales.customer.search</field>
+        <field name="model">telesales.customer</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="governorate_id"/>
+                <group expand="0" string="تجميع حسب">
+                    <filter string="المحافظة" name="group_governorate" context="{'group_by': 'governorate_id'}"/>
+                    <filter string="التصنيف" name="group_category" context="{'group_by': 'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_telesales_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">telesales.customer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                أضف أول عميل
+            </p>
+        </field>
+    </record>
+</odoo>

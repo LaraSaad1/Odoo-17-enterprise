@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_telesales_root"
+              name="Telesales"
+              parent="crm_salesperson_planner.menu_salesperson_planner"
+              sequence="50"/>
+
+    <menuitem id="menu_telesales_calls"
+              name="Calls"
+              parent="menu_telesales_root"
+              action="action_telesales_call"
+              sequence="10"/>
+
+    <menuitem id="menu_telesales_customers"
+              name="Customers"
+              parent="menu_telesales_root"
+              action="action_telesales_customer"
+              sequence="20"/>
+
+</odoo>
