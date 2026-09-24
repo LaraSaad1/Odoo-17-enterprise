@@ -1,73 +1,60 @@
 # -*- coding: utf-8 -*-
-import datetime
+import re
 from itertools import chain
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import models, fields, _
-from odoo.exceptions import UserError
+from odoo import models, fields
 
 
 class AgedPartnerBalanceCustomHandler(models.AbstractModel):
     """
-    Replaces Odoo's stock aging buckets - which are ALWAYS evenly spaced
-    (30/30/30/30/Older) - with fixed, unevenly spaced buckets:
-    1-30, 31-90, 91-150, 151-365, Older.
+    Customizable aging buckets for Aged Receivable / Payable.
 
-    Ported to match Odoo 17's actual account_reports API (odoo 17 does NOT
-    have odoo.tools.SQL, report._get_report_query, _currency_table_apply_rate,
-    or options['aging_based_on'] - all of those are Odoo 18-only and were
-    causing AttributeError / KeyError when this module was first ported).
-
-    _CUMULATIVE_DAYS is the single source of truth for the bucket edges:
-    both the report's data engine and its "click a cell to see the
-    invoices" audit action read from it, so they can never drift out of
-    sync with each other.
-
-    _CUMULATIVE_DAYS[0] is always 0. Each subsequent value is the
-    cumulative day-count at which that bucket ends. The number of entries
-    after the leading 0 must equal the number of dated columns
-    (period1..period4) defined on the Aged Receivable / Aged Payable
-    reports - 4, by default in stock Odoo 17 (5 periods total: period0
-    "Not Due" + 4 aging buckets... adjusted below to also support the
-    stock 6-period layout: period0 Not Due + period1..period4 + Older).
+    Filter input (options['custom_periods_days']): ONE number of days, e.g. 30 or 90.
+    30 -> 1-30, 31-60, 61-90, ...   90 -> 1-90, 91-180, 181-270, ...
     """
     _inherit = 'account.aged.partner.balance.report.handler'
 
-    _CUMULATIVE_DAYS = [0, 30, 90, 150, 365]  # -> buckets: 1-30, 31-90, 91-150, 151-365, then Older
+    _DEFAULT_INTERVAL = 30
 
     # ------------------------------------------------------------------
-    # Column labels ("1 - 30", "31 - 90", ...)
+    # Options: one number N -> equal buckets 1-N, N+1-2N, ... , > last
     # ------------------------------------------------------------------
     def _custom_options_initializer(self, report, options, previous_options=None):
         super()._custom_options_initializer(report, options, previous_options=previous_options)
 
-        # Toggle state, persisted per user/session. Defaults to ON.
-        options['custom_periods_enabled'] = (
-            True if previous_options is None
-            else previous_options.get('custom_periods_enabled', True)
-        )
+        # period0 ("At Date") + N buckets + "Older"  ->  N = columns - 2
+        period_columns = [c for c in options['columns'] if c['expression_label'].startswith('period')]
+        nb_buckets = len(period_columns) - 2
 
-        if not options['custom_periods_enabled']:
-            return  # leave the stock interval-based labels super() already set
+        raw = (previous_options or {}).get('custom_periods_days')
+        try:
+            interval = int(str(raw).strip())
+        except (TypeError, ValueError):
+            interval = 0
+        if interval <= 0:
+            interval = self._DEFAULT_INTERVAL  # empty / invalid / old "30,90,150" value -> default
 
-        custom_labels = []
-        prev = 0
-        for end_day in self._CUMULATIVE_DAYS[1:]:
-            custom_labels.append(f'{prev + 1} - {end_day}')
+        bounds = [interval * (i + 1) for i in range(nb_buckets)]
+        options['custom_periods_days'] = interval
+        options['custom_periods_bounds'] = bounds
+
+        labels, prev = [], 0
+        for end_day in bounds:
+            labels.append(f'{prev + 1}-{end_day}')
             prev = end_day
+        labels.append(f'> {prev}')  # Older
 
         for column in options['columns']:
-            if column['expression_label'].startswith('period'):
-                period_number = int(column['expression_label'].replace('period', '')) - 1
-                if 0 <= period_number < len(custom_labels):
-                    column['name'] = custom_labels[period_number]
+            label = column['expression_label']
+            if label.startswith('period'):
+                number = int(label[len('period'):])
+                if 1 <= number <= len(labels):
+                    column['name'] = labels[number - 1]
 
     # ------------------------------------------------------------------
-    # Core data engine - rebuilt against Odoo 17's actual account_reports
-    # API (report._query_get / report._get_query_currency_table / raw
-    # %s-parameterized SQL). Only the `periods` construction block differs
-    # from stock; everything else mirrors the v17 original method exactly.
+    # Core data engine (same as stock Odoo 17, only the periods differ)
     # ------------------------------------------------------------------
     def _aged_partner_report_custom_engine_common(self, options, internal_type, current_groupby, next_groupby, offset=0, limit=None):
         report = self.env['account.report'].browse(options['report_id'])
@@ -77,41 +64,14 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
             return fields.Date.to_string(date_obj - relativedelta(days=days))
 
         date_to = fields.Date.from_string(options['date']['date_to'])
-        nb_periods = len([column for column in options['columns'] if column['expression_label'].startswith('period')]) - 1
+        bounds = options['custom_periods_bounds']
 
-        if options.get('custom_periods_enabled', True):
-            # --- CUSTOM: variable-width buckets instead of the stock 30/30/30/30 spacing ---
-            bounds = self._CUMULATIVE_DAYS[1:]  # e.g. [30, 90, 150, 365]
-            if nb_periods != len(bounds) + 1:
-                raise UserError(_(
-                    "Aged Report Custom Periods: the report defines %(actual)s dated "
-                    "period columns, but this module's _CUMULATIVE_DAYS expects "
-                    "%(expected)s (one per custom bucket + Older). Check the "
-                    "aged_receivable_report/aged_payable_report column definitions, "
-                    "or adjust _CUMULATIVE_DAYS to match.",
-                    actual=nb_periods, expected=len(bounds) + 1,
-                ))
-
-            periods = [(False, fields.Date.to_string(date_to))]  # period0: Not Due
-            prev_end = 0
-            for end_day in bounds:
-                start_date = minus_days(date_to, prev_end + 1)
-                end_date = minus_days(date_to, end_day)
-                periods.append((start_date, end_date))
-                prev_end = end_day
-            periods.append((minus_days(date_to, prev_end + 1), False))  # Older, open-ended
-            # --- END CUSTOM ---
-        else:
-            # --- STOCK: original hardcoded 30/30/30/30/Older layout ---
-            periods = [
-                (False, fields.Date.to_string(date_to)),
-                (minus_days(date_to, 1), minus_days(date_to, 30)),
-                (minus_days(date_to, 31), minus_days(date_to, 60)),
-                (minus_days(date_to, 61), minus_days(date_to, 90)),
-                (minus_days(date_to, 91), minus_days(date_to, 120)),
-                (minus_days(date_to, 121), False),
-            ]
-            # --- END STOCK ---
+        periods = [(False, fields.Date.to_string(date_to))]  # period0: Not Due
+        prev_end = 0
+        for end_day in bounds:
+            periods.append((minus_days(date_to, prev_end + 1), minus_days(date_to, end_day)))
+            prev_end = end_day
+        periods.append((minus_days(date_to, prev_end + 1), False))  # Older, open-ended
 
         def build_result_dict(report, query_res_lines):
             rslt = {f'period{i}': 0 for i in range(len(periods))}
@@ -122,7 +82,7 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
                     rslt[period_key] += query_res[period_key]
 
             if current_groupby == 'id':
-                query_res = query_res_lines[0]  # We're grouping by id, so there is only 1 element in query_res_lines anyway
+                query_res = query_res_lines[0]  # grouping by id: only 1 element
                 currency = self.env['res.currency'].browse(query_res['currency_id'][0]) if len(query_res['currency_id']) == 1 else None
                 expected_date = len(query_res['expected_date']) == 1 and query_res['expected_date'][0] or len(query_res['due_date']) == 1 and query_res['due_date'][0]
                 rslt.update({
@@ -276,52 +236,38 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
 
         if not current_groupby:
             return build_result_dict(report, query_res_lines)
-        else:
-            rslt = []
 
-            all_res_per_grouping_key = {}
-            for query_res in query_res_lines:
-                grouping_key = query_res['grouping_key']
-                all_res_per_grouping_key.setdefault(grouping_key, []).append(query_res)
+        rslt = []
+        all_res_per_grouping_key = {}
+        for query_res in query_res_lines:
+            all_res_per_grouping_key.setdefault(query_res['grouping_key'], []).append(query_res)
 
-            for grouping_key, query_res_lines in all_res_per_grouping_key.items():
-                rslt.append((grouping_key, build_result_dict(report, query_res_lines)))
-
-            return rslt
+        for grouping_key, lines in all_res_per_grouping_key.items():
+            rslt.append((grouping_key, build_result_dict(report, lines)))
+        return rslt
 
     # ------------------------------------------------------------------
-    # Audit / drill-down domain when a cell is clicked. Stock Odoo
-    # hardcodes 30-day buckets here regardless of the interval - it must
-    # be kept in sync with the buckets above or the invoices shown won't
-    # match the cell that was clicked.
+    # Drill-down domain when a cell is clicked
     # ------------------------------------------------------------------
     def _build_domain_from_period(self, options, period):
-        if period == "total" or not period[-1].isdigit():
+        match = re.fullmatch(r'period(\d+)', period or '')
+        if not match:  # "total" or anything else
             return []
 
-        period_number = int(period[-1])
-        options_date_to = datetime.datetime.strptime(options['date']['date_to'], '%Y-%m-%d')
+        period_number = int(match.group(1))  # (the stock code only reads the last character)
+        date_to = fields.Date.from_string(options['date']['date_to'])
 
         if period_number == 0:
             return [('date_maturity', '>=', options['date']['date_to'])]
 
-        if not options.get('custom_periods_enabled', True):
-            # --- STOCK: original hardcoded-30-day formula ---
-            period_end = options_date_to - datetime.timedelta(30 * (period_number - 1) + 1)
-            period_start = options_date_to - datetime.timedelta(30 * period_number)
-            if period_number == 5:
-                return [('date_maturity', '<=', period_end)]
-            return [('date_maturity', '>=', period_start), ('date_maturity', '<=', period_end)]
+        bounds = [0] + options['custom_periods_bounds']
 
-        bounds = self._CUMULATIVE_DAYS  # [0, 30, 90, 150, 365]
+        if period_number < len(bounds):
+            start = date_to - relativedelta(days=bounds[period_number])
+            end = date_to - relativedelta(days=bounds[period_number - 1] + 1)
+            return [('date_maturity', '>=', fields.Date.to_string(start)),
+                    ('date_maturity', '<=', fields.Date.to_string(end))]
 
-        if 1 <= period_number < len(bounds):
-            days_before = bounds[period_number - 1]
-            days_after = bounds[period_number]
-            period_start = options_date_to - datetime.timedelta(days=days_after)
-            period_end = options_date_to - datetime.timedelta(days=days_before + 1)
-            return [('date_maturity', '>=', period_start), ('date_maturity', '<=', period_end)]
-
-        # Older: anything past the last defined boundary
-        period_end = options_date_to - datetime.timedelta(days=bounds[-1] + 1)
-        return [('date_maturity', '<=', period_end)]
+        # Older: anything past the last boundary
+        end = date_to - relativedelta(days=bounds[-1] + 1)
+        return [('date_maturity', '<=', fields.Date.to_string(end))]

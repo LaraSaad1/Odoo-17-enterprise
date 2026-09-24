@@ -1,33 +1,25 @@
-/** @odoo-module **/
-
-/*
- * BEST-EFFORT / UNVERIFIED FILE
- * ------------------------------
- * I don't have the real source of account_reports' aged-partner-balance
- * frontend component, so the import path, class name, and the way options
- * get updated/reloaded below are educated guesses based on typical Odoo 18
- * OWL report-filter patterns, not a copy of the real file.
- *
- * If this throws in the browser console (F12) after installing/upgrading
- * the module, or the button just doesn't appear, paste me:
- *   1. The console error (if any)
- *   2. The real aged_partner_balance_filters.js /.xml content you find via
- *      the earlier find/Get-ChildItem command
- * and I'll fix this file exactly instead of guessing again.
- */
+/** @odoo-module */
 
 import { patch } from "@web/core/utils/patch";
-import { AgedPartnerBalanceFilters } from "@account_reports/components/aged_partner_balance_filters/aged_partner_balance_filters";
+import { AccountReportFilters } from "@account_reports/components/account_report/filters/filters";
 
-patch(AgedPartnerBalanceFilters.prototype, {
-    get customPeriodsEnabled() {
-        return this.controller.options.custom_periods_enabled;
-    },
+patch(AccountReportFilters.prototype, {
+    async applyCustomPeriods(ev) {
+        const key = "custom_periods_days";
+        const value = ev.target.value.trim();
+        const controller = this.controller;
+        if (!value || value === controller.options[key]) {
+            return;
+        }
 
-    toggleCustomPeriods() {
-        // Mirrors how the existing "Based on Due Date" / "30 Days" filters
-        // in this same component are expected to trigger a report reload.
-        this.controller.options.custom_periods_enabled = !this.controller.options.custom_periods_enabled;
-        this.controller.reload();
+        // Try the stock helpers first, then fall back to a manual reload.
+        if (typeof this.updateFilter === "function") {
+            await this.updateFilter(key, value);
+        } else if (typeof controller.updateOption === "function") {
+            await controller.updateOption(key, value, true);
+        } else {
+            controller.options[key] = value;
+            await controller.reload(key, controller.options);
+        }
     },
 });
