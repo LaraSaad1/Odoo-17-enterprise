@@ -18,11 +18,27 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
 
     _DEFAULT_INTERVAL = 30
 
+    def _get_aging_date_sql(self, options):
+        """SQL expression of the date used to age a line (whitelisted, no user input)."""
+        if options.get('aging_based_on') == 'base_on_invoice_date':
+            return "COALESCE(move.invoice_date, account_move_line.date)"
+        return "COALESCE(account_move_line.date_maturity, account_move_line.date)"
+
+    def _get_aging_domain_field(self, options):
+        return 'move_id.invoice_date' if options.get('aging_based_on') == 'base_on_invoice_date' else 'date_maturity'
+
     # ------------------------------------------------------------------
     # Options: one number N -> equal buckets 1-N, N+1-2N, ... , > last
     # ------------------------------------------------------------------
     def _custom_options_initializer(self, report, options, previous_options=None):
         super()._custom_options_initializer(report, options, previous_options=previous_options)
+
+        # Age buckets based on due date (default) or invoice date
+        # (keep the value set by stock Odoo if it is already valid)
+        valid = ('base_on_maturity_date', 'base_on_invoice_date')
+        if options.get('aging_based_on') not in valid:
+            based_on = (previous_options or {}).get('aging_based_on')
+            options['aging_based_on'] = based_on if based_on in valid else 'base_on_maturity_date'
 
         # period0 ("At Date") + N buckets + "Older"  ->  N = columns - 2
         period_columns = [c for c in options['columns'] if c['expression_label'].startswith('period')]
@@ -65,6 +81,7 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
 
         date_to = fields.Date.from_string(options['date']['date_to'])
         bounds = options['custom_periods_bounds']
+        aging_date = self._get_aging_date_sql(options)
 
         periods = [(False, fields.Date.to_string(date_to))]  # period0: Not Due
         prev_end = 0
@@ -158,7 +175,7 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
                 ARRAY_AGG(DISTINCT account_move_line.partner_id) AS partner_id,
                 ARRAY_AGG(account_move_line.payment_id) AS payment_id,
                 ARRAY_AGG(DISTINCT move.invoice_date) AS invoice_date,
-                ARRAY_AGG(DISTINCT COALESCE(account_move_line.date_maturity, account_move_line.date)) AS report_date,
+                ARRAY_AGG(DISTINCT {aging_date}) AS report_date,
                 ARRAY_AGG(DISTINCT account_move_line.expected_pay_date) AS expected_date,
                 ARRAY_AGG(DISTINCT account.code) AS account_name,
                 ARRAY_AGG(DISTINCT COALESCE(account_move_line.date_maturity, account_move_line.date)) AS due_date,
@@ -197,12 +214,12 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
             JOIN period_table ON
                 (
                     period_table.date_start IS NULL
-                    OR COALESCE(account_move_line.date_maturity, account_move_line.date) <= DATE(period_table.date_start)
+                    OR {aging_date} <= DATE(period_table.date_start)
                 )
                 AND
                 (
                     period_table.date_stop IS NULL
-                    OR COALESCE(account_move_line.date_maturity, account_move_line.date) >= DATE(period_table.date_stop)
+                    OR {aging_date} >= DATE(period_table.date_stop)
                 )
 
             WHERE {where_clause}
@@ -254,20 +271,21 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
         if not match:  # "total" or anything else
             return []
 
+        field = self._get_aging_domain_field(options)
         period_number = int(match.group(1))  # (the stock code only reads the last character)
         date_to = fields.Date.from_string(options['date']['date_to'])
 
         if period_number == 0:
-            return [('date_maturity', '>=', options['date']['date_to'])]
+            return [(field, '>=', options['date']['date_to'])]
 
         bounds = [0] + options['custom_periods_bounds']
 
         if period_number < len(bounds):
             start = date_to - relativedelta(days=bounds[period_number])
             end = date_to - relativedelta(days=bounds[period_number - 1] + 1)
-            return [('date_maturity', '>=', fields.Date.to_string(start)),
-                    ('date_maturity', '<=', fields.Date.to_string(end))]
+            return [(field, '>=', fields.Date.to_string(start)),
+                    (field, '<=', fields.Date.to_string(end))]
 
         # Older: anything past the last boundary
         end = date_to - relativedelta(days=bounds[-1] + 1)
-        return [('date_maturity', '<=', fields.Date.to_string(end))]
+        return [(field, '<=', fields.Date.to_string(end))]

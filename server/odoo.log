@@ -3049,3 +3049,844 @@ LINE 1: SELECT COUNT(*), SUM("mrp_bom"."component_qty")
 2026-09-29 13:43:55,161 5248 INFO ? odoo.service.server: Initiating shutdown 
 2026-09-29 13:43:55,163 5248 INFO ? odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
 2026-09-29 13:43:55,689 5248 INFO ? odoo.sql_db: ConnectionPool(used=0/count=0/max=64): Closed 3 connections  
+2026-09-29 13:43:57,910 5144 INFO ? odoo: Odoo version 17.0+e-20241103 
+2026-09-29 13:43:57,910 5144 INFO ? odoo: Using configuration file at C:\Workspace\Odoo 17 enterprise\server\odoo.conf 
+2026-09-29 13:43:57,910 5144 INFO ? odoo: addons paths: ['C:\\Workspace\\Odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\sessions\\addons\\17.0', 'c:\\workspace\\odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\my_adds'] 
+2026-09-29 13:43:57,910 5144 INFO ? odoo: database: odoo@localhost:8017 
+2026-09-29 13:43:58,028 5144 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at C:\Workspace\Odoo 17 enterprise\thirdparty\wkhtmltopdf.exe 
+2026-09-29 13:43:58,385 5144 INFO ? odoo.service.server: HTTP service (werkzeug) running on Lara-Saad:8069 
+2026-09-29 13:44:01,211 5144 INFO odoo_17 odoo.modules.loading: loading 1 modules... 
+2026-09-29 13:44:01,211 5144 INFO odoo_17 odoo.modules.loading: 1 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-09-29 13:44:01,561 5144 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-09-29 13:44:01,593 5144 WARNING odoo_17 odoo.addons.attachment_indexation.models.ir_attachment: Attachment indexation of PDF documents is unavailable because the 'pdfminer' Python library cannot be found on the system. You may install it from https://pypi.org/project/pdfminer.six/ (e.g. `pip3 install pdfminer.six`) 
+2026-09-29 13:44:06,023 5144 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 4.46s, 0 queries (+0 extra) 
+2026-09-29 13:44:06,609 5144 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-09-29 13:44:06,790 5144 INFO odoo_17 odoo.modules.loading: Modules loaded. 
+2026-09-29 13:44:06,826 5144 INFO odoo_17 odoo.modules.registry: Registry loaded in 5.679s 
+2026-09-29 13:44:06,826 5144 INFO odoo_17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-09-29 13:44:06,926 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:06] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 32 0.058 5.721
+2026-09-29 13:44:07,262 5144 INFO ? odoo.addons.bus.models.bus: Bus.loop listen imbus on db postgres 
+2026-09-29 13:44:18,722 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:18] "POST /web/action/load HTTP/1.1" 200 - 11 0.018 1.556
+2026-09-29 13:44:18,855 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:18] "POST /web/dataset/call_kw/ir.module.module/get_views HTTP/1.1" 200 - 53 0.052 0.065
+2026-09-29 13:44:18,965 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:18] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 1 0.000 0.092
+2026-09-29 13:44:19,040 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:19] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 44 0.051 0.116
+2026-09-29 13:44:19,122 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:19] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.012 0.238
+2026-09-29 13:44:21,119 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:21] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 42 0.043 0.018
+2026-09-29 13:44:21,178 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:21] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.008 0.108
+2026-09-29 13:44:24,596 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:24] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 42 0.087 0.024
+2026-09-29 13:44:24,675 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:24] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 3 0.009 0.054
+2026-09-29 13:44:28,647 5144 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_immediate_upgrade on ['MRP MO Overview Excel Export'] to user admin #2 via 127.0.0.1 
+2026-09-29 13:44:28,649 5144 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['MRP MO Overview Excel Export'] to user admin #2 via 127.0.0.1 
+2026-09-29 13:44:28,649 5144 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['MRP MO Overview Excel Export'] to user admin #2 via 127.0.0.1 
+2026-09-29 13:44:30,073 5144 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user admin #2 via 127.0.0.1 
+2026-09-29 13:44:30,123 5144 INFO odoo_17 odoo.modules.loading: loading 1 modules... 
+2026-09-29 13:44:30,130 5144 INFO odoo_17 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-09-29 13:44:30,143 5144 INFO odoo_17 odoo.modules.loading: updating modules list 
+2026-09-29 13:44:30,143 5144 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via 127.0.0.1 
+2026-09-29 13:44:31,362 5144 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-09-29 13:44:31,528 5144 INFO odoo_17 odoo.modules.loading: Loading module mrp_mo_excel (150/232) 
+2026-09-29 13:44:32,737 5144 INFO odoo_17 odoo.modules.registry: module mrp_mo_excel: creating or updating database tables 
+2026-09-29 13:44:32,769 5144 INFO odoo_17 odoo.models: Prepare computation of mrp.bom.component_qty 
+2026-09-29 13:44:32,975 5144 INFO odoo_17 odoo.modules.loading: Module mrp_mo_excel loaded in 1.45s, 70 queries (+70 other) 
+2026-09-29 13:44:33,023 5144 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 1.66s, 70 queries (+70 extra) 
+2026-09-29 13:44:33,023 5144 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-09-29 13:44:33,023 5144 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-09-29 13:44:33,023 5144 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-09-29 13:44:33,023 5144 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-09-29 13:44:33,435 5144 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-09-29 13:44:33,959 5144 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-09-29 13:44:34,402 5144 INFO odoo_17 odoo.modules.registry: verifying fields for every extended model 
+2026-09-29 13:44:36,460 5144 INFO odoo_17 odoo.modules.loading: Modules loaded. 
+2026-09-29 13:44:36,466 5144 INFO odoo_17 odoo.modules.registry: Registry loaded in 6.360s 
+2026-09-29 13:44:36,466 5144 INFO odoo_17 odoo.addons.base.models.ir_module: getting next ir.actions.todo() 
+2026-09-29 13:44:36,466 5144 INFO odoo_17 odoo.modules.registry: Registry changed, signaling through the database 
+2026-09-29 13:44:36,466 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:36] "POST /web/dataset/call_button HTTP/1.1" 200 - 7207 3.525 4.303
+2026-09-29 13:44:36,503 5144 INFO odoo_17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-09-29 13:44:38,450 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:38] "GET /web HTTP/1.1" 200 - 98 0.072 1.878
+2026-09-29 13:44:38,861 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:38] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 9 0.018 0.008
+2026-09-29 13:44:38,861 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:38] "GET /bus/websocket_worker_bundle?v=17.0-1 HTTP/1.1" 304 - 4 0.005 0.017
+2026-09-29 13:44:39,030 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:39] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 10 0.048 0.074
+2026-09-29 13:44:39,030 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:39] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 22 0.083 0.069
+2026-09-29 13:44:39,038 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:39] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.000 0.061
+2026-09-29 13:44:39,052 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:39] "POST /mail/init_messaging HTTP/1.1" 200 - 60 0.114 0.094
+2026-09-29 13:44:39,085 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:39] "POST /mail/load_message_failures HTTP/1.1" 200 - 16 0.009 0.017
+2026-09-29 13:44:40,662 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:40] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.000
+2026-09-29 13:44:48,502 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:48] "POST /web/action/load HTTP/1.1" 200 - 10 0.010 0.002
+2026-09-29 13:44:48,663 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:48] "POST /web/dataset/call_kw/mrp.workcenter/get_views HTTP/1.1" 200 - 40 0.037 0.080
+2026-09-29 13:44:48,710 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:44:48] "POST /web/dataset/call_kw/mrp.workcenter/web_search_read HTTP/1.1" 200 - 16 0.015 0.016
+2026-09-29 13:45:00,766 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:00] "POST /web/action/load HTTP/1.1" 200 - 11 0.000 0.017
+2026-09-29 13:45:00,878 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:00] "POST /web/dataset/call_kw/mrp.bom/get_views HTTP/1.1" 200 - 59 0.015 0.088
+2026-09-29 13:45:00,899 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:00] "POST /web/dataset/call_kw/res.users/has_group HTTP/1.1" 200 - 2 0.005 0.000
+2026-09-29 13:45:00,910 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:00] "POST /web/dataset/call_kw/mrp.bom/web_search_read HTTP/1.1" 200 - 9 0.004 0.013
+2026-09-29 13:45:04,051 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:04] "POST /web/dataset/call_kw/mrp.bom/read_group HTTP/1.1" 200 - 3 0.009 0.000
+2026-09-29 13:45:04,063 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:04] "POST /web/dataset/call_kw/res.users/has_group HTTP/1.1" 200 - 2 0.000 0.005
+2026-09-29 13:45:15,743 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:15] "POST /web/dataset/call_kw/mrp.bom/read_group HTTP/1.1" 200 - 4 0.008 0.000
+2026-09-29 13:45:22,437 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:22] "POST /web/dataset/call_kw/mrp.bom/read_group HTTP/1.1" 200 - 12 0.050 0.013
+2026-09-29 13:45:25,783 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:25] "POST /web/dataset/call_kw/mrp.bom/read_group HTTP/1.1" 200 - 3 0.009 0.000
+2026-09-29 13:45:25,812 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:25] "POST /web/dataset/call_kw/mrp.bom/read_group HTTP/1.1" 200 - 4 0.014 0.007
+2026-09-29 13:45:25,847 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:45:25] "POST /web/dataset/call_kw/mrp.bom/read_group HTTP/1.1" 200 - 12 0.035 0.021
+2026-09-29 13:57:07,578 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-29 13:57:07,578 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.000s). 
+2026-09-29 13:57:10,960 5144 INFO odoo_17 werkzeug: 127.0.0.1 - - [29/Sep/2026 13:57:10] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.000 0.005
+2026-09-29 14:03:00,342 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-29 14:03:00,348 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.007s). 
+2026-09-29 16:58:01,510 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-29 16:58:01,515 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.006s). 
+2026-09-29 16:58:01,523 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Automation Rules: check and execute`. 
+2026-09-29 16:58:01,527 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Starting time-based automation rule `supports the add follower flow`. 
+2026-09-29 16:58:01,535 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Time-based automation rule `supports the add follower flow` done. 
+2026-09-29 16:58:01,536 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Automation Rules: check and execute` (0.013s). 
+2026-09-29 16:58:01,543 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-29 16:58:01,564 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.019s). 
+2026-09-29 17:28:12,167 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-29 17:28:12,188 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.021s). 
+2026-09-30 06:03:39,814 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-30 06:03:39,816 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.002s). 
+2026-09-30 06:03:39,830 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Sales: Send pending emails`. 
+2026-09-30 06:03:39,846 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Sales: Send pending emails` (0.016s). 
+2026-09-30 06:03:39,846 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Automation Rules: check and execute`. 
+2026-09-30 06:03:39,846 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Starting time-based automation rule `supports the add follower flow`. 
+2026-09-30 06:03:39,869 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Time-based automation rule `supports the add follower flow` done. 
+2026-09-30 06:03:39,869 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Automation Rules: check and execute` (0.024s). 
+2026-09-30 06:03:39,880 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-30 06:03:39,882 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.003s). 
+2026-09-30 06:51:41,615 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-30 06:51:41,615 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.000s). 
+2026-09-30 07:02:41,832 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-30 07:02:41,832 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.000s). 
+2026-09-30 07:51:14,190 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-30 07:51:14,200 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.010s). 
+2026-09-30 08:02:42,510 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-30 08:02:42,510 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.000s). 
+2026-09-30 08:17:40,786 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Automation Rules: check and execute`. 
+2026-09-30 08:17:40,815 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Starting time-based automation rule `supports the add follower flow`. 
+2026-09-30 08:17:40,827 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Time-based automation rule `supports the add follower flow` done. 
+2026-09-30 08:17:40,834 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Automation Rules: check and execute` (0.048s). 
+2026-09-30 08:33:42,917 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Accrual Time Off: Updates the number of time off`. 
+2026-09-30 08:33:42,943 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Accrual Time Off: Updates the number of time off` (0.026s). 
+2026-09-30 08:33:42,949 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Time Off: Cancel invalid leaves`. 
+2026-09-30 08:33:42,956 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Time Off: Cancel invalid leaves` (0.007s). 
+2026-09-30 08:51:14,504 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-30 08:51:14,537 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.033s). 
+2026-09-30 09:02:43,306 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: Create salesperson visits`. 
+2026-09-30 09:02:43,327 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: Create salesperson visits` (0.020s). 
+2026-09-30 09:02:43,334 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-30 09:02:43,335 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.001s). 
+2026-09-30 12:23:53,949 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Base: Auto-vacuum internal data`. 
+2026-09-30 12:23:53,972 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `HR Contract: update state`. 
+2026-09-30 12:23:54,379 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `HR Contract: update state` (0.407s). 
+2026-09-30 12:23:54,514 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Generate Missing Work Entries`. 
+2026-09-30 12:23:54,566 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Generate Missing Work Entries` (0.053s). 
+2026-09-30 12:23:54,579 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-30 12:23:54,591 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.012s). 
+2026-09-30 12:23:54,603 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Automation Rules: check and execute`. 
+2026-09-30 12:23:54,613 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Starting time-based automation rule `supports the add follower flow`. 
+2026-09-30 12:23:54,637 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Time-based automation rule `supports the add follower flow` done. 
+2026-09-30 12:23:54,641 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Automation Rules: check and execute` (0.038s). 
+2026-09-30 12:23:54,655 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-30 12:23:54,668 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.013s). 
+2026-09-30 12:23:54,690 5144 INFO odoo_17 odoo.addons.base.models.ir_attachment: filestore gc 0 checked, 0 removed 
+2026-09-30 12:23:54,898 5144 INFO odoo_17 odoo.addons.base.models.res_users: GC'd 0 user log entries 
+2026-09-30 12:23:54,971 5144 INFO odoo_17 odoo.addons.auth_totp.models.auth_totp: GC'd 0 totp devices entries 
+2026-09-30 12:23:55,046 5144 INFO odoo_17 odoo.models.unlink: User #1 deleted bus.bus records with IDs: [2937, 2938, 2939, 2940, 2941, 2942, 2943, 2944, 2945, 2946, 2947, 2948, 2949, 2950, 2951, 2952, 2953] 
+2026-09-30 12:23:55,063 5144 INFO odoo_17 odoo.models.unlink: User #1 deleted bus.presence records with IDs: [14] 
+2026-09-30 12:23:55,495 5144 INFO odoo_17 odoo.addons.sms.models.sms_sms: GC'd 0 sms marked for deletion 
+2026-09-30 12:23:56,321 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Base: Auto-vacuum internal data` (2.371s). 
+2026-09-30 13:02:42,249 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-30 13:02:42,265 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.016s). 
+2026-09-30 13:02:42,280 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-30 13:02:42,280 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.000s). 
+2026-09-30 13:51:26,743 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-30 13:51:26,759 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.016s). 
+2026-09-30 16:52:32,603 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-09-30 16:52:32,605 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-09-30 16:52:32,623 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.020s). 
+2026-09-30 16:52:32,625 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.020s). 
+2026-09-30 16:52:32,637 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Automation Rules: check and execute`. 
+2026-09-30 16:52:32,646 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Starting time-based automation rule `supports the add follower flow`. 
+2026-09-30 16:52:32,667 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Time-based automation rule `supports the add follower flow` done. 
+2026-09-30 16:52:32,669 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Automation Rules: check and execute` (0.032s). 
+2026-10-01 06:18:34,225 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-10-01 06:18:34,235 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.010s). 
+2026-10-01 06:18:34,251 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Sales: Send pending emails`. 
+2026-10-01 06:18:34,257 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Sales: Send pending emails` (0.006s). 
+2026-10-01 06:18:34,263 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-10-01 06:18:34,267 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.004s). 
+2026-10-01 06:18:34,273 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Automation Rules: check and execute`. 
+2026-10-01 06:18:34,283 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Starting time-based automation rule `supports the add follower flow`. 
+2026-10-01 06:18:34,289 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Time-based automation rule `supports the add follower flow` done. 
+2026-10-01 06:18:34,289 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Automation Rules: check and execute` (0.016s). 
+2026-10-01 06:51:34,685 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-10-01 06:51:34,693 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.008s). 
+2026-10-01 07:02:34,875 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-10-01 07:02:34,884 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.009s). 
+2026-10-01 07:51:35,449 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-10-01 07:51:35,457 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.008s). 
+2026-10-01 08:03:27,036 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-10-01 08:03:27,068 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.032s). 
+2026-10-01 08:17:40,541 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Automation Rules: check and execute`. 
+2026-10-01 08:17:40,712 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Starting time-based automation rule `supports the add follower flow`. 
+2026-10-01 08:17:40,965 5144 INFO odoo_17 odoo.addons.base_automation.models.base_automation: Time-based automation rule `supports the add follower flow` done. 
+2026-10-01 08:17:40,992 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Automation Rules: check and execute` (0.379s). 
+2026-10-01 08:33:41,222 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Accrual Time Off: Updates the number of time off`. 
+2026-10-01 08:33:41,253 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Accrual Time Off: Updates the number of time off` (0.030s). 
+2026-10-01 08:33:41,253 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Time Off: Cancel invalid leaves`. 
+2026-10-01 08:33:41,269 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Time Off: Cancel invalid leaves` (0.016s). 
+2026-10-01 08:51:19,627 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `Payroll: Generate pdfs`. 
+2026-10-01 08:51:19,647 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `Payroll: Generate pdfs` (0.020s). 
+2026-10-01 09:03:03,799 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: Create salesperson visits`. 
+2026-10-01 09:03:03,819 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: Create salesperson visits` (0.020s). 
+2026-10-01 09:03:03,819 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Starting job `CRM: enrich leads (IAP)`. 
+2026-10-01 09:03:03,839 5144 INFO odoo_17 odoo.addons.base.models.ir_cron: Job done: `CRM: enrich leads (IAP)` (0.020s). 
+2026-10-01 09:03:16,473 5144 INFO ? odoo.service.server: Initiating shutdown 
+2026-10-01 09:03:16,475 5144 INFO ? odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-10-01 09:03:16,882 5144 INFO ? odoo.sql_db: ConnectionPool(used=0/count=0/max=64): Closed 6 connections  
+2026-10-01 09:03:20,975 6224 INFO ? odoo: Odoo version 17.0+e-20241103 
+2026-10-01 09:03:20,975 6224 INFO ? odoo: Using configuration file at C:\Workspace\Odoo 17 enterprise\server\odoo.conf 
+2026-10-01 09:03:20,975 6224 INFO ? odoo: addons paths: ['C:\\Workspace\\Odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\sessions\\addons\\17.0', 'c:\\workspace\\odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\my_adds'] 
+2026-10-01 09:03:20,975 6224 INFO ? odoo: database: odoo@localhost:8017 
+2026-10-01 09:03:21,500 6224 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at C:\Workspace\Odoo 17 enterprise\thirdparty\wkhtmltopdf.exe 
+2026-10-01 09:03:21,836 6224 INFO ? odoo.service.server: HTTP service (werkzeug) running on Lara-Saad:8069 
+2026-10-01 09:03:37,929 6224 INFO ? odoo.service.server: Initiating shutdown 
+2026-10-01 09:03:37,929 6224 INFO ? odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-10-01 09:03:38,121 6224 INFO ? odoo.sql_db: ConnectionPool(used=0/count=0/max=64): Closed 2 connections  
+2026-10-01 09:03:40,033 18256 INFO ? odoo: Odoo version 17.0+e-20241103 
+2026-10-01 09:03:40,033 18256 INFO ? odoo: Using configuration file at C:\Workspace\Odoo 17 enterprise\server\odoo.conf 
+2026-10-01 09:03:40,033 18256 INFO ? odoo: addons paths: ['C:\\Workspace\\Odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\sessions\\addons\\17.0', 'c:\\workspace\\odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\my_adds'] 
+2026-10-01 09:03:40,033 18256 INFO ? odoo: database: odoo@localhost:8017 
+2026-10-01 09:03:40,128 18256 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at C:\Workspace\Odoo 17 enterprise\thirdparty\wkhtmltopdf.exe 
+2026-10-01 09:03:40,350 18256 INFO ? odoo.service.server: HTTP service (werkzeug) running on Lara-Saad:8069 
+2026-10-01 09:03:48,077 18256 INFO odoo_17 odoo.modules.loading: loading 1 modules... 
+2026-10-01 09:03:48,094 18256 INFO odoo_17 odoo.modules.loading: 1 modules loaded in 0.02s, 0 queries (+0 extra) 
+2026-10-01 09:03:48,486 18256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:03:48,493 18256 WARNING odoo_17 odoo.addons.attachment_indexation.models.ir_attachment: Attachment indexation of PDF documents is unavailable because the 'pdfminer' Python library cannot be found on the system. You may install it from https://pypi.org/project/pdfminer.six/ (e.g. `pip3 install pdfminer.six`) 
+2026-10-01 09:03:52,807 18256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 4.32s, 0 queries (+0 extra) 
+2026-10-01 09:03:53,140 18256 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-10-01 09:03:53,236 18256 INFO odoo_17 odoo.modules.loading: Modules loaded. 
+2026-10-01 09:03:53,256 18256 INFO odoo_17 odoo.modules.registry: Registry loaded in 5.229s 
+2026-10-01 09:03:53,256 18256 INFO odoo_17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-10-01 09:03:53,315 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:03:53] "GET / HTTP/1.1" 303 - 31 0.062 5.226
+2026-10-01 09:03:54,705 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:03:54] "GET /web HTTP/1.1" 200 - 96 0.122 1.243
+2026-10-01 09:03:54,761 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:03:54] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 9 0.005 0.008
+2026-10-01 09:04:02,365 18256 INFO odoo_17 odoo.addons.base.models.assetsbundle: Generating a new asset bundle attachment /web/assets/a98a87c/web.assets_web.min.js (id:1395) 
+2026-10-01 09:04:02,365 18256 INFO odoo_17 odoo.addons.base.models.assetsbundle: Deleting attachments [1394] (matching /web/assets/_______/web.assets_web.min.js) because it was replaced with /web/assets/a98a87c/web.assets_web.min.js 
+2026-10-01 09:04:02,547 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:02] "GET /web/assets/a98a87c/web.assets_web.min.js HTTP/1.1" 200 - 17 0.144 7.660
+2026-10-01 09:04:03,072 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "GET /web/static/src/libs/fontawesome/fonts/fontawesome-webfont.woff2?v=4.7.0 HTTP/1.1" 304 - 0 0.000 0.001
+2026-10-01 09:04:03,074 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "GET /web/static/lib/odoo_ui_icons/fonts/odoo_ui_icons.woff2 HTTP/1.1" 304 - 0 0.000 0.003
+2026-10-01 09:04:03,102 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "GET /web_enterprise/static/img/background-light.svg HTTP/1.1" 304 - 0 0.000 0.002
+2026-10-01 09:04:03,143 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "GET /bus/websocket_worker_bundle?v=17.0-1 HTTP/1.1" 304 - 4 0.001 0.155
+2026-10-01 09:04:03,233 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 22 0.032 0.180
+2026-10-01 09:04:03,238 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.001 0.079
+2026-10-01 09:04:03,268 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 17 0.024 0.202
+2026-10-01 09:04:03,291 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "GET /web/static/img/odoo-icon-192x192.png HTTP/1.1" 304 - 0 0.000 0.009
+2026-10-01 09:04:03,330 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "POST /mail/init_messaging HTTP/1.1" 200 - 60 0.064 0.276
+2026-10-01 09:04:03,360 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:03] "POST /mail/load_message_failures HTTP/1.1" 200 - 16 0.008 0.022
+2026-10-01 09:04:03,678 18256 INFO ? odoo.addons.bus.models.bus: Bus.loop listen imbus on db postgres 
+2026-10-01 09:04:04,792 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:04] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.000
+2026-10-01 09:04:11,256 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "POST /web/action/load HTTP/1.1" 200 - 9 0.015 0.000
+2026-10-01 09:04:11,356 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "POST /web/dataset/call_kw/ir.module.module/get_views HTTP/1.1" 200 - 50 0.021 0.035
+2026-10-01 09:04:11,375 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 1 0.000 0.002
+2026-10-01 09:04:11,406 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 44 0.003 0.030
+2026-10-01 09:04:11,488 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.000 0.113
+2026-10-01 09:04:11,660 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /sale_management/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.007
+2026-10-01 09:04:11,673 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /pos_restaurant/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.015
+2026-10-01 09:04:11,675 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /account/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.012
+2026-10-01 09:04:11,680 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /crm/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.011
+2026-10-01 09:04:11,687 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /website/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.012
+2026-10-01 09:04:11,692 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /website_sale/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.007
+2026-10-01 09:04:11,694 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /stock/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.013
+2026-10-01 09:04:11,698 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /mass_mailing/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.008
+2026-10-01 09:04:11,703 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /purchase/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.009
+2026-10-01 09:04:11,708 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /account_accountant/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.007
+2026-10-01 09:04:11,710 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /mrp/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.006
+2026-10-01 09:04:11,712 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /point_of_sale/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.013
+2026-10-01 09:04:11,719 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /project/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.010
+2026-10-01 09:04:11,721 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /hr_expense/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.008
+2026-10-01 09:04:11,727 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /timesheet_grid/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.009
+2026-10-01 09:04:11,731 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /web_studio/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.011
+2026-10-01 09:04:11,735 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /hr_holidays/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.008
+2026-10-01 09:04:11,735 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /documents/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.010
+2026-10-01 09:04:11,743 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /hr/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.010
+2026-10-01 09:04:11,745 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /hr_recruitment/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.015
+2026-10-01 09:04:11,752 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /data_recycle/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.015
+2026-10-01 09:04:11,752 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /delivery_starshipit/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.010
+2026-10-01 09:04:11,754 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /delivery_ups_rest/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.005
+2026-10-01 09:04:11,760 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /frontdesk/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.009
+2026-10-01 09:04:11,767 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /maintenance/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.015
+2026-10-01 09:04:11,771 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /knowledge/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.012
+2026-10-01 09:04:11,777 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /room/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.008
+2026-10-01 09:04:11,778 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /whatsapp/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.013
+2026-10-01 09:04:11,786 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /purchase_comparison_chart/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.016
+2026-10-01 09:04:11,787 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /sign/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.016
+2026-10-01 09:04:11,794 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /helpdesk/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.013
+2026-10-01 09:04:11,797 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /sale_subscription/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.012
+2026-10-01 09:04:11,803 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /quality_control/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.015
+2026-10-01 09:04:11,804 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /website_slides/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.007
+2026-10-01 09:04:11,805 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /planning/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.007
+2026-10-01 09:04:11,812 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /website_event/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.010
+2026-10-01 09:04:11,815 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /mail/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.008
+2026-10-01 09:04:11,819 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /contacts/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.006
+2026-10-01 09:04:11,820 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /mrp_plm/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.004
+2026-10-01 09:04:11,826 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /sale_renting/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.009
+2026-10-01 09:04:11,830 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /calendar/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.011
+2026-10-01 09:04:11,832 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /industry_fsm/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.008
+2026-10-01 09:04:11,836 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /hr_appraisal/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.007
+2026-10-01 09:04:11,837 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /social/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.009
+2026-10-01 09:04:11,839 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /fleet/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.007
+2026-10-01 09:04:11,844 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /marketing_automation/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.006
+2026-10-01 09:04:11,844 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /approvals/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.009
+2026-10-01 09:04:11,844 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /account_consolidation/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.000
+2026-10-01 09:04:11,844 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /im_livechat/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.000
+2026-10-01 09:04:11,856 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /appointment/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.013
+2026-10-01 09:04:11,856 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /survey/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.013
+2026-10-01 09:04:11,856 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /hr_referral/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.000
+2026-10-01 09:04:11,856 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /repair/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.000
+2026-10-01 09:04:11,856 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /hr_attendance/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.000
+2026-10-01 09:04:11,873 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /mass_mailing_sms/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.016
+2026-10-01 09:04:11,873 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /iot/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.016
+2026-10-01 09:04:11,873 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:11] "GET /stock_barcode/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.016
+2026-10-01 09:04:14,925 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:14] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 42 0.024 0.012
+2026-10-01 09:04:14,961 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:14] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.007 0.064
+2026-10-01 09:04:16,950 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:16] "POST /web/action/load HTTP/1.1" 200 - 8 0.000 0.000
+2026-10-01 09:04:17,001 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:17] "POST /web/dataset/call_kw/base.module.update/get_views HTTP/1.1" 200 - 9 0.016 0.010
+2026-10-01 09:04:17,014 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:17] "POST /web/dataset/call_kw/base.module.update/onchange HTTP/1.1" 200 - 2 0.002 0.001
+2026-10-01 09:04:18,924 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:18] "POST /web/dataset/call_kw/base.module.update/web_save HTTP/1.1" 200 - 5 0.015 0.007
+2026-10-01 09:04:18,934 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user admin #2 via 127.0.0.1 
+2026-10-01 09:04:20,001 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:20] "POST /web/dataset/call_button HTTP/1.1" 200 - 2412 0.648 0.423
+2026-10-01 09:04:24,277 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:24] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 42 0.039 0.010
+2026-10-01 09:04:24,298 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:24] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 3 0.018 0.004
+2026-10-01 09:04:24,318 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:24] "GET /base/static/description/icon.png HTTP/1.1" 304 - 0 0.000 0.000
+2026-10-01 09:04:28,198 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_immediate_upgrade on ['Aged Report Custom Periods'] to user admin #2 via 127.0.0.1 
+2026-10-01 09:04:28,214 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['Aged Report Custom Periods'] to user admin #2 via 127.0.0.1 
+2026-10-01 09:04:28,214 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['Aged Report Custom Periods'] to user admin #2 via 127.0.0.1 
+2026-10-01 09:04:29,275 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user admin #2 via 127.0.0.1 
+2026-10-01 09:04:29,313 18256 INFO odoo_17 odoo.modules.loading: loading 1 modules... 
+2026-10-01 09:04:29,325 18256 INFO odoo_17 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-10-01 09:04:29,337 18256 INFO odoo_17 odoo.modules.loading: updating modules list 
+2026-10-01 09:04:29,337 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via 127.0.0.1 
+2026-10-01 09:04:30,309 18256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:04:30,387 18256 INFO odoo_17 odoo.modules.loading: Loading module aged_report_custom_periods (176/232) 
+2026-10-01 09:04:31,078 18256 INFO odoo_17 odoo.modules.registry: module aged_report_custom_periods: creating or updating database tables 
+2026-10-01 09:04:31,197 18256 INFO odoo_17 odoo.modules.loading: Module aged_report_custom_periods loaded in 0.81s, 41 queries (+41 other) 
+2026-10-01 09:04:31,213 18256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 0.90s, 41 queries (+41 extra) 
+2026-10-01 09:04:31,213 18256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:04:31,213 18256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-10-01 09:04:31,213 18256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:04:31,213 18256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-10-01 09:04:31,468 18256 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-10-01 09:04:31,913 18256 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-10-01 09:04:33,554 18256 INFO odoo_17 odoo.modules.loading: Modules loaded. 
+2026-10-01 09:04:33,570 18256 INFO odoo_17 odoo.modules.registry: Registry loaded in 4.279s 
+2026-10-01 09:04:33,570 18256 INFO odoo_17 odoo.addons.base.models.ir_module: getting next ir.actions.todo() 
+2026-10-01 09:04:33,589 18256 INFO odoo_17 odoo.modules.registry: Registry changed, signaling through the database 
+2026-10-01 09:04:33,589 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:33] "POST /web/dataset/call_button HTTP/1.1" 200 - 7146 2.705 2.691
+2026-10-01 09:04:33,612 18256 INFO odoo_17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-10-01 09:04:34,318 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:34] "GET /web HTTP/1.1" 200 - 98 0.049 0.659
+2026-10-01 09:04:34,631 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:34] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 9 0.012 0.009
+2026-10-01 09:04:34,636 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:34] "GET /bus/websocket_worker_bundle?v=17.0-1 HTTP/1.1" 304 - 4 0.005 0.014
+2026-10-01 09:04:34,725 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:34] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 22 0.048 0.026
+2026-10-01 09:04:34,751 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:34] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 10 0.026 0.042
+2026-10-01 09:04:34,752 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:34] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.004 0.048
+2026-10-01 09:04:34,770 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:34] "POST /mail/init_messaging HTTP/1.1" 200 - 60 0.092 0.053
+2026-10-01 09:04:34,788 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:34] "POST /mail/load_message_failures HTTP/1.1" 200 - 16 0.003 0.008
+2026-10-01 09:04:36,334 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:36] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.000
+2026-10-01 09:04:37,509 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:37] "POST /web/action/load HTTP/1.1" 200 - 9 0.016 0.011
+2026-10-01 09:04:37,598 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:37] "POST /web/dataset/call_kw/account.journal/get_views HTTP/1.1" 200 - 57 0.031 0.031
+2026-10-01 09:04:37,731 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:37] "POST /web/dataset/call_kw/account.journal/web_search_read HTTP/1.1" 200 - 56 0.069 0.039
+2026-10-01 09:04:37,761 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:37] "POST /onboarding/account_dashboard HTTP/1.1" 200 - 6 0.016 0.000
+2026-10-01 09:04:37,792 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:37] "GET /web/bundle/web.chartjs_lib?lang=en_US&debug=1 HTTP/1.1" 200 - 2 0.001 0.002
+2026-10-01 09:04:44,897 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:44] "POST /web/action/load HTTP/1.1" 200 - 6 0.014 0.008
+2026-10-01 09:04:44,949 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:44] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 27 0.024 0.020
+2026-10-01 09:04:45,006 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:04:45] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 26 0.019 0.031
+2026-10-01 09:05:00,278 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "GET /web HTTP/1.1" 200 - 14 0.008 0.018
+2026-10-01 09:05:00,545 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.011 0.011
+2026-10-01 09:05:00,545 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "GET /bus/websocket_worker_bundle?v=17.0-1 HTTP/1.1" 304 - 3 0.007 0.011
+2026-10-01 09:05:00,545 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "POST /web/action/load HTTP/1.1" 200 - 6 0.008 0.012
+2026-10-01 09:05:00,595 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.009 0.024
+2026-10-01 09:05:00,635 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.009 0.048
+2026-10-01 09:05:00,637 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.000 0.025
+2026-10-01 09:05:00,645 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.070 0.037
+2026-10-01 09:05:00,663 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.032 0.024
+2026-10-01 09:05:00,667 18256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "GET /web/static/img/favicon.ico HTTP/1.1" 304 - 0 0.000 0.016
+2026-10-01 09:05:00,687 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.013 0.017
+2026-10-01 09:05:00,739 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:00] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 20 0.032 0.035
+2026-10-01 09:05:02,293 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:02] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.000
+2026-10-01 09:05:31,182 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:31] "POST /web/action/load HTTP/1.1" 200 - 9 0.000 0.000
+2026-10-01 09:05:31,266 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:31] "POST /web/dataset/call_kw/ir.module.module/get_views HTTP/1.1" 200 - 44 0.019 0.026
+2026-10-01 09:05:31,289 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:31] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 1 0.000 0.002
+2026-10-01 09:05:31,336 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:31] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 44 0.020 0.028
+2026-10-01 09:05:31,348 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:31] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.010 0.049
+2026-10-01 09:05:33,824 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:33] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 42 0.022 0.018
+2026-10-01 09:05:33,843 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:33] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.007 0.051
+2026-10-01 09:05:34,761 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:34] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 42 0.036 0.008
+2026-10-01 09:05:34,784 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:34] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 3 0.004 0.019
+2026-10-01 09:05:38,499 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_immediate_upgrade on ['Aged Report Custom Periods'] to user admin #2 via 127.0.0.1 
+2026-10-01 09:05:38,500 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['Aged Report Custom Periods'] to user admin #2 via 127.0.0.1 
+2026-10-01 09:05:38,500 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['Aged Report Custom Periods'] to user admin #2 via 127.0.0.1 
+2026-10-01 09:05:39,545 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user admin #2 via 127.0.0.1 
+2026-10-01 09:05:39,561 18256 INFO odoo_17 odoo.modules.loading: loading 1 modules... 
+2026-10-01 09:05:39,576 18256 INFO odoo_17 odoo.modules.loading: 1 modules loaded in 0.02s, 0 queries (+0 extra) 
+2026-10-01 09:05:39,608 18256 INFO odoo_17 odoo.modules.loading: updating modules list 
+2026-10-01 09:05:39,608 18256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via 127.0.0.1 
+2026-10-01 09:05:40,593 18256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:05:40,705 18256 INFO odoo_17 odoo.modules.loading: Loading module aged_report_custom_periods (176/232) 
+2026-10-01 09:05:41,625 18256 INFO odoo_17 odoo.modules.registry: module aged_report_custom_periods: creating or updating database tables 
+2026-10-01 09:05:41,744 18256 INFO odoo_17 odoo.modules.loading: Module aged_report_custom_periods loaded in 1.04s, 41 queries (+41 other) 
+2026-10-01 09:05:41,763 18256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 1.17s, 41 queries (+41 extra) 
+2026-10-01 09:05:41,769 18256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:05:41,769 18256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-10-01 09:05:41,769 18256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:05:41,769 18256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-10-01 09:05:41,977 18256 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-10-01 09:05:42,507 18256 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-10-01 09:05:43,882 18256 INFO odoo_17 odoo.modules.loading: Modules loaded. 
+2026-10-01 09:05:43,898 18256 INFO odoo_17 odoo.modules.registry: Registry loaded in 4.337s 
+2026-10-01 09:05:43,898 18256 INFO odoo_17 odoo.addons.base.models.ir_module: getting next ir.actions.todo() 
+2026-10-01 09:05:43,914 18256 INFO odoo_17 odoo.modules.registry: Registry changed, signaling through the database 
+2026-10-01 09:05:43,914 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:43] "POST /web/dataset/call_button HTTP/1.1" 200 - 7149 2.466 2.955
+2026-10-01 09:05:43,935 18256 INFO odoo_17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-10-01 09:05:44,591 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:44] "GET /web HTTP/1.1" 200 - 98 0.030 0.628
+2026-10-01 09:05:44,851 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:44] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 9 0.012 0.006
+2026-10-01 09:05:44,854 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:44] "GET /bus/websocket_worker_bundle?v=17.0-1 HTTP/1.1" 304 - 4 0.005 0.012
+2026-10-01 09:05:44,960 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:44] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 22 0.066 0.027
+2026-10-01 09:05:44,968 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:44] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 10 0.043 0.039
+2026-10-01 09:05:44,975 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:44] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.000 0.014
+2026-10-01 09:05:44,995 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:44] "POST /mail/init_messaging HTTP/1.1" 200 - 60 0.086 0.064
+2026-10-01 09:05:45,028 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:45] "POST /mail/load_message_failures HTTP/1.1" 200 - 16 0.011 0.013
+2026-10-01 09:05:46,542 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:46] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.008
+2026-10-01 09:05:46,917 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:46] "POST /web/action/load HTTP/1.1" 200 - 9 0.004 0.003
+2026-10-01 09:05:47,035 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:47] "POST /web/dataset/call_kw/account.journal/get_views HTTP/1.1" 200 - 57 0.017 0.063
+2026-10-01 09:05:47,127 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:47] "POST /web/dataset/call_kw/account.journal/web_search_read HTTP/1.1" 200 - 56 0.026 0.047
+2026-10-01 09:05:47,144 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:47] "POST /onboarding/account_dashboard HTTP/1.1" 200 - 6 0.001 0.005
+2026-10-01 09:05:47,181 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:47] "GET /web/bundle/web.chartjs_lib?lang=en_US&debug=1 HTTP/1.1" 200 - 2 0.002 0.003
+2026-10-01 09:05:50,505 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:50] "POST /web/action/load HTTP/1.1" 200 - 6 0.005 0.005
+2026-10-01 09:05:50,562 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:50] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 28 0.018 0.017
+2026-10-01 09:05:50,605 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:05:50] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 26 0.011 0.024
+2026-10-01 09:06:21,603 18256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:06:21] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.000
+2026-10-01 09:12:06,772 18256 INFO ? odoo.service.server: Initiating shutdown 
+2026-10-01 09:12:06,772 18256 INFO ? odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-10-01 09:12:07,091 18256 INFO ? odoo.sql_db: ConnectionPool(used=0/count=0/max=64): Closed 6 connections  
+2026-10-01 09:12:08,890 19256 INFO ? odoo: Odoo version 17.0+e-20241103 
+2026-10-01 09:12:08,890 19256 INFO ? odoo: Using configuration file at C:\Workspace\Odoo 17 enterprise\server\odoo.conf 
+2026-10-01 09:12:08,890 19256 INFO ? odoo: addons paths: ['C:\\Workspace\\Odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\sessions\\addons\\17.0', 'c:\\workspace\\odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\my_adds'] 
+2026-10-01 09:12:08,890 19256 INFO ? odoo: database: odoo@localhost:8017 
+2026-10-01 09:12:09,001 19256 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at C:\Workspace\Odoo 17 enterprise\thirdparty\wkhtmltopdf.exe 
+2026-10-01 09:12:09,225 19256 INFO ? odoo.service.server: HTTP service (werkzeug) running on Lara-Saad:8069 
+2026-10-01 09:12:11,635 19256 INFO odoo_17 odoo.modules.loading: loading 1 modules... 
+2026-10-01 09:12:11,640 19256 INFO odoo_17 odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-10-01 09:12:11,840 19256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:12:11,857 19256 WARNING odoo_17 odoo.addons.attachment_indexation.models.ir_attachment: Attachment indexation of PDF documents is unavailable because the 'pdfminer' Python library cannot be found on the system. You may install it from https://pypi.org/project/pdfminer.six/ (e.g. `pip3 install pdfminer.six`) 
+2026-10-01 09:12:14,790 19256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 2.95s, 0 queries (+0 extra) 
+2026-10-01 09:12:15,043 19256 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-10-01 09:12:15,155 19256 INFO odoo_17 odoo.modules.loading: Modules loaded. 
+2026-10-01 09:12:15,193 19256 INFO odoo_17 odoo.modules.registry: Registry loaded in 3.618s 
+2026-10-01 09:12:15,193 19256 INFO odoo_17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-10-01 09:12:15,238 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:15] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 32 0.049 3.614
+2026-10-01 09:12:15,571 19256 INFO ? odoo.addons.bus.models.bus: Bus.loop listen imbus on db postgres 
+2026-10-01 09:12:19,751 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:19] "POST /web/action/load HTTP/1.1" 200 - 11 0.000 0.632
+2026-10-01 09:12:19,834 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:19] "POST /web/dataset/call_kw/ir.module.module/get_views HTTP/1.1" 200 - 53 0.021 0.024
+2026-10-01 09:12:19,934 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:19] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 1 0.000 0.083
+2026-10-01 09:12:19,967 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:19] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 44 0.033 0.084
+2026-10-01 09:12:19,984 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:19] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.000 0.123
+2026-10-01 09:12:21,988 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:21] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 42 0.026 0.012
+2026-10-01 09:12:22,008 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:22] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 4 0.006 0.052
+2026-10-01 09:12:23,829 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:23] "POST /web/dataset/call_kw/ir.module.module/search_panel_select_range HTTP/1.1" 200 - 42 0.031 0.014
+2026-10-01 09:12:23,852 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:23] "POST /web/dataset/call_kw/ir.module.module/web_search_read HTTP/1.1" 200 - 3 0.003 0.020
+2026-10-01 09:12:27,076 19256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_immediate_upgrade on ['Aged Report Custom Periods'] to user admin #2 via 127.0.0.1 
+2026-10-01 09:12:27,077 19256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['Aged Report Custom Periods'] to user admin #2 via 127.0.0.1 
+2026-10-01 09:12:27,077 19256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['Aged Report Custom Periods'] to user admin #2 via 127.0.0.1 
+2026-10-01 09:12:28,189 19256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user admin #2 via 127.0.0.1 
+2026-10-01 09:12:28,221 19256 INFO odoo_17 odoo.modules.loading: loading 1 modules... 
+2026-10-01 09:12:28,237 19256 INFO odoo_17 odoo.modules.loading: 1 modules loaded in 0.02s, 0 queries (+0 extra) 
+2026-10-01 09:12:28,237 19256 INFO odoo_17 odoo.modules.loading: updating modules list 
+2026-10-01 09:12:28,253 19256 INFO odoo_17 odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via 127.0.0.1 
+2026-10-01 09:12:29,223 19256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:12:29,302 19256 INFO odoo_17 odoo.modules.loading: Loading module aged_report_custom_periods (176/232) 
+2026-10-01 09:12:30,145 19256 INFO odoo_17 odoo.modules.registry: module aged_report_custom_periods: creating or updating database tables 
+2026-10-01 09:12:30,251 19256 INFO odoo_17 odoo.modules.loading: Module aged_report_custom_periods loaded in 0.95s, 41 queries (+41 other) 
+2026-10-01 09:12:30,256 19256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 1.03s, 41 queries (+41 extra) 
+2026-10-01 09:12:30,256 19256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:12:30,256 19256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-10-01 09:12:30,271 19256 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:12:30,271 19256 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 0.00s, 0 queries (+0 extra) 
+2026-10-01 09:12:30,509 19256 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-10-01 09:12:30,859 19256 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-10-01 09:12:32,330 19256 INFO odoo_17 odoo.modules.loading: Modules loaded. 
+2026-10-01 09:12:32,350 19256 INFO odoo_17 odoo.modules.registry: Registry loaded in 4.128s 
+2026-10-01 09:12:32,350 19256 INFO odoo_17 odoo.addons.base.models.ir_module: getting next ir.actions.todo() 
+2026-10-01 09:12:32,350 19256 INFO odoo_17 odoo.modules.registry: Registry changed, signaling through the database 
+2026-10-01 09:12:32,350 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:32] "POST /web/dataset/call_button HTTP/1.1" 200 - 7149 2.393 2.886
+2026-10-01 09:12:32,378 19256 INFO odoo_17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-10-01 09:12:33,263 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:33] "GET /web HTTP/1.1" 200 - 98 0.077 0.811
+2026-10-01 09:12:33,363 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:33] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 9 0.011 0.045
+2026-10-01 09:12:38,341 19256 INFO odoo_17 odoo.addons.base.models.assetsbundle: Generating a new asset bundle attachment /web/assets/7814e29/web.assets_web.min.js (id:1396) 
+2026-10-01 09:12:38,342 19256 INFO odoo_17 odoo.addons.base.models.assetsbundle: Deleting attachments [1395] (matching /web/assets/_______/web.assets_web.min.js) because it was replaced with /web/assets/7814e29/web.assets_web.min.js 
+2026-10-01 09:12:38,397 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:38] "GET /web/assets/7814e29/web.assets_web.min.js HTTP/1.1" 200 - 16 0.023 5.087
+2026-10-01 09:12:38,791 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:38] "GET /bus/websocket_worker_bundle?v=17.0-1 HTTP/1.1" 304 - 4 0.003 0.006
+2026-10-01 09:12:38,890 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:38] "POST /mail/init_messaging HTTP/1.1" 200 - 60 0.050 0.040
+2026-10-01 09:12:38,908 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:38] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 22 0.030 0.026
+2026-10-01 09:12:38,934 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:38] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 10 0.022 0.031
+2026-10-01 09:12:38,952 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:38] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 1 0.003 0.012
+2026-10-01 09:12:38,957 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:38] "POST /mail/load_message_failures HTTP/1.1" 200 - 16 0.023 0.015
+2026-10-01 09:12:40,541 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:40] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.001 0.002
+2026-10-01 09:12:42,729 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:42] "POST /web/action/load HTTP/1.1" 200 - 9 0.000 0.011
+2026-10-01 09:12:42,828 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:42] "POST /web/dataset/call_kw/account.journal/get_views HTTP/1.1" 200 - 57 0.015 0.058
+2026-10-01 09:12:42,935 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:42] "POST /web/dataset/call_kw/account.journal/web_search_read HTTP/1.1" 200 - 56 0.062 0.025
+2026-10-01 09:12:42,954 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:42] "POST /onboarding/account_dashboard HTTP/1.1" 200 - 6 0.001 0.007
+2026-10-01 09:12:42,997 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:42] "GET /web/bundle/web.chartjs_lib?lang=en_US&debug=1 HTTP/1.1" 200 - 2 0.000 0.002
+2026-10-01 09:12:45,633 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:45] "POST /web/action/load HTTP/1.1" 200 - 6 0.005 0.004
+2026-10-01 09:12:45,676 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:45] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 28 0.013 0.015
+2026-10-01 09:12:45,708 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:45] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 26 0.010 0.015
+2026-10-01 09:12:50,025 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:50] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.007 0.012
+2026-10-01 09:12:50,054 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:50] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 20 0.008 0.014
+2026-10-01 09:12:54,702 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:54] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.008 0.009
+2026-10-01 09:12:54,733 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:54] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 20 0.009 0.015
+2026-10-01 09:12:56,931 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:12:56] "POST /web/dataset/call_kw/account.report/get_expanded_lines HTTP/1.1" 200 - 13 0.011 0.054
+2026-10-01 09:13:01,281 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:13:01] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.006 0.012
+2026-10-01 09:13:01,342 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:13:01] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.010 0.046
+2026-10-01 09:13:17,822 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:13:17] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.009 0.012
+2026-10-01 09:13:17,885 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:13:17] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.007 0.050
+2026-10-01 09:13:20,546 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:13:20] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.005 0.013
+2026-10-01 09:13:20,607 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:13:20] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.026 0.031
+2026-10-01 09:13:35,082 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:13:35] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.005 0.013
+2026-10-01 09:13:35,144 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:13:35] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.025 0.030
+2026-10-01 09:14:16,115 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:14:16] "POST /web/dataset/call_kw/account.report/dispatch_report_action HTTP/1.1" 200 - 5 0.014 0.004
+2026-10-01 09:14:16,240 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:14:16] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 87 0.008 0.110
+2026-10-01 09:14:16,394 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:14:16] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 67 0.046 0.080
+2026-10-01 09:14:16,541 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:14:16] "GET /web/bundle/web_editor.backend_assets_wysiwyg?lang=en_US&debug=1 HTTP/1.1" 200 - 7 0.007 0.043
+2026-10-01 09:14:16,590 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:14:16] "GET /web/bundle/knowledge.assets_wysiwyg?lang=en_US&debug=1 HTTP/1.1" 200 - 2 0.001 0.004
+2026-10-01 09:14:16,628 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:14:16] "POST /web/dataset/call_kw/ir.ui.view/render_public_asset HTTP/1.1" 200 - 8 0.008 0.010
+2026-10-01 09:14:16,767 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:14:16] "POST /mail/thread/messages HTTP/1.1" 200 - 7 0.017 0.007
+2026-10-01 09:14:16,782 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:14:16] "POST /mail/thread/data HTTP/1.1" 200 - 35 0.056 0.046
+2026-10-01 09:15:13,543 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.031 0.021
+2026-10-01 09:15:13,571 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.080 0.035
+2026-10-01 09:15:13,575 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.012 0.035
+2026-10-01 09:15:13,607 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.012 0.015
+2026-10-01 09:15:13,654 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 7 0.015 0.096
+2026-10-01 09:15:13,737 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 43 0.009 0.044
+2026-10-01 09:15:13,834 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "GET /web/bundle/web_editor.backend_assets_wysiwyg?lang=en_US&debug=1 HTTP/1.1" 200 - 1 0.001 0.002
+2026-10-01 09:15:13,856 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "GET /web/bundle/knowledge.assets_wysiwyg?lang=en_US&debug=1 HTTP/1.1" 200 - 1 0.000 0.002
+2026-10-01 09:15:13,880 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "POST /web/dataset/call_kw/ir.ui.view/render_public_asset HTTP/1.1" 200 - 5 0.002 0.003
+2026-10-01 09:15:13,957 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.001 0.004
+2026-10-01 09:15:13,979 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:13] "POST /mail/thread/data HTTP/1.1" 200 - 27 0.018 0.044
+2026-10-01 09:15:15,525 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:15] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.002 0.004
+2026-10-01 09:15:17,497 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "POST /web/action/load HTTP/1.1" 200 - 10 0.001 0.011
+2026-10-01 09:15:17,550 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 17 0.019 0.021
+2026-10-01 09:15:17,578 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "POST /web/dataset/call_kw/res.users/has_group HTTP/1.1" 200 - 2 0.002 0.004
+2026-10-01 09:15:17,588 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "POST /web/dataset/call_kw/account.move/web_search_read HTTP/1.1" 200 - 9 0.006 0.011
+2026-10-01 09:15:17,669 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "POST /onboarding/account_invoice HTTP/1.1" 200 - 43 0.035 0.035
+2026-10-01 09:15:17,700 19256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "GET /base/static/img/onboarding_confetti.svg HTTP/1.1" 200 - 0 0.000 0.008
+2026-10-01 09:15:17,760 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "GET /web/image/onboarding.onboarding.step/7/step_image HTTP/1.1" 304 - 5 0.013 0.056
+2026-10-01 09:15:17,760 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "GET /web/image/onboarding.onboarding.step/6/step_image HTTP/1.1" 304 - 4 0.007 0.062
+2026-10-01 09:15:17,771 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "GET /web/image/onboarding.onboarding.step/8/step_image HTTP/1.1" 200 - 4 0.003 0.075
+2026-10-01 09:15:17,772 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:17] "GET /web/image/onboarding.onboarding.step/15/step_image HTTP/1.1" 200 - 4 0.005 0.065
+2026-10-01 09:15:22,614 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:22] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 43 0.015 0.036
+2026-10-01 09:15:22,749 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:22] "POST /mail/thread/data HTTP/1.1" 200 - 27 0.023 0.053
+2026-10-01 09:15:22,752 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:22] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.011 0.007
+2026-10-01 09:15:28,410 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "GET /web/bundle/web_studio.studio_assets?lang=en_US&debug=1 HTTP/1.1" 200 - 6 0.001 0.103
+2026-10-01 09:15:28,434 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "GET /web/assets/174a64d/web_studio.studio_assets.min.js HTTP/1.1" 200 - 3 0.001 0.006
+2026-10-01 09:15:28,434 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "GET /web/assets/ca23382/web_studio.studio_assets.min.css HTTP/1.1" 200 - 3 0.003 0.006
+2026-10-01 09:15:28,466 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "POST /web_studio/chatter_allowed HTTP/1.1" 200 - 1 0.001 0.004
+2026-10-01 09:15:28,546 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 136 0.035 0.050
+2026-10-01 09:15:28,574 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "POST /web_studio/get_studio_view_arch HTTP/1.1" 200 - 4 0.002 0.002
+2026-10-01 09:15:28,671 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 47 0.018 0.046
+2026-10-01 09:15:28,795 19256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "GET /web_studio/static/src/img/ui/studio_icons.png HTTP/1.1" 200 - 0 0.000 0.012
+2026-10-01 09:15:28,863 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "POST /mail/thread/data HTTP/1.1" 200 - 27 0.021 0.035
+2026-10-01 09:15:28,871 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:28] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.006 0.008
+2026-10-01 09:15:31,796 19256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:15:31] "GET /web_studio/static/src/img/ui/checkbox_active.svg HTTP/1.1" 200 - 0 0.000 0.002
+2026-10-01 09:17:41,609 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:17:41] "POST /web/dataset/call_kw/account.payment.term/get_formview_action HTTP/1.1" 200 - 1 0.000 0.003
+2026-10-01 09:17:41,648 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:17:41] "POST /web/dataset/call_kw/account.payment.term/get_views HTTP/1.1" 200 - 26 0.013 0.019
+2026-10-01 09:17:41,679 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:17:41] "POST /web/dataset/call_kw/account.payment.term/web_read HTTP/1.1" 200 - 15 0.025 0.006
+2026-10-01 09:17:45,154 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:17:45] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 43 0.021 0.035
+2026-10-01 09:17:45,290 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:17:45] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.007 0.014
+2026-10-01 09:17:45,290 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:17:45] "POST /mail/thread/data HTTP/1.1" 200 - 27 0.028 0.031
+2026-10-01 09:18:10,125 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:10] "POST /web/action/load HTTP/1.1" 200 - 10 0.001 0.014
+2026-10-01 09:18:10,172 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:10] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 2 0.000 0.039
+2026-10-01 09:18:10,277 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:10] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 43 0.030 0.058
+2026-10-01 09:18:10,478 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:10] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.016 0.029
+2026-10-01 09:18:10,497 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:10] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.030 0.032
+2026-10-01 09:18:10,513 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:10] "POST /mail/thread/data HTTP/1.1" 200 - 27 0.054 0.042
+2026-10-01 09:18:10,517 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:10] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.004 0.026
+2026-10-01 09:18:12,456 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:12] "POST /web/dataset/call_kw/account.move/web_search_read HTTP/1.1" 200 - 9 0.008 0.018
+2026-10-01 09:18:12,490 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:12] "POST /onboarding/account_invoice HTTP/1.1" 200 - 14 0.003 0.018
+2026-10-01 09:18:14,231 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:14] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 71 0.037 0.060
+2026-10-01 09:18:14,373 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:14] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.038 0.045
+2026-10-01 09:18:14,408 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:14] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.034 0.030
+2026-10-01 09:18:21,460 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:21] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 111 0.026 0.019
+2026-10-01 09:18:21,490 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:21] "POST /web_studio/get_studio_view_arch HTTP/1.1" 200 - 3 0.002 0.004
+2026-10-01 09:18:21,610 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:21] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 59 0.010 0.089
+2026-10-01 09:18:21,796 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:21] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.028 0.044
+2026-10-01 09:18:21,800 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:21] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.004 0.009
+2026-10-01 09:18:46,304 19256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:18:46] "GET /web_studio/static/src/img/ui/checkbox_indeterminate.svg HTTP/1.1" 200 - 0 0.000 0.001
+2026-10-01 09:20:01,192 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:01] "POST /web/action/load HTTP/1.1" 200 - 10 0.013 0.006
+2026-10-01 09:20:01,218 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:01] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 2 0.000 0.019
+2026-10-01 09:20:01,305 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:01] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 58 0.031 0.028
+2026-10-01 09:20:01,466 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:01] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.027 0.020
+2026-10-01 09:20:01,467 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:01] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.019 0.025
+2026-10-01 09:20:01,493 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:01] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.005 0.021
+2026-10-01 09:20:01,501 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:01] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.048 0.040
+2026-10-01 09:20:08,861 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:08] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 28 0.024 0.053
+2026-10-01 09:20:11,258 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:11] "POST /web/dataset/call_kw/res.partner/name_search HTTP/1.1" 200 - 6 0.002 0.014
+2026-10-01 09:20:34,496 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:34] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.008 0.010
+2026-10-01 09:20:34,551 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:34] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.017 0.032
+2026-10-01 09:20:44,219 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:44] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 42 0.041 0.031
+2026-10-01 09:20:48,560 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:48] "POST /web/dataset/call_kw/account.move.line/onchange HTTP/1.1" 200 - 6 0.019 0.046
+2026-10-01 09:20:48,591 19256 INFO ? werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:48] "GET /web/static/img/openhand.cur HTTP/1.1" 304 - 0 0.000 0.005
+2026-10-01 09:20:48,615 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:48] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 10 0.018 0.019
+2026-10-01 09:20:51,071 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:51] "POST /web/dataset/call_kw/product.product/name_search HTTP/1.1" 200 - 10 0.017 0.016
+2026-10-01 09:20:52,334 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:52] "POST /web/dataset/call_kw/account.move.line/onchange HTTP/1.1" 200 - 31 0.026 0.032
+2026-10-01 09:20:52,380 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:20:52] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 22 0.005 0.031
+2026-10-01 09:21:10,116 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:10] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 29 0.013 0.029
+2026-10-01 09:21:17,646 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:17] "POST /web/dataset/call_kw/account.payment.term/name_search HTTP/1.1" 200 - 3 0.002 0.010
+2026-10-01 09:21:25,343 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:25] "POST /web/dataset/call_kw/account.payment.term/get_views HTTP/1.1" 200 - 5 0.002 0.009
+2026-10-01 09:21:25,364 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:25] "POST /web/dataset/call_kw/account.payment.term/web_search_read HTTP/1.1" 200 - 3 0.001 0.006
+2026-10-01 09:21:33,129 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:33] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 31 0.012 0.029
+2026-10-01 09:21:36,405 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:36] "POST /web/dataset/call_kw/account.payment.term/name_search HTTP/1.1" 200 - 3 0.003 0.004
+2026-10-01 09:21:41,866 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:41] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 24 0.010 0.026
+2026-10-01 09:21:43,575 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:43] "POST /web/dataset/call_kw/account.payment.term/name_search HTTP/1.1" 200 - 3 0.003 0.008
+2026-10-01 09:21:45,210 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:45] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 24 0.011 0.022
+2026-10-01 09:21:50,913 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:50] "POST /web/dataset/call_kw/account.move/web_save HTTP/1.1" 200 - 116 1.848 0.171
+2026-10-01 09:21:51,000 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:51] "POST /mail/thread/data HTTP/1.1" 200 - 24 0.022 0.034
+2026-10-01 09:21:51,052 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:51] "POST /mail/thread/messages HTTP/1.1" 200 - 19 0.056 0.026
+2026-10-01 09:21:54,261 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:54] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 111 0.012 0.031
+2026-10-01 09:21:54,275 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:54] "POST /web_studio/get_studio_view_arch HTTP/1.1" 200 - 3 0.002 0.002
+2026-10-01 09:21:54,346 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:54] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 52 0.023 0.027
+2026-10-01 09:21:54,546 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:54] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.009 0.016
+2026-10-01 09:21:54,553 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:21:54] "POST /mail/thread/data HTTP/1.1" 200 - 24 0.030 0.078
+2026-10-01 09:22:11,000 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:11] "POST /web/action/load HTTP/1.1" 200 - 10 0.002 0.000
+2026-10-01 09:22:11,040 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:11] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 2 0.002 0.023
+2026-10-01 09:22:11,138 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:11] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 51 0.028 0.064
+2026-10-01 09:22:11,257 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:11] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.023 0.018
+2026-10-01 09:22:11,257 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:11] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.017 0.022
+2026-10-01 09:22:11,315 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:11] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.039 0.016
+2026-10-01 09:22:11,318 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:11] "POST /mail/thread/data HTTP/1.1" 200 - 24 0.043 0.063
+2026-10-01 09:22:14,185 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:14] "GET /web HTTP/1.1" 200 - 14 0.015 0.015
+2026-10-01 09:22:14,506 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:14] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.017 0.006
+2026-10-01 09:22:14,506 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:14] "POST /web/action/load HTTP/1.1" 200 - 6 0.016 0.005
+2026-10-01 09:22:14,585 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:14] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.012 0.055
+2026-10-01 09:22:14,623 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:14] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.037 0.087
+2026-10-01 09:22:14,644 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:14] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.013 0.027
+2026-10-01 09:22:14,659 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:14] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.034 0.027
+2026-10-01 09:22:14,667 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:14] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.006 0.023
+2026-10-01 09:22:14,761 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:14] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.012 0.081
+2026-10-01 09:22:16,298 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:16] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.000
+2026-10-01 09:22:32,063 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:32] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.009 0.010
+2026-10-01 09:22:32,170 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:32] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.023 0.055
+2026-10-01 09:22:35,611 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:35] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.008 0.011
+2026-10-01 09:22:35,687 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:35] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.016 0.054
+2026-10-01 09:22:49,482 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:49] "POST /web/dataset/call_kw/account.move.line/onchange HTTP/1.1" 200 - 25 0.008 0.022
+2026-10-01 09:22:49,559 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:49] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 44 0.021 0.045
+2026-10-01 09:22:54,169 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:54] "POST /web/dataset/call_kw/account.move/web_save HTTP/1.1" 200 - 80 0.029 0.113
+2026-10-01 09:22:54,246 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:54] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.038 0.019
+2026-10-01 09:22:54,260 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:54] "POST /mail/thread/data HTTP/1.1" 200 - 24 0.037 0.023
+2026-10-01 09:22:54,397 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:54] "POST /web/dataset/call_button HTTP/1.1" 200 - 86 0.093 0.102
+2026-10-01 09:22:54,434 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:54] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.016 0.012
+2026-10-01 09:22:54,500 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:54] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 55 0.050 0.043
+2026-10-01 09:22:54,592 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:22:54] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.028 0.049
+2026-10-01 09:23:02,584 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:02] "GET /web HTTP/1.1" 200 - 14 0.001 0.032
+2026-10-01 09:23:02,844 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:02] "POST /web/action/load HTTP/1.1" 200 - 6 0.007 0.013
+2026-10-01 09:23:02,844 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:02] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.008 0.012
+2026-10-01 09:23:02,920 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:02] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.020 0.045
+2026-10-01 09:23:02,964 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:02] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.099 0.024
+2026-10-01 09:23:02,967 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:02] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.019 0.022
+2026-10-01 09:23:02,975 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:02] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.027 0.018
+2026-10-01 09:23:03,003 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:03] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.009 0.020
+2026-10-01 09:23:03,083 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:03] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.033 0.063
+2026-10-01 09:23:04,628 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:04] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.013
+2026-10-01 09:23:20,838 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:20] "GET /web HTTP/1.1" 200 - 14 0.004 0.013
+2026-10-01 09:23:21,100 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.006 0.023
+2026-10-01 09:23:21,114 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "POST /web/action/load HTTP/1.1" 200 - 10 0.017 0.014
+2026-10-01 09:23:21,144 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.015 0.008
+2026-10-01 09:23:21,193 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.013 0.047
+2026-10-01 09:23:21,218 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.064 0.061
+2026-10-01 09:23:21,218 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 2 0.001 0.057
+2026-10-01 09:23:21,251 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.007 0.012
+2026-10-01 09:23:21,333 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 55 0.020 0.062
+2026-10-01 09:23:21,446 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "GET /web/bundle/web_editor.backend_assets_wysiwyg?lang=en_US&debug=1 HTTP/1.1" 200 - 1 0.001 0.001
+2026-10-01 09:23:21,471 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "GET /web/bundle/knowledge.assets_wysiwyg?lang=en_US&debug=1 HTTP/1.1" 200 - 1 0.000 0.002
+2026-10-01 09:23:21,494 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "POST /web/dataset/call_kw/ir.ui.view/render_public_asset HTTP/1.1" 200 - 5 0.001 0.005
+2026-10-01 09:23:21,584 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.025 0.031
+2026-10-01 09:23:21,584 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:21] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.024 0.005
+2026-10-01 09:23:23,296 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:23:23] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.010
+2026-10-01 09:24:08,865 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:08] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.006 0.011
+2026-10-01 09:24:08,920 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:08] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.016 0.032
+2026-10-01 09:24:15,836 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:15] "GET /web HTTP/1.1" 200 - 14 0.015 0.019
+2026-10-01 09:24:16,094 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:16] "POST /web/action/load HTTP/1.1" 200 - 6 0.011 0.009
+2026-10-01 09:24:16,094 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:16] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.015 0.005
+2026-10-01 09:24:16,148 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:16] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.017 0.029
+2026-10-01 09:24:16,191 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:16] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.021 0.020
+2026-10-01 09:24:16,197 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:16] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.061 0.046
+2026-10-01 09:24:16,198 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:16] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.010 0.021
+2026-10-01 09:24:16,233 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:16] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.030 0.005
+2026-10-01 09:24:16,313 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:16] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.030 0.067
+2026-10-01 09:24:17,873 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:17] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.001 0.005
+2026-10-01 09:24:20,929 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:20] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.008 0.011
+2026-10-01 09:24:20,991 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:20] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.043 0.013
+2026-10-01 09:24:23,828 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:23] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.004 0.016
+2026-10-01 09:24:23,887 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:23] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.021 0.033
+2026-10-01 09:24:45,541 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:45] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.003 0.016
+2026-10-01 09:24:45,601 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:45] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.009 0.045
+2026-10-01 09:24:48,609 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:48] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.007 0.011
+2026-10-01 09:24:48,678 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:48] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.018 0.045
+2026-10-01 09:24:50,969 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:50] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.003 0.015
+2026-10-01 09:24:51,045 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:51] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.025 0.046
+2026-10-01 09:24:53,251 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:53] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.005 0.014
+2026-10-01 09:24:53,310 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:53] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.024 0.029
+2026-10-01 09:24:55,510 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:55] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.006 0.011
+2026-10-01 09:24:55,593 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:55] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.032 0.046
+2026-10-01 09:24:58,678 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:58] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.003 0.015
+2026-10-01 09:24:58,738 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:24:58] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.007 0.048
+2026-10-01 09:25:04,255 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:04] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.007 0.011
+2026-10-01 09:25:04,317 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:04] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.023 0.032
+2026-10-01 09:25:39,836 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:39] "POST /web/dataset/call_button HTTP/1.1" 200 - 3 0.003 0.003
+2026-10-01 09:25:39,874 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:39] "POST /web/dataset/call_kw/account.payment.register/get_views HTTP/1.1" 200 - 16 0.009 0.016
+2026-10-01 09:25:39,918 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:39] "POST /web/dataset/call_kw/account.payment.register/onchange HTTP/1.1" 200 - 21 0.023 0.013
+2026-10-01 09:25:51,863 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:51] "POST /web/dataset/call_kw/account.payment.register/onchange HTTP/1.1" 200 - 8 0.004 0.012
+2026-10-01 09:25:56,948 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:56] "POST /web/dataset/call_kw/account.payment.register/web_save HTTP/1.1" 200 - 22 0.035 0.010
+2026-10-01 09:25:57,191 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:57] "POST /web/dataset/call_button HTTP/1.1" 200 - 186 0.096 0.137
+2026-10-01 09:25:57,244 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:57] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.020 0.018
+2026-10-01 09:25:57,291 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:57] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 58 0.037 0.047
+2026-10-01 09:25:57,346 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:25:57] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.017 0.023
+2026-10-01 09:26:06,868 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:06] "GET /web HTTP/1.1" 200 - 14 0.002 0.039
+2026-10-01 09:26:07,128 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:07] "POST /web/action/load HTTP/1.1" 200 - 6 0.006 0.007
+2026-10-01 09:26:07,128 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:07] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.006 0.008
+2026-10-01 09:26:07,191 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:07] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.024 0.020
+2026-10-01 09:26:07,224 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:07] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.018 0.045
+2026-10-01 09:26:07,230 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:07] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.073 0.032
+2026-10-01 09:26:07,247 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:07] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.015 0.041
+2026-10-01 09:26:07,270 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:07] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.009 0.025
+2026-10-01 09:26:07,355 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:07] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.025 0.074
+2026-10-01 09:26:08,903 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:08] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.010
+2026-10-01 09:26:22,433 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:22] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.006 0.015
+2026-10-01 09:26:22,498 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:22] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.033 0.025
+2026-10-01 09:26:25,381 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:25] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.007 0.012
+2026-10-01 09:26:25,441 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:26:25] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.024 0.031
+2026-10-01 09:27:38,467 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:27:38] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.006 0.010
+2026-10-01 09:27:38,523 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:27:38] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.023 0.026
+2026-10-01 09:28:20,968 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:20] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 19 0.006 0.029
+2026-10-01 09:28:22,301 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:22] "POST /web/dataset/call_kw/res.partner/name_search HTTP/1.1" 200 - 6 0.004 0.012
+2026-10-01 09:28:23,244 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:23] "POST /web/dataset/call_kw/res.partner/name_search HTTP/1.1" 200 - 6 0.003 0.009
+2026-10-01 09:28:24,713 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:24] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 41 0.015 0.027
+2026-10-01 09:28:29,453 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:29] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 10 0.011 0.011
+2026-10-01 09:28:31,136 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:31] "POST /web/dataset/call_kw/account.payment.term/name_search HTTP/1.1" 200 - 3 0.002 0.007
+2026-10-01 09:28:32,741 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:32] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 5 0.003 0.012
+2026-10-01 09:28:35,904 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:35] "POST /web/dataset/call_kw/account.payment.term/name_search HTTP/1.1" 200 - 3 0.005 0.020
+2026-10-01 09:28:38,926 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:38] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 5 0.004 0.015
+2026-10-01 09:28:42,215 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:42] "POST /web/dataset/call_kw/account.move.line/onchange HTTP/1.1" 200 - 6 0.004 0.012
+2026-10-01 09:28:42,260 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:42] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 10 0.008 0.020
+2026-10-01 09:28:44,543 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:44] "POST /web/dataset/call_kw/product.product/name_search HTTP/1.1" 200 - 5 0.006 0.020
+2026-10-01 09:28:45,719 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:45] "POST /web/dataset/call_kw/account.move.line/onchange HTTP/1.1" 200 - 29 0.008 0.025
+2026-10-01 09:28:45,764 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:45] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 22 0.012 0.022
+2026-10-01 09:28:52,083 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:52] "POST /web/dataset/call_kw/account.move.line/onchange HTTP/1.1" 200 - 15 0.010 0.014
+2026-10-01 09:28:52,151 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:52] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 22 0.015 0.042
+2026-10-01 09:28:59,174 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:59] "POST /web/dataset/call_kw/account.move.line/onchange HTTP/1.1" 200 - 15 0.006 0.019
+2026-10-01 09:28:59,218 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:28:59] "POST /web/dataset/call_kw/account.move/onchange HTTP/1.1" 200 - 22 0.006 0.029
+2026-10-01 09:29:03,490 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:03] "POST /web/dataset/call_kw/account.move/web_save HTTP/1.1" 200 - 97 0.067 0.086
+2026-10-01 09:29:03,595 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:03] "POST /mail/thread/data HTTP/1.1" 200 - 24 0.053 0.032
+2026-10-01 09:29:03,623 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:03] "POST /mail/thread/messages HTTP/1.1" 200 - 19 0.055 0.032
+2026-10-01 09:29:03,715 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:03] "POST /web/dataset/call_button HTTP/1.1" 200 - 80 0.087 0.113
+2026-10-01 09:29:03,757 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:03] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.020 0.015
+2026-10-01 09:29:03,818 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:03] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 54 0.042 0.053
+2026-10-01 09:29:03,878 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:03] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.018 0.028
+2026-10-01 09:29:09,317 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:09] "GET /web HTTP/1.1" 200 - 14 0.001 0.041
+2026-10-01 09:29:09,580 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:09] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.014 0.004
+2026-10-01 09:29:09,585 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:09] "POST /web/action/load HTTP/1.1" 200 - 6 0.005 0.018
+2026-10-01 09:29:09,646 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:09] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.041 0.015
+2026-10-01 09:29:09,685 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:09] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.040 0.066
+2026-10-01 09:29:09,690 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:09] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.016 0.028
+2026-10-01 09:29:09,690 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:09] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.015 0.029
+2026-10-01 09:29:09,719 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:09] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.017 0.013
+2026-10-01 09:29:09,805 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:09] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.036 0.079
+2026-10-01 09:29:11,369 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:11] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.000
+2026-10-01 09:29:33,105 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:33] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.006 0.013
+2026-10-01 09:29:33,165 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:33] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.008 0.046
+2026-10-01 09:29:35,434 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:35] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.003 0.015
+2026-10-01 09:29:35,496 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:35] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.025 0.032
+2026-10-01 09:29:41,224 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:41] "POST /web/dataset/call_button HTTP/1.1" 200 - 3 0.002 0.005
+2026-10-01 09:29:41,266 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:41] "POST /web/dataset/call_kw/account.payment.register/onchange HTTP/1.1" 200 - 18 0.011 0.018
+2026-10-01 09:29:48,017 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:48] "POST /web/dataset/call_kw/account.payment.register/onchange HTTP/1.1" 200 - 8 0.006 0.010
+2026-10-01 09:29:54,024 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:54] "POST /web/dataset/call_kw/account.payment.register/onchange HTTP/1.1" 200 - 8 0.006 0.016
+2026-10-01 09:29:55,650 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:55] "POST /web/dataset/call_kw/account.payment.register/web_save HTTP/1.1" 200 - 20 0.017 0.020
+2026-10-01 09:29:55,854 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:55] "POST /web/dataset/call_button HTTP/1.1" 200 - 167 0.102 0.093
+2026-10-01 09:29:55,915 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:55] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.022 0.017
+2026-10-01 09:29:55,961 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:55] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 57 0.031 0.055
+2026-10-01 09:29:56,035 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:29:56] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.028 0.033
+2026-10-01 09:30:02,929 19256 INFO odoo_17 odoo.models.unlink: User #2 deleted account.partial.reconcile records with IDs: [7] 
+2026-10-01 09:30:02,956 19256 INFO odoo_17 odoo.models.unlink: User #2 deleted account.full.reconcile records with IDs: [6] 
+2026-10-01 09:30:03,068 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:03] "POST /web/dataset/call_kw/account.move/js_remove_outstanding_partial HTTP/1.1" 200 - 105 0.078 0.087
+2026-10-01 09:30:03,121 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:03] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.018 0.014
+2026-10-01 09:30:03,170 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:03] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 54 0.021 0.059
+2026-10-01 09:30:03,224 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:03] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.013 0.026
+2026-10-01 09:30:09,506 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:09] "GET /web HTTP/1.1" 200 - 14 0.009 0.013
+2026-10-01 09:30:09,772 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:09] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.014 0.003
+2026-10-01 09:30:09,790 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:09] "POST /web/action/load HTTP/1.1" 200 - 10 0.009 0.026
+2026-10-01 09:30:09,824 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:09] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.011 0.023
+2026-10-01 09:30:09,881 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:09] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.063 0.047
+2026-10-01 09:30:09,883 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:09] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.023 0.013
+2026-10-01 09:30:09,909 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:09] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 2 0.001 0.062
+2026-10-01 09:30:09,935 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:09] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.009 0.020
+2026-10-01 09:30:10,019 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:10] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 54 0.011 0.073
+2026-10-01 09:30:10,124 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:10] "GET /web/bundle/web_editor.backend_assets_wysiwyg?lang=en_US&debug=1 HTTP/1.1" 200 - 1 0.000 0.002
+2026-10-01 09:30:10,147 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:10] "GET /web/bundle/knowledge.assets_wysiwyg?lang=en_US&debug=1 HTTP/1.1" 200 - 1 0.000 0.002
+2026-10-01 09:30:10,190 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:10] "POST /web/dataset/call_kw/ir.ui.view/render_public_asset HTTP/1.1" 200 - 5 0.002 0.004
+2026-10-01 09:30:10,291 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:10] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.024 0.042
+2026-10-01 09:30:10,298 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:10] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.031 0.015
+2026-10-01 09:30:11,858 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:11] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.008 0.000
+2026-10-01 09:30:14,329 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:14] "POST /web/dataset/call_button HTTP/1.1" 200 - 3 0.004 0.006
+2026-10-01 09:30:14,347 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:14] "POST /web/dataset/call_kw/account.payment.register/get_views HTTP/1.1" 200 - 1 0.000 0.007
+2026-10-01 09:30:14,378 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:14] "POST /web/dataset/call_kw/account.payment.register/onchange HTTP/1.1" 200 - 18 0.007 0.015
+2026-10-01 09:30:20,064 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:20] "POST /web/dataset/call_kw/account.payment.register/onchange HTTP/1.1" 200 - 8 0.005 0.014
+2026-10-01 09:30:23,068 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:23] "POST /web/dataset/call_kw/account.payment.register/onchange HTTP/1.1" 200 - 8 0.005 0.011
+2026-10-01 09:30:29,738 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:29] "POST /web/dataset/call_kw/account.payment.register/web_save HTTP/1.1" 200 - 20 0.017 0.020
+2026-10-01 09:30:29,959 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:29] "POST /web/dataset/call_button HTTP/1.1" 200 - 159 0.079 0.131
+2026-10-01 09:30:30,016 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:30] "POST /mail/thread/messages HTTP/1.1" 200 - 21 0.028 0.018
+2026-10-01 09:30:30,070 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:30] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 59 0.045 0.054
+2026-10-01 09:30:30,120 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:30] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.015 0.022
+2026-10-01 09:30:36,110 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:36] "GET /web HTTP/1.1" 200 - 14 0.016 0.017
+2026-10-01 09:30:36,370 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:36] "POST /web/action/load HTTP/1.1" 200 - 6 0.009 0.006
+2026-10-01 09:30:36,372 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:36] "GET /web/manifest.webmanifest HTTP/1.1" 200 - 7 0.010 0.007
+2026-10-01 09:30:36,428 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:36] "POST /web/dataset/call_kw/res.users/systray_get_activities HTTP/1.1" 200 - 9 0.008 0.036
+2026-10-01 09:30:36,466 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:36] "GET /web/image?model=res.users&field=avatar_128&id=2 HTTP/1.1" 304 - 9 0.018 0.045
+2026-10-01 09:30:36,474 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:36] "POST /mail/init_messaging HTTP/1.1" 200 - 39 0.075 0.033
+2026-10-01 09:30:36,478 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:36] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.013 0.039
+2026-10-01 09:30:36,512 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:36] "POST /mail/load_message_failures HTTP/1.1" 200 - 13 0.017 0.010
+2026-10-01 09:30:36,592 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:36] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.024 0.077
+2026-10-01 09:30:38,097 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:38] "GET /web/service-worker.js HTTP/1.1" 200 - 1 0.000 0.000
+2026-10-01 09:30:58,227 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:58] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.007 0.012
+2026-10-01 09:30:58,295 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:30:58] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.022 0.040
+2026-10-01 09:32:52,890 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:32:52] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.005 0.011
+2026-10-01 09:32:52,965 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:32:52] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.008 0.060
+2026-10-01 09:32:55,121 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:32:55] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.006 0.011
+2026-10-01 09:32:55,177 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:32:55] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.008 0.043
+2026-10-01 09:33:12,322 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:33:12] "GET /web/bundle/web_studio.studio_assets?lang=en_US&debug=1 HTTP/1.1" 200 - 1 0.000 0.004
+2026-10-01 09:33:12,366 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:33:12] "POST /web_studio/chatter_allowed HTTP/1.1" 200 - 1 0.001 0.002
+2026-10-01 09:33:12,410 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:33:12] "POST /web/dataset/call_kw/account.move/get_views HTTP/1.1" 200 - 111 0.020 0.028
+2026-10-01 09:33:12,433 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:33:12] "POST /web_studio/get_studio_view_arch HTTP/1.1" 200 - 3 0.002 0.003
+2026-10-01 09:33:12,543 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:33:12] "POST /web/dataset/call_kw/account.move/web_read HTTP/1.1" 200 - 60 0.007 0.057
+2026-10-01 09:33:12,716 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:33:12] "POST /mail/thread/messages HTTP/1.1" 200 - 4 0.008 0.008
+2026-10-01 09:33:12,723 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:33:12] "POST /mail/thread/data HTTP/1.1" 200 - 28 0.023 0.039
+2026-10-01 09:34:45,168 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:34:45] "POST /web/dataset/call_kw/account.report/get_options HTTP/1.1" 200 - 18 0.003 0.013
+2026-10-01 09:34:45,240 19256 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:34:45] "POST /web/dataset/call_kw/account.report/get_report_information HTTP/1.1" 200 - 24 0.027 0.038
+2026-10-01 09:39:10,350 19256 INFO ? odoo.service.server: Initiating shutdown 
+2026-10-01 09:39:10,350 19256 INFO ? odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-10-01 09:39:10,619 19256 INFO ? odoo.sql_db: ConnectionPool(used=0/count=0/max=64): Closed 5 connections  
+2026-10-01 09:39:12,520 11444 INFO ? odoo: Odoo version 17.0+e-20241103 
+2026-10-01 09:39:12,520 11444 INFO ? odoo: Using configuration file at C:\Workspace\Odoo 17 enterprise\server\odoo.conf 
+2026-10-01 09:39:12,520 11444 INFO ? odoo: addons paths: ['C:\\Workspace\\Odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\sessions\\addons\\17.0', 'c:\\workspace\\odoo 17 enterprise\\server\\odoo\\addons', 'c:\\workspace\\odoo 17 enterprise\\my_adds'] 
+2026-10-01 09:39:12,520 11444 INFO ? odoo: database: odoo@localhost:8017 
+2026-10-01 09:39:12,631 11444 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at C:\Workspace\Odoo 17 enterprise\thirdparty\wkhtmltopdf.exe 
+2026-10-01 09:39:12,886 11444 INFO ? odoo.service.server: HTTP service (werkzeug) running on Lara-Saad:8069 
+2026-10-01 09:39:12,981 11444 INFO odoo_17 odoo.modules.loading: loading 1 modules... 
+2026-10-01 09:39:12,997 11444 INFO odoo_17 odoo.modules.loading: 1 modules loaded in 0.02s, 0 queries (+0 extra) 
+2026-10-01 09:39:13,113 11444 INFO odoo_17 odoo.modules.loading: loading 232 modules... 
+2026-10-01 09:39:13,113 11444 WARNING odoo_17 odoo.addons.attachment_indexation.models.ir_attachment: Attachment indexation of PDF documents is unavailable because the 'pdfminer' Python library cannot be found on the system. You may install it from https://pypi.org/project/pdfminer.six/ (e.g. `pip3 install pdfminer.six`) 
+2026-10-01 09:39:14,410 11444 INFO odoo_17 odoo.modules.loading: 232 modules loaded in 1.30s, 0 queries (+0 extra) 
+2026-10-01 09:39:14,566 11444 WARNING odoo_17 odoo.fields: Field report.wizard.attachment: unknown parameter 'nodrop', if this is an actual parameter you may want to override the method _valid_field_parameter on the relevant model in order to allow it 
+2026-10-01 09:39:14,614 11444 INFO odoo_17 odoo.modules.loading: Modules loaded. 
+2026-10-01 09:39:14,629 11444 INFO odoo_17 odoo.modules.registry: Registry loaded in 1.712s 
+2026-10-01 09:39:14,629 11444 INFO odoo_17 odoo.addons.base.models.ir_http: Generating routing map for key None 
+2026-10-01 09:39:14,661 11444 INFO odoo_17 werkzeug: 127.0.0.1 - - [01/Oct/2026 09:39:14] "GET /websocket?version=17.0-1 HTTP/1.1" 101 - 32 0.005 1.738
+2026-10-01 09:39:15,007 11444 INFO ? odoo.addons.bus.models.bus: Bus.loop listen imbus on db postgres 
+2026-10-01 09:39:17,221 11444 INFO ? odoo.service.server: Initiating shutdown 
+2026-10-01 09:39:17,221 11444 INFO ? odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-10-01 09:39:17,632 11444 INFO ? odoo.sql_db: ConnectionPool(used=0/count=0/max=64): Closed 3 connections  
